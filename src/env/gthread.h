@@ -1,11 +1,11 @@
-// 这个文件是 MCF 的一部分。
-// 有关具体授权说明，请参阅 MCFLicense.txt。
+// This file is part of MCFCRT.
+// See MCFLicense.txt for licensing information.
 // Copyleft 2013 - 2016, LH_Mouse. All wrongs reserved.
 
 #ifndef __MCFCRT_ENV_GTHREAD_H_
 #define __MCFCRT_ENV_GTHREAD_H_
 
-// 专门为 GCC 定制的兼容层。
+// Compatible layer for libgcc and other GCC libraries.
 
 #ifdef __GTHREADS
 #	error __GTHREADS is already defined. (Thread model confliction detected?)

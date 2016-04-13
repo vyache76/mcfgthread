@@ -1,5 +1,5 @@
-// 这个文件是 MCF 的一部分。
-// 有关具体授权说明，请参阅 MCFLicense.txt。
+// This file is part of MCFCRT.
+// See MCFLicense.txt for licensing information.
 // Copyleft 2013 - 2016, LH_Mouse. All wrongs reserved.
 
 #include "condition_variable.h"
@@ -29,7 +29,7 @@ static inline bool ReallyWaitForConditionVariable(volatile uintptr_t *puControl,
 		LARGE_INTEGER liTimeout;
 		__MCF_CRT_InitializeNtTimeout(&liTimeout, u64UntilFastMonoClock);
 		NTSTATUS lStatus = NtWaitForKeyedEvent(nullptr, (void *)puControl, false, &liTimeout);
-		_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtWaitForKeyedEvent() 失败。");
+		_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtWaitForKeyedEvent() failed.");
 		if(_MCFCRT_EXPECT(lStatus == STATUS_TIMEOUT)){
 			bool bDecremented;
 			{
@@ -48,14 +48,14 @@ static inline bool ReallyWaitForConditionVariable(volatile uintptr_t *puControl,
 				return (*pfnRelockCallback)(nContext, nUnlocked), false;
 			}
 			lStatus = NtWaitForKeyedEvent(nullptr, (void *)puControl, false, nullptr);
-			_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtWaitForKeyedEvent() 失败。");
+			_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtWaitForKeyedEvent() failed.");
 			_MCFCRT_ASSERT(lStatus != STATUS_TIMEOUT);
 			(*pfnRelockCallback)(nContext, nUnlocked);
 			return (*pfnRelockCallback)(nContext, nUnlocked), true;
 		}
 	} else {
 		NTSTATUS lStatus = NtWaitForKeyedEvent(nullptr, (void *)puControl, false, nullptr);
-		_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtWaitForKeyedEvent() 失败。");
+		_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtWaitForKeyedEvent() failed.");
 		_MCFCRT_ASSERT(lStatus != STATUS_TIMEOUT);
 	}
 	return (*pfnRelockCallback)(nContext, nUnlocked), true;
@@ -76,7 +76,7 @@ static inline size_t ReallySignalConditionVariable(volatile uintptr_t *puControl
 	}
 	for(size_t i = 0; i < uCountToSignal; ++i){
 		NTSTATUS lStatus = NtReleaseKeyedEvent(nullptr, (void *)puControl, false, nullptr);
-		_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtReleaseKeyedEvent() 失败。");
+		_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtReleaseKeyedEvent() failed.");
 		_MCFCRT_ASSERT(lStatus != STATUS_TIMEOUT);
 	}
 	return uCountToSignal;

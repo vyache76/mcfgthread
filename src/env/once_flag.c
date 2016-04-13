@@ -1,5 +1,5 @@
-// 这个文件是 MCF 的一部分。
-// 有关具体授权说明，请参阅 MCFLicense.txt。
+// This file is part of MCFCRT.
+// See MCFLicense.txt for licensing information.
 // Copyleft 2013 - 2016, LH_Mouse. All wrongs reserved.
 
 #include "once_flag.h"
@@ -67,7 +67,7 @@ static _MCFCRT_OnceResult RealWaitForOnceFlag(volatile uintptr_t *puControl, boo
 			LARGE_INTEGER liTimeout;
 			__MCF_CRT_InitializeNtTimeout(&liTimeout, u64UntilFastMonoClock);
 			NTSTATUS lStatus = NtWaitForKeyedEvent(nullptr, (void *)puControl, false, &liTimeout);
-			_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtWaitForKeyedEvent() 失败。");
+			_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtWaitForKeyedEvent() failed.");
 			if(_MCFCRT_EXPECT(lStatus == STATUS_TIMEOUT)){
 				bool bDecremented;
 				{
@@ -86,13 +86,13 @@ static _MCFCRT_OnceResult RealWaitForOnceFlag(volatile uintptr_t *puControl, boo
 					return _MCFCRT_kOnceResultTimedOut;
 				}
 				lStatus = NtWaitForKeyedEvent(nullptr, (void *)puControl, false, nullptr);
-				_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtWaitForKeyedEvent() 失败。");
+				_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtWaitForKeyedEvent() failed.");
 				_MCFCRT_ASSERT(lStatus != STATUS_TIMEOUT);
 				return _MCFCRT_kOnceResultTimedOut;
 			}
 		} else {
 			NTSTATUS lStatus = NtWaitForKeyedEvent(nullptr, (void *)puControl, false, nullptr);
-			_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtWaitForKeyedEvent() 失败。");
+			_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtWaitForKeyedEvent() failed.");
 			_MCFCRT_ASSERT(lStatus != STATUS_TIMEOUT);
 		}
 	}
@@ -104,8 +104,8 @@ static void RealSetAndSignalOnceFlag(volatile uintptr_t *puControl, bool bFinish
 		uintptr_t uOld, uNew;
 		uOld = __atomic_load_n(puControl, __ATOMIC_ACQUIRE);
 		do {
-			_MCFCRT_ASSERT_MSG(uOld & MASK_LOCKED,      L"一次性初始化标志没有被任何线程锁定。");
-			_MCFCRT_ASSERT_MSG(!(uOld & MASK_FINISHED), L"一次性初始化标志已被使用。");
+			_MCFCRT_ASSERT_MSG(uOld & MASK_LOCKED,      L"This once flag isn't locked by any thread.");
+			_MCFCRT_ASSERT_MSG(!(uOld & MASK_FINISHED), L"This once flag has been disposed.");
 
 			uNew = uOld & ~MASK_LOCKED;
 			if(bFinished){
@@ -118,7 +118,7 @@ static void RealSetAndSignalOnceFlag(volatile uintptr_t *puControl, bool bFinish
 	}
 	for(size_t i = 0; i < uCountToSignal; ++i){
 		NTSTATUS lStatus = NtReleaseKeyedEvent(nullptr, (void *)puControl, false, nullptr);
-		_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtReleaseKeyedEvent() 失败。");
+		_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtReleaseKeyedEvent() failed.");
 		_MCFCRT_ASSERT(lStatus != STATUS_TIMEOUT);
 	}
 }

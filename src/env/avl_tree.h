@@ -1,5 +1,5 @@
-// 这个文件是 MCF 的一部分。
-// 有关具体授权说明，请参阅 MCFLicense.txt。
+// This file is part of MCFCRT.
+// See MCFLicense.txt for licensing information.
 // Copyleft 2013 - 2016, LH_Mouse. All wrongs reserved.
 
 #ifndef __MCFCRT_ENV_AVL_H_
@@ -71,15 +71,15 @@ static inline void _MCFCRT_AvlSwap(_MCFCRT_AvlRoot *__ppRoot1, _MCFCRT_AvlRoot *
 	}
 }
 
-// 参考 strcmp()。
+// These comparators shall return a negative, zero or positive value if the left operand is less than, equal to or greater than the right operand, respectively.
 typedef int (*_MCFCRT_AvlComparatorNodes)(const _MCFCRT_AvlNodeHeader *, const _MCFCRT_AvlNodeHeader *);
 typedef int (*_MCFCRT_AvlComparatorNodeOther)(const _MCFCRT_AvlNodeHeader *, _MCFCRT_STD intptr_t);
 
 __attribute__((__flatten__))
 static inline void _MCFCRT_AvlAttachWithHint(_MCFCRT_AvlRoot *__ppRoot,
-	// 如果新节点被插入到该节点前后相邻的位置，则效率被优化。
-	// 此处行为和 C++03 以及 C++11 都兼容。
-	// __pHint 可以为空。
+	// Insertion is optimized if __pNode is inserted to an adjacent position to either side of __pHint.
+	// Such behavior is compatible with both C++98 and C++11.
+	// __pHint can be null.
 	const _MCFCRT_AvlNodeHeader *__pHint,
 	_MCFCRT_AvlNodeHeader *__pNode, _MCFCRT_AvlComparatorNodes __pfnComparator)
 {
@@ -95,8 +95,8 @@ static inline void _MCFCRT_AvlAttachWithHint(_MCFCRT_AvlRoot *__ppRoot,
 				__pParent = __pMutableHint;
 				__ppRefl = &(__pMutableHint->__pLeft);
 			} else if((*__pfnComparator)(__pNode, __pPrev) >= 0){
-				// 条件：  node        <   hint
-				//         hint->prev  <=  node
+				// Requires: node        <   hint
+				//           hint->prev  <=  node
 				if(__pPrev->__uHeight < __pHint->__uHeight){
 					_MCFCRT_ASSERT(!__pPrev->__pRight);
 
@@ -117,8 +117,8 @@ static inline void _MCFCRT_AvlAttachWithHint(_MCFCRT_AvlRoot *__ppRoot,
 				__pParent = __pMutableHint;
 				__ppRefl = &(__pMutableHint->__pRight);
 			} else if((*__pfnComparator)(__pNode, __pNext) < 0){
-				// 条件：  hint  <=  node
-				//         node  <   hint->next
+				// Requires: hint  <=  node
+				//           node  <   hint->next
 				if(__pHint->__uHeight < __pNext->__uHeight){
 					_MCFCRT_ASSERT(!__pHint->__pRight);
 

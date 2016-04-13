@@ -1,5 +1,5 @@
-// 这个文件是 MCF 的一部分。
-// 有关具体授权说明，请参阅 MCFLicense.txt。
+// This file is part of MCFCRT.
+// See MCFLicense.txt for licensing information.
 // Copyleft 2013 - 2016, LH_Mouse. All wrongs reserved.
 
 #include "avl_tree.h"
@@ -60,8 +60,8 @@ static void UpdateRecur(_MCFCRT_AvlNodeHeader *pWhere){
 					pNode->__pParent = pLeft;
 					pNode->__ppRefl  = &(pLeft->__pRight);
 					pNode->__pLeft   = pLR;
-					// H(lr) >= H(l) - 2   // 平衡二叉树的要求。
-					//        = H(r)       // 前置条件。
+					// H(lr) >= H(l) - 2   // The invariant of an AVL tree.
+					//        = H(r)       // Precondition of this `if` branch.
 					pNode->__uHeight = uLRHeight + 1;
 
 					pLeft->__pParent = pParent;

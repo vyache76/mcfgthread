@@ -1,5 +1,5 @@
-// 这个文件是 MCF 的一部分。
-// 有关具体授权说明，请参阅 MCFLicense.txt。
+// This file is part of MCFCRT.
+// See MCFLicense.txt for licensing information.
 // Copyleft 2013 - 2016, LH_Mouse. All wrongs reserved.
 
 #include "../env/_crtdef.h"
@@ -24,9 +24,9 @@ wchar_t *_MCFCRT_wcpcpy(wchar_t *restrict dst, const wchar_t *restrict src){
 		}
 	}
 
-	// 如果 rp 是对齐到字的，就不用考虑越界的问题。
-	// 因为内存按页分配的，也自然对齐到页，并且也对齐到字。
-	// 每个字内的字节的权限必然一致。
+	// Align rp to word boundaries, only by then can we read one word at a time.
+	// Since memory access applies to pages, as long as we read an aligned word we can never access across pages,
+	// which leads to a segment fault if the current page is readable but the next page is not.
 	while(((uintptr_t)rp & (sizeof(uintptr_t) - 1)) != 0){
 		if((*wp = *(rp++)) == 0){
 			return wp;
@@ -71,7 +71,7 @@ wchar_t *_MCFCRT_wcppcpy(wchar_t *restrict dst, wchar_t *restrict end, const wch
 	register const wchar_t *rp = src;
 	register wchar_t *wp = dst;
 
-	_MCFCRT_ASSERT_MSG(wp < end, L"目的缓冲区至少应为一个字符大小以容纳字符串结束符。");
+	_MCFCRT_ASSERT_MSG(wp < end, L"The destination buffer must be at least one characterlarge to store the null terminator.");
 
 	if(((uintptr_t)rp & 1) != 0){
 		for(;;){
@@ -82,9 +82,9 @@ wchar_t *_MCFCRT_wcppcpy(wchar_t *restrict dst, wchar_t *restrict end, const wch
 		}
 	}
 
-	// 如果 rp 是对齐到字的，就不用考虑越界的问题。
-	// 因为内存按页分配的，也自然对齐到页，并且也对齐到字。
-	// 每个字内的字节的权限必然一致。
+	// Align rp to word boundaries, only by then can we read one word at a time.
+	// Since memory access applies to pages, as long as we read an aligned word we can never access across pages,
+	// which leads to a segment fault if the current page is readable but the next page is not.
 	while(((uintptr_t)rp & (sizeof(uintptr_t) - 1)) != 0){
 		if(wp >= end - 1){
 			*wp = 0;

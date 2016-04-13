@@ -1,5 +1,5 @@
-// 这个文件是 MCF 的一部分。
-// 有关具体授权说明，请参阅 MCFLicense.txt。
+// This file is part of MCFCRT.
+// See MCFLicense.txt for licensing information.
 // Copyleft 2013 - 2016, LH_Mouse. All wrongs reserved.
 
 #ifndef __MCFCRT_ENV_CRTDEF_H_
@@ -37,7 +37,7 @@
 #define __MCFCRT_C_STDCALL              __attribute__((__stdcall__))  __MCFCRT_C_CALLBACK_DECL
 #define __MCFCRT_C_FASTCALL             __attribute__((__fastcall__)) __MCFCRT_C_CALLBACK_DECL
 
-// C++ 目前还不支持 C99 的 restrict 限定符。
+// C++ has not been supporting the `restrict` qualifier yet.
 #ifdef __cplusplus
 #	define restrict                     __restrict__
 #endif

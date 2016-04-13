@@ -1,5 +1,5 @@
-// 这个文件是 MCF 的一部分。
-// 有关具体授权说明，请参阅 MCFLicense.txt。
+// This file is part of MCFCRT.
+// See MCFLicense.txt for licensing information.
 // Copyleft 2013 - 2016, LH_Mouse. All wrongs reserved.
 
 #ifndef __MCFCRT_ENV_CONDITION_VARIABLE_H_
@@ -9,7 +9,7 @@
 
 __MCFCRT_EXTERN_C_BEGIN
 
-// 初始化为 { 0 } 即可。
+// In the case of static initialization, please initialize it with { 0 }.
 typedef struct __MCFCRT_tagConditionVariable {
 	volatile _MCFCRT_STD uintptr_t __u;
 } volatile _MCFCRT_ConditionVariable;

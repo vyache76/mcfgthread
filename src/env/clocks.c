@@ -1,5 +1,5 @@
-// 这个文件是 MCF 的一部分。
-// 有关具体授权说明，请参阅 MCFLicense.txt。
+// This file is part of MCFCRT.
+// See MCFLicense.txt for licensing information.
 // Copyleft 2013 - 2016, LH_Mouse. All wrongs reserved.
 
 #include "clocks.h"
@@ -16,7 +16,7 @@ static uint64_t GetTimeZoneOffsetInMillisecondsOnce(){
 
 		DYNAMIC_TIME_ZONE_INFORMATION vInfo;
 		if(GetDynamicTimeZoneInformation(&vInfo) == TIME_ZONE_ID_INVALID){
-			_MCFCRT_Bail(L"GetDynamicTimeZoneInformation() 失败。");
+			_MCFCRT_Bail(L"GetDynamicTimeZoneInformation() failed.");
 		}
 		*pInited = (uint64_t)(vInfo.Bias * -60000ll);
 
@@ -34,7 +34,7 @@ static double QueryPerformanceFrequencyReciprocalOnce(){
 
 		LARGE_INTEGER liFreq;
 		if(!QueryPerformanceFrequency(&liFreq)){
-			_MCFCRT_Bail(L"QueryPerformanceFrequency() 失败。");
+			_MCFCRT_Bail(L"QueryPerformanceFrequency() failed.");
 		}
 		*pInited = 1000.0 / (double)liFreq.QuadPart;
 
@@ -49,7 +49,7 @@ uint64_t _MCFCRT_GetUtcClock(){
 		LARGE_INTEGER li;
 	} unUtc;
 	GetSystemTimeAsFileTime(&unUtc.ft);
-	// 0x019DB1DED53E8000 = 从 1601-01-01 到 1970-01-01 经历的时间纳秒数。
+	// 0x019DB1DED53E8000 = duration since 1601-01-01 until 1970-01-01 in nanoseconds.
 	return (uint64_t)(unUtc.li.QuadPart - 0x019DB1DED53E8000ll) / 10000;;
 }
 uint64_t _MCFCRT_GetLocalClock(){
@@ -69,7 +69,7 @@ uint64_t _MCFCRT_GetFastMonoClock(){
 double _MCFCRT_GetHiResMonoClock(){
 	LARGE_INTEGER liCounter;
 	if(!QueryPerformanceCounter(&liCounter)){
-		_MCFCRT_Bail(L"QueryPerformanceCounter() 失败。");
+		_MCFCRT_Bail(L"QueryPerformanceCounter() failed.");
 	}
 	return (double)liCounter.QuadPart * QueryPerformanceFrequencyReciprocalOnce();
 }
