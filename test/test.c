@@ -1,4 +1,4 @@
-// 这个文件被置入公有领域(the Public Domain)。
+// This file is put into the Public Domain.
 
 #include <stdio.h>
 #include <stdlib.h>
