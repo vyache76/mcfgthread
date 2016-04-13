@@ -12,6 +12,7 @@ __gthread_key_t key;
 
 void tls_destructor(void *p){
 	printf("destructing tls data %u\n", *(unsigned *)p);
+	free(p);
 }
 
 // mutex
