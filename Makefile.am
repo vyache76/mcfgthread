@@ -45,4 +45,4 @@ dist_data_DATA =	\
 
 lib_libmcfgthread_la_LDFLAGS =	\
 	-shared -no-undefined -nodefaultlibs	\
-	-Wl,-lgcc,-lgcc_eh,-lmsvcrt,-lkernel32,-lntdll,-subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import,-s
+	-Wl,-lgcc,-lgcc_eh,-lmsvcrt,-lkernel32,-lntdll,-subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import
