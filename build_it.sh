@@ -4,7 +4,7 @@ set -e
 
 echo Building shared library...
 mkdir -p m4
-autoreconf -if
+autoreconf -i
 CFLAGS='-O3' LDFLAGS='-Wl,-s' ./configure --disable-static --enable-shared
 make -j4
 

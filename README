@@ -31,6 +31,8 @@ You are gonna need a toolchain from the mingw-w64 project. You can get one here:
 假设当前目录是在该项目中，在 bash 中运行以下命令：
 Assuming the working directory is this project, run the following commands in bash:
 
+  $ mkdir -p m4
+  $ autoreconf -i
   $ CFLAGS='-O3' LDFLAGS='-Wl,-s' ./configure --enable-shared && make -j4
   $ ls lib/.libs/*dll*
 
