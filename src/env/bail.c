@@ -38,7 +38,15 @@ typedef enum tagHardErrorResponse {
 extern __attribute__((__dllimport__, __stdcall__))
 NTSTATUS NtRaiseHardError(NTSTATUS stError, DWORD dwUnknown, DWORD dwParamCount, const ULONG_PTR *pulParams, HardErrorResponseOption eOption, HardErrorResponse *peResponse);
 
+static volatile bool g_bBailed = false;
+
 _Noreturn void _MCFCRT_Bail(const wchar_t *pwszDescription){
+	const bool bBailed = __atomic_exchange_n(&g_bBailed, true, __ATOMIC_RELAXED);
+	if(bBailed){
+		TerminateThread(GetCurrentThread(), (DWORD)STATUS_UNSUCCESSFUL);
+		__builtin_unreachable();
+	}
+
 #ifdef NDEBUG
 	const bool bCanBeDebugged = IsDebuggerPresent();
 #else
