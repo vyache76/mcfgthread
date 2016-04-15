@@ -7,7 +7,7 @@ AC_PROG_CC
 AC_PROG_LIBTOOL
 
 AM_INIT_AUTOMAKE
-LT_INIT([win32-dll], [disable-static])
+LT_INIT([win32-dll disable-static])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
