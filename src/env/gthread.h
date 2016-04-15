@@ -132,7 +132,7 @@ typedef struct {
 static inline void __gthread_recursive_mutex_init_function(__gthread_recursive_mutex_t *__recur_mutex) _MCFCRT_NOEXCEPT {
 	__recur_mutex->__owner = 0;
 	__recur_mutex->__count = 0;
-	__gthread_mutex_init_function(&(__recur_mutex->__mutex));
+	__gthread_mutex_init_function(&(__recur_mutex->__mutex)); // This guarantees release semantics so we need no atomic operations above.
 }
 static inline int __gthread_recursive_mutex_destroy(__gthread_recursive_mutex_t *__recur_mutex) _MCFCRT_NOEXCEPT {
 	__gthread_mutex_destroy(&(__recur_mutex->__mutex));
