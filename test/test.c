@@ -4,8 +4,9 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <assert.h>
+
 #include <gthread.h>
-#include <mcfwin.h>
+#include <thread.h>
 
 // tls
 __gthread_key_t key;
@@ -23,7 +24,7 @@ volatile unsigned long counter = 0;
 #define THREAD_COUNT           4ul
 
 __MCFCRT_C_STDCALL
-DWORD test_thread_proc(LPVOID param){
+unsigned long test_thread_proc(void * param){
 	unsigned *p = malloc(sizeof(unsigned));
 	assert(p);
 	*p = (unsigned)(uintptr_t)param;
@@ -47,15 +48,17 @@ int main(){
 	assert(ret == 0);
 	printf("key = %p\n", key);
 
-	HANDLE threads[THREAD_COUNT];
+	void *threads[THREAD_COUNT];
 	for(unsigned i = 0; i < THREAD_COUNT; ++i){
-		HANDLE h = CreateThread(0, 0, &test_thread_proc, (LPVOID)(intptr_t)(int)i, 0, 0);
+		void *h = _MCFCRT_CreateNativeThread(&test_thread_proc, (void *)(intptr_t)i, false, nullptr);
 		assert(h);
 		threads[i] = h;
 	}
 	for(unsigned i = 0; i < THREAD_COUNT; ++i){
+		void *h = threads[i];
 		printf("waiting for thread %u\n", i);
-		WaitForSingleObject(threads[i], INFINITE);
+		_MCFCRT_WaitForThreadForever(h);
+		_MCFCRT_CloseThread(h);
 	}
 	printf("counter = %lu\n", counter);
 

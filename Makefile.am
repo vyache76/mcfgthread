@@ -9,6 +9,7 @@ pkginclude_HEADERS =	\
 	src/env/gthread.h	\
 	src/env/mutex.h	\
 	src/env/once_flag.h	\
+	src/env/thread.h	\
 	src/env/thread_env.h
 
 lib_LTLIBRARIES =	\
@@ -33,6 +34,7 @@ lib_libmcfgthread_la_SOURCES =	\
 	src/env/gthread.c	\
 	src/env/mutex.c	\
 	src/env/once_flag.c	\
+	src/env/thread.c	\
 	src/env/thread_env.c	\
 	src/ext/assert.c	\
 	src/ext/itow.c	\
