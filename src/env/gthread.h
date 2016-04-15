@@ -5,7 +5,7 @@
 #ifndef __MCFCRT_ENV_GTHREAD_H_
 #define __MCFCRT_ENV_GTHREAD_H_
 
-// Compatible layer for libgcc and other GCC libraries.
+// Compatibility layer for libgcc and other GCC libraries.
 
 #ifdef __GTHREADS
 #	error __GTHREADS is already defined. (Thread model confliction detected?)
