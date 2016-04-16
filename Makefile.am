@@ -40,7 +40,7 @@ lib_libmcfgthread_la_SOURCES =	\
 	src/ext/itow.c	\
 	src/ext/wcpcpy.c
 
-dist_data_DATA =	\
+EXTRA_DIST =	\
 	build_it.sh	\
 	test/build_test.sh	\
 	test/test.c
