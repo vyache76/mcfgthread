@@ -4,11 +4,7 @@
 
 #ifndef __MCFCRT_ENV_CRTDEF_H_
 #define __MCFCRT_ENV_CRTDEF_H_
-/*
-#if !defined(__amd64__) && !defined(__i386__)
-#	error Unsupported processor architecture.
-#endif
-*/
+
 #if defined(__cplusplus) && __cplusplus >= 201402l
 #	define _MCFCRT_CXX14                1
 #endif
@@ -19,7 +15,6 @@
 
 #ifdef __cplusplus
 #	include <cstddef>
-#	include <cstdint>
 #	include <climits>
 #	include <cassert>
 #	define _MCFCRT_EXTERN_C_BEGIN       extern "C" {
@@ -27,7 +22,6 @@
 #	define _MCFCRT_STD                  ::std::
 #else
 #	include <stddef.h>
-#	include <stdint.h>
 #	include <limits.h>
 #	include <stdbool.h>
 #	include <stdalign.h>
@@ -37,10 +31,26 @@
 #	define _MCFCRT_STD                  //
 #endif
 
+#if defined(_MCFCRT_CXX11)
+#	include <cstdint>
+#elif defined(__cplusplus)
+#	include <stdint.h>
+namespace std {
+	using ::    int8_t; using ::   uint8_t;
+	using ::   int16_t; using ::  uint16_t;
+	using ::   int32_t; using ::  uint32_t;
+	using ::   int64_t; using ::  uint64_t;
+	using ::  intptr_t; using :: uintptr_t;
+	using ::  intmax_t; using :: uintmax_t;
+}
+#else
+#	include <stdint.h>
+#endif
+
 #define restrict                        __restrict__
 
 #ifndef _MCFCRT_CXX11
-#	define nullptr                      ((void *)0)
+#	define nullptr                      0
 #endif
 
 #define __MCFCRT_C_CALLBACK_DECL        __attribute__((__nothrow__, __force_align_arg_pointer__, __aligned__(16)))
