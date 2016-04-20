@@ -3,6 +3,7 @@
 set -e
 
 prefix="$(pwd)/release/mingw32"
+mkdir -p "$prefix"
 
 echo Building shared library...
 mkdir -p m4
