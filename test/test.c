@@ -48,14 +48,14 @@ int main(){
 	assert(ret == 0);
 	printf("key = %p\n", key);
 
-	void *threads[THREAD_COUNT];
+	_MCFCRT_ThreadHandle threads[THREAD_COUNT];
 	for(unsigned i = 0; i < THREAD_COUNT; ++i){
-		void *h = _MCFCRT_CreateNativeThread(&test_thread_proc, (void *)(intptr_t)i, false, nullptr);
+		_MCFCRT_ThreadHandle h = _MCFCRT_CreateNativeThread(&test_thread_proc, (void *)(intptr_t)i, false, nullptr);
 		assert(h);
 		threads[i] = h;
 	}
 	for(unsigned i = 0; i < THREAD_COUNT; ++i){
-		void *h = threads[i];
+		_MCFCRT_ThreadHandle h = threads[i];
 		printf("waiting for thread %u\n", i);
 		_MCFCRT_WaitForThreadForever(h);
 		_MCFCRT_CloseThread(h);
