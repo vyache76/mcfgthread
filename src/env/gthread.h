@@ -32,7 +32,7 @@ _MCFCRT_CONSTEXPR int __gthread_active_p(void) _MCFCRT_NOEXCEPT {
 extern unsigned long __MCFCRT_GthreadTlsConstructor(_MCFCRT_STD intptr_t __nContext, void *__pStorage) _MCFCRT_NOEXCEPT;
 extern void __MCFCRT_GthreadTlsDestructor(_MCFCRT_STD intptr_t __nContext, void *__pStorage) _MCFCRT_NOEXCEPT;
 
-typedef void * __gthread_key_t;
+typedef _MCFCRT_TlsKeyHandle __gthread_key_t;
 
 static inline int __gthread_key_create(__gthread_key_t *__key_ret, void (*__destructor)(void *)) _MCFCRT_NOEXCEPT {
 	const __gthread_key_t __key = _MCFCRT_TlsAllocKey(sizeof(void *), &__MCFCRT_GthreadTlsConstructor, &__MCFCRT_GthreadTlsDestructor, (_MCFCRT_STD intptr_t)__destructor);

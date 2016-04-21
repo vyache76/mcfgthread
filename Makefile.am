@@ -61,3 +61,8 @@ EXTRA_DIST =	\
 lib_libmcfgthread_la_LDFLAGS =	\
 	-shared -no-undefined -nodefaultlibs	\
 	-Wl,-lgcc,-lgcc_eh,-lmsvcrt,-lkernel32,-lntdll,-subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import
+
+install-exec-hook:
+## Due to Windows limitation we can't link this library statically.
+	(cd $(libdir) &&	\
+		ln -sf libmcfgthread.dll.a libmcfgthread.a)

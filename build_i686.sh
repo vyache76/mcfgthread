@@ -21,6 +21,3 @@ echo Testing...
 
 (cd "$build" &&
   make install)
-# Due to Windows limitation we can't link this library as a static one.
-(cd "$prefix/lib" &&
-  ln -sf libmcfgthread.dll.a libmcfgthread.a)
