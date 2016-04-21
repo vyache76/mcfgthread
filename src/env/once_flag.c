@@ -14,9 +14,17 @@ NTSTATUS NtWaitForKeyedEvent(HANDLE hKeyedEvent, void *pKey, BOOLEAN bAlertable,
 extern __attribute__((__dllimport__, __stdcall__))
 NTSTATUS NtReleaseKeyedEvent(HANDLE hKeyedEvent, void *pKey, BOOLEAN bAlertable, const LARGE_INTEGER *pliTimeout);
 
-#define MASK_LOCKED             ((uintptr_t) 0x0001)
-#define MASK_FINISHED           ((uintptr_t) 0x0002)
-#define MASK_THREADS_TRAPPED    ((uintptr_t)~0x000F)
+// The first byte is reserved by Itanium ABI to indicate whether the initialization has succeeded.
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#	define MASK_LOCKED             ((uintptr_t) 0x0100)
+#	define MASK_FINISHED           ((uintptr_t) 0x0001)
+#	define MASK_THREADS_TRAPPED    ((uintptr_t)~0x01FF)
+#else
+#	define BSMS(v_)                ((uintptr_t)((uintptr_t)(v_) << ((sizeof(uintptr_t) - 1) * CHAR_BIT)))
+#	define MASK_LOCKED             ((uintptr_t) 0x0001)
+#	define MASK_FINISHED           ((uintptr_t)                      BSMS(0x01))
+#	define MASK_THREADS_TRAPPED    ((uintptr_t)~0x0001 & (uintptr_t)~BSMS(0xFF))
+#endif
 
 #define THREAD_TRAPPED_ONE      ((uintptr_t)(MASK_THREADS_TRAPPED & -MASK_THREADS_TRAPPED))
 #define THREAD_TRAPPED_MAX      ((uintptr_t)(MASK_THREADS_TRAPPED / THREAD_TRAPPED_ONE))
