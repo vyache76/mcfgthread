@@ -46,7 +46,7 @@ unsigned long test_thread_proc(void * param){
 int main(){
 	int ret = __gthread_key_create(&key, &tls_destructor);
 	assert(ret == 0);
-	printf("key = %p\n", key);
+	printf("key = %p\n", (void *)key);
 
 	_MCFCRT_ThreadHandle threads[THREAD_COUNT];
 	for(unsigned i = 0; i < THREAD_COUNT; ++i){
