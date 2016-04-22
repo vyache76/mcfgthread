@@ -8,17 +8,22 @@
 // Compatibility layer for libgcc and other GCC libraries.
 
 #include "_crtdef.h"
-
-_MCFCRT_EXTERN_C_BEGIN
+#include <errno.h>
+#include "../ext/assert.h"
+#include "../ext/expect.h"
+#include "thread_env.h"
+#include "thread.h"
+#include "once_flag.h"
+#include "mutex.h"
+#include "condition_variable.h"
 
 #ifdef __GTHREADS
 #	error __GTHREADS is already defined. (Thread model confliction detected?)
 #endif
 
-#include <errno.h>
-#include "../ext/assert.h"
-
 #define __GTHREADS 1
+
+_MCFCRT_EXTERN_C_BEGIN
 
 _MCFCRT_CONSTEXPR int __gthread_active_p(void) _MCFCRT_NOEXCEPT {
 	return 1;
@@ -27,8 +32,6 @@ _MCFCRT_CONSTEXPR int __gthread_active_p(void) _MCFCRT_NOEXCEPT {
 //-----------------------------------------------------------------------------
 // Thread local storage
 //-----------------------------------------------------------------------------
-#include "thread_env.h"
-
 extern unsigned long __MCFCRT_GthreadTlsConstructor(_MCFCRT_STD intptr_t __nContext, void *__pStorage) _MCFCRT_NOEXCEPT;
 extern void __MCFCRT_GthreadTlsDestructor(_MCFCRT_STD intptr_t __nContext, void *__pStorage) _MCFCRT_NOEXCEPT;
 
@@ -74,9 +77,6 @@ static inline int __gthread_setspecific(__gthread_key_t __key, const void *__val
 //-----------------------------------------------------------------------------
 // Once
 //-----------------------------------------------------------------------------
-#include "once_flag.h"
-#include "../ext/expect.h"
-
 typedef _MCFCRT_OnceFlag __gthread_once_t;
 
 #define __GTHREAD_ONCE_INIT    { 0 }
@@ -95,8 +95,6 @@ static inline int __gthread_once(__gthread_once_t *__flag, void (*__func)(void))
 //-----------------------------------------------------------------------------
 // Mutex
 //-----------------------------------------------------------------------------
-#include "mutex.h"
-
 typedef _MCFCRT_Mutex __gthread_mutex_t;
 
 #define __GTHREAD_MUTEX_INIT            { 0 }
@@ -129,8 +127,6 @@ static inline int __gthread_mutex_unlock(__gthread_mutex_t *__mutex) _MCFCRT_NOE
 //-----------------------------------------------------------------------------
 // Recursive mutex
 //-----------------------------------------------------------------------------
-#include "thread.h"
-
 typedef struct {
 	volatile _MCFCRT_STD uintptr_t __owner;
 	_MCFCRT_STD size_t __count;
@@ -192,8 +188,6 @@ static inline int __gthread_recursive_mutex_unlock(__gthread_recursive_mutex_t *
 // Condition variable
 //-----------------------------------------------------------------------------
 #define __GTHREAD_HAS_COND 1
-
-#include "condition_variable.h"
 
 extern _MCFCRT_STD intptr_t __MCFCRT_GthreadUnlockCallbackMutex(_MCFCRT_STD intptr_t __context) _MCFCRT_NOEXCEPT;
 extern void __MCFCRT_GthreadRelockCallbackMutex(_MCFCRT_STD intptr_t __context, _MCFCRT_STD intptr_t __unlocked) _MCFCRT_NOEXCEPT;

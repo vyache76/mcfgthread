@@ -1,12 +1,11 @@
 // This file is put into the Public Domain.
 
+#include "../src/env/gthread.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <assert.h>
-
-#include <gthread.h>
-#include <thread.h>
 
 // tls
 __gthread_key_t key;
