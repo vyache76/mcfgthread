@@ -28,7 +28,7 @@ extern void _MCFCRT_AlertableSleepForever(void) _MCFCRT_NOEXCEPT;
 extern void _MCFCRT_YieldThread(void) _MCFCRT_NOEXCEPT;
 
 extern long _MCFCRT_SuspendThread(_MCFCRT_ThreadHandle __hThread) _MCFCRT_NOEXCEPT;
-extern long _MCFCRT_ResumeThread(_MCFCRT_ThreadHandle _hThread) _MCFCRT_NOEXCEPT;
+extern long _MCFCRT_ResumeThread(_MCFCRT_ThreadHandle __hThread) _MCFCRT_NOEXCEPT;
 
 // _MCFCRT_WaitForThread() returns true if the other thread has terminated and false if the current thread has timed out.
 extern bool _MCFCRT_WaitForThread(_MCFCRT_ThreadHandle __hThread, _MCFCRT_STD uint64_t __u64UntilFastMonoClock) _MCFCRT_NOEXCEPT;
