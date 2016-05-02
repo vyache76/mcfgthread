@@ -5,7 +5,7 @@ set -e
 prefix="$(pwd)/release/mingw32"
 mkdir -p "$prefix"
 
-build="$(pwd)/build-i686"
+build="$(pwd)/build_i686"
 mkdir -p "$build"
 
 echo Building shared library...

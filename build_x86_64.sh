@@ -5,7 +5,7 @@ set -e
 prefix="$(pwd)/release/mingw64"
 mkdir -p "$prefix"
 
-build="$(pwd)/build-x86_64"
+build="$(pwd)/build_x86_64"
 mkdir -p "$build"
 
 echo Building shared library...
