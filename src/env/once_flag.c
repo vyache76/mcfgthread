@@ -32,7 +32,7 @@ NTSTATUS NtReleaseKeyedEvent(HANDLE hKeyedEvent, void *pKey, BOOLEAN bAlertable,
 static _MCFCRT_OnceResult RealWaitForOnceFlag(volatile uintptr_t *puControl, bool bMayTimeOut, uint64_t u64UntilFastMonoClock){
 	{
 		uintptr_t uOld, uNew;
-		uOld = __atomic_load_n(puControl, __ATOMIC_ACQUIRE);
+		uOld = __atomic_load_n(puControl, __ATOMIC_RELAXED);
 		if(_MCFCRT_EXPECT(uOld & MASK_FINISHED)){
 			return _MCFCRT_kOnceResultFinished;
 		}
@@ -51,7 +51,7 @@ static _MCFCRT_OnceResult RealWaitForOnceFlag(volatile uintptr_t *puControl, boo
 		bool bFinished, bTaken;
 		{
 			uintptr_t uOld, uNew;
-			uOld = __atomic_load_n(puControl, __ATOMIC_ACQUIRE);
+			uOld = __atomic_load_n(puControl, __ATOMIC_RELAXED);
 			do {
 				bFinished = !!(uOld & MASK_FINISHED);
 				if(bFinished){
@@ -80,7 +80,7 @@ static _MCFCRT_OnceResult RealWaitForOnceFlag(volatile uintptr_t *puControl, boo
 				bool bDecremented;
 				{
 					uintptr_t uOld, uNew;
-					uOld = __atomic_load_n(puControl, __ATOMIC_ACQUIRE);
+					uOld = __atomic_load_n(puControl, __ATOMIC_RELAXED);
 					do {
 						const size_t uThreadsTrapped = (uOld & MASK_THREADS_TRAPPED) / THREAD_TRAPPED_ONE;
 						bDecremented = (uThreadsTrapped > 0);
@@ -110,7 +110,7 @@ static void RealSetAndSignalOnceFlag(volatile uintptr_t *puControl, bool bFinish
 	uintptr_t uCountToSignal;
 	{
 		uintptr_t uOld, uNew;
-		uOld = __atomic_load_n(puControl, __ATOMIC_ACQUIRE);
+		uOld = __atomic_load_n(puControl, __ATOMIC_RELAXED);
 		do {
 			_MCFCRT_ASSERT_MSG(uOld & MASK_LOCKED,      L"This once flag isn't locked by any thread.");
 			_MCFCRT_ASSERT_MSG(!(uOld & MASK_FINISHED), L"This once flag has been disposed.");
