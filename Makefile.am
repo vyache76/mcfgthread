@@ -1,6 +1,6 @@
 ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = foreign subdir-objects
-AM_CPPFLAGS = -std=c11 -Wall -Wextra -pedantic -pedantic-errors -Wconversion -Wsign-conversion -Wsuggest-attribute=noreturn -Wundef -Wshadow	\
+AM_CPPFLAGS = -std=c11 -Wall -Wextra -pedantic -pedantic-errors -Wstrict-prototypes -Wconversion -Wsign-conversion -Wsuggest-attribute=noreturn -Wundef -Wshadow	\
 	-pipe -mfpmath=both -march=nocona -mno-stack-arg-probe -mno-accumulate-outgoing-args -mpush-args -masm=intel
 
 pkginclude_HEADERS =	\

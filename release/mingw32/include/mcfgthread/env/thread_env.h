@@ -12,7 +12,7 @@ _MCFCRT_EXTERN_C_BEGIN
 extern bool __MCFCRT_ThreadEnvInit(void) _MCFCRT_NOEXCEPT;
 extern void __MCFCRT_ThreadEnvUninit(void) _MCFCRT_NOEXCEPT;
 
-extern void __MCFCRT_TlsCleanup() _MCFCRT_NOEXCEPT;
+extern void __MCFCRT_TlsCleanup(void) _MCFCRT_NOEXCEPT;
 
 // The constructor shall return 0 upon success. Otherwise, see comments above _MCFCRT_TlsRequire().
 typedef unsigned long (*_MCFCRT_TlsConstructor)(_MCFCRT_STD intptr_t __nContext, void *__pStorage);
