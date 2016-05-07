@@ -69,8 +69,12 @@ static TlsThread *RequireTlsForCurrentThread(void){
 		pThread->pFirstByThread = nullptr;
 		pThread->pLastByThread  = nullptr;
 
-		const bool bSucceeded = TlsSetValue(g_dwTlsIndex, pThread);
-		_MCFCRT_ASSERT(bSucceeded);
+		if(!TlsSetValue(g_dwTlsIndex, pThread)){
+			const DWORD dwErrorCode = GetLastError();
+			free(pThread);
+			SetLastError(dwErrorCode);
+			return nullptr;
+		}
 	}
 	return pThread;
 }
