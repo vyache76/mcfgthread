@@ -88,7 +88,7 @@ typedef struct tagTlsKey {
 	intptr_t nContext;
 } TlsKey;
 
-TlsObject *GetTlsObject(TlsThread *pThread, TlsKey *pKey){
+static TlsObject *GetTlsObject(TlsThread *pThread, TlsKey *pKey){
 	_MCFCRT_ASSERT(pThread);
 
 	if(!pKey){
@@ -118,7 +118,7 @@ TlsObject *GetTlsObject(TlsThread *pThread, TlsKey *pKey){
 	}
 	return pObject;
 }
-TlsObject *RequireTlsObject(TlsThread *pThread, TlsKey *pKey, size_t uSize, _MCFCRT_TlsConstructor pfnConstructor, _MCFCRT_TlsDestructor pfnDestructor, intptr_t nContext){
+static TlsObject *RequireTlsObject(TlsThread *pThread, TlsKey *pKey, size_t uSize, _MCFCRT_TlsConstructor pfnConstructor, _MCFCRT_TlsDestructor pfnDestructor, intptr_t nContext){
 	TlsObject *pObject = GetTlsObject(pThread, pKey);
 	if(!pObject){
 		const size_t uSizeToAlloc = sizeof(TlsObject) + uSize;
