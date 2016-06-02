@@ -5,10 +5,14 @@
 #include "env/mcfwin.h"
 #include "env/thread_env.h"
 
+__MCFCRT_C_STDCALL
+BOOL __MCFCRT_DllStartup(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved)
+	__asm__("__MCFCRT_DllStartup");
+
 static bool g_bInitialized = false;
 
 __MCFCRT_C_STDCALL
-BOOL DllMain(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved){
+BOOL __MCFCRT_DllStartup(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved){
 	(void)hDll;
 	(void)pReserved;
 

@@ -1,7 +1,10 @@
 ACLOCAL_AMFLAGS = -I m4
-AUTOMAKE_OPTIONS = foreign subdir-objects
+AUTOMAKE_OPTIONS = no-exeext foreign subdir-objects
 AM_CPPFLAGS = -std=c11 -Wall -Wextra -pedantic -pedantic-errors -Wstrict-prototypes -Wconversion -Wsign-conversion -Wsuggest-attribute=noreturn -Wundef -Wshadow	\
 	-pipe -mfpmath=both -march=nocona -mno-stack-arg-probe -mno-accumulate-outgoing-args -mpush-args -masm=intel
+
+## I think you GNU people should just STFU and stop confusing the linker.
+EXEEXT =
 
 pkginclude_HEADERS =	\
 	src/gthread.h
@@ -28,10 +31,10 @@ pkginclude_ext_HEADERS =	\
 	src/ext/itow.h	\
 	src/ext/wcpcpy.h
 
-lib_LTLIBRARIES =	\
-	lib/libmcfgthread.la
+bin_PROGRAMS =	\
+	bin/mcfgthread.dll
 
-lib_libmcfgthread_la_SOURCES =	\
+bin_mcfgthread_dll_SOURCES =	\
 	src/env/avl_tree.c	\
 	src/env/bail.c	\
 	src/env/clocks.c	\
@@ -46,17 +49,24 @@ lib_libmcfgthread_la_SOURCES =	\
 	src/ext/wcpcpy.c	\
 	src/dll_startup.c
 
+bin_mcfgthread_dll_LDFLAGS =	\
+	-shared -nostdlib -Wl,-e__MCFCRT_DllStartup,--out-implib,libmcfgthread.dll.a,-subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import
+
+bin_mcfgthread_dll_LDADD =	\
+	-lgcc -lmsvcrt -lkernel32 -lntdll
+
+lib_LIBRARIES =	\
+	lib/libmcfgthread.dll.a	\
+	lib/libmcfgthread.a
+
+lib/libmcfgthread.dll.a: bin/mcfgthread.dll
+	cp -p libmcfgthread.dll.a $@
+
+lib/libmcfgthread.a: bin/mcfgthread.dll
+## Due to Windows limitation we can't link this library statically.
+	cp -p libmcfgthread.dll.a $@
+
 EXTRA_DIST =	\
 	build_it.sh	\
 	test/build_test.sh	\
 	test/test.c
-
-lib_libmcfgthread_la_LDFLAGS =	\
-	-version-info 0 -shared -no-undefined -nodefaultlibs	\
-	-Wl,-subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import	\
-	-Wl,-lgcc,-lmsvcrt,-lkernel32,-lntdll
-
-install-exec-hook:
-## Due to Windows limitation we can't link this library statically.
-	(cd $(libdir) &&	\
-		ln -sf libmcfgthread.dll.a libmcfgthread.a)
