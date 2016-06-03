@@ -59,14 +59,16 @@ lib_LIBRARIES =	\
 	lib/libmcfgthread.dll.a	\
 	lib/libmcfgthread.a
 
+lib_libmcfgthread_dll_a_SOURCES =
+
 lib/libmcfgthread.dll.a: bin/mcfgthread.dll
 	cp -p libmcfgthread.dll.a $@
+
+lib_libmcfgthread_a_SOURCES =
 
 lib/libmcfgthread.a: bin/mcfgthread.dll
 ## Due to Windows limitation we can't link this library statically.
 	cp -p libmcfgthread.dll.a $@
 
 EXTRA_DIST =	\
-	build_it.sh	\
-	test/build_test.sh	\
 	test/test.c
