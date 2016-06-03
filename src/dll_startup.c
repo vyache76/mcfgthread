@@ -42,6 +42,7 @@ BOOL __MCFCRT_DllStartup(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved){
 			break;
 		}
 		g_bInitialized = false;
+		__MCFCRT_TlsCleanup();
 		__MCFCRT_ThreadEnvUninit();
 		break;
 	}
