@@ -33,19 +33,20 @@ Assuming the working directory is this project, run the following commands in ba
 
   $ mkdir -p m4
   $ autoreconf -i
-  $ CFLAGS='-O3' LDFLAGS='-Wl,-s' ./configure --enable-shared && make -j4
-  $ ls lib/.libs/*dll*
+  $ CFLAGS='-O3' LDFLAGS='-Wl,-s' ./configure
+  $ make -j4
+  $ ls lib/*dll.a
 
-如果构建是成功的，你将会看到这两个文件：
-If the DLL is built successfully, you will see the follow two files:
+如果构建是成功的，你将会看到这个文件：
+If the DLL is built successfully, you will see the follow file:
 
-  lib/.libs/libmcfgthread.dll.a  lib/.libs/msys-mcfgthread-0.dll
+  lib/libmcfgthread.dll.a
 
 现在看看这个 DLL 是否正常工作：
 Now check whether it is working:
 
-  $ gcc -std=c11 test/test.c -otest.exe -Isrc/env -Llib/.libs -lmcfgthread
-  $ PATH="$PATH:"'lib/.libs' ./test.exe
+  $ gcc -std=c11 test/test.c -otest.exe -Isrc/env -Llib -lmcfgthread
+  $ PATH="./lib:$PATH" ./test.exe
 
 如果一切顺利，你将会看到类似这样的输出（TLS key 的值是机器相关的，而 TLS 的析构函数是乱序执行的）：
 If everything goes well you will see something like this (the value of the TLS key is machine-dependent and TLS destructors are executed out-of-order):
