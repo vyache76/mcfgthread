@@ -43,7 +43,7 @@ static __MCFCRT_C_STDCALL __MCFCRT_HAS_EH_TOP
 DWORD CrtThreadProc(LPVOID pParam){
 	const _MCFCRT_ThreadProc pfnProc = ((ThreadInitParams *)pParam)->pfnProc;
 	const intptr_t           nParam  = ((ThreadInitParams *)pParam)->nParam;
-	free(pParam);
+	_MCFCRT_free(pParam);
 
 	DWORD dwExitCode;
 
@@ -59,7 +59,7 @@ DWORD CrtThreadProc(LPVOID pParam){
 }
 
 _MCFCRT_ThreadHandle _MCFCRT_CreateThread(_MCFCRT_ThreadProc pfnThreadProc, intptr_t nParam, bool bSuspended, uintptr_t *restrict puThreadId){
-	ThreadInitParams *const pInitParams = malloc(sizeof(ThreadInitParams));
+	ThreadInitParams *const pInitParams = _MCFCRT_malloc(sizeof(ThreadInitParams));
 	if(!pInitParams){
 		return nullptr;
 	}
@@ -69,7 +69,7 @@ _MCFCRT_ThreadHandle _MCFCRT_CreateThread(_MCFCRT_ThreadProc pfnThreadProc, intp
 	const _MCFCRT_ThreadHandle hThread = _MCFCRT_CreateNativeThread(&CrtThreadProc, pInitParams, bSuspended, puThreadId);
 	if(!hThread){
 		const DWORD dwLastError = GetLastError();
-		free(pInitParams);
+		_MCFCRT_free(pInitParams);
 		SetLastError(dwLastError);
 		return nullptr;
 	}

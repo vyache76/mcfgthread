@@ -50,7 +50,7 @@ uint64_t _MCFCRT_GetUtcClock(void){
 	} unUtc;
 	GetSystemTimeAsFileTime(&unUtc.ft);
 	// 0x019DB1DED53E8000 = duration since 1601-01-01 until 1970-01-01 in nanoseconds.
-	return (uint64_t)(unUtc.li.QuadPart - 0x019DB1DED53E8000ll) / 10000;;
+	return (uint64_t)(((double)unUtc.li.QuadPart - 0x019DB1DED53E8000ll) / 10000.0);
 }
 uint64_t _MCFCRT_GetLocalClock(void){
 	return _MCFCRT_GetLocalClockFromUtc(_MCFCRT_GetUtcClock());

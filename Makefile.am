@@ -16,6 +16,7 @@ pkginclude_env_HEADERS =	\
 	src/env/clocks.h	\
 	src/env/condition_variable.h	\
 	src/env/gthread.h	\
+	src/env/heap.h	\
 	src/env/mcfwin.h	\
 	src/env/mutex.h	\
 	src/env/once_flag.h	\
@@ -40,6 +41,7 @@ bin_mcfgthread_dll_SOURCES =	\
 	src/env/clocks.c	\
 	src/env/condition_variable.c	\
 	src/env/gthread.c	\
+	src/env/heap.c	\
 	src/env/mutex.c	\
 	src/env/once_flag.c	\
 	src/env/thread.c	\
@@ -53,7 +55,7 @@ bin_mcfgthread_dll_LDFLAGS =	\
 	-shared -nostdlib -Wl,-e__MCFCRT_DllStartup,--out-implib,libmcfgthread.dll.a,-subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import
 
 bin_mcfgthread_dll_LDADD =	\
-	-lgcc -lmsvcrt -lkernel32 -lntdll
+	-lkernel32 -lntdll
 
 lib_LIBRARIES =	\
 	lib/libmcfgthread.dll.a	\
@@ -62,13 +64,15 @@ lib_LIBRARIES =	\
 lib_libmcfgthread_dll_a_SOURCES =
 
 lib/libmcfgthread.dll.a: bin/mcfgthread.dll
-	cp -p libmcfgthread.dll.a $@
+	mkdir -p "$$(dirname '$@')"
+	cp -p libmcfgthread.dll.a '$@'
 
 lib_libmcfgthread_a_SOURCES =
 
 lib/libmcfgthread.a: bin/mcfgthread.dll
-## Due to Windows limitation we can't link this library statically.
-	cp -p libmcfgthread.dll.a $@
+	mkdir -p "$$(dirname '$@')"
+	## Due to Windows limitation we can't link this library statically.
+	cp -p libmcfgthread.dll.a '$@'
 
 EXTRA_DIST =	\
 	test/test.c
