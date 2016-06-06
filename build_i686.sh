@@ -14,8 +14,10 @@ echo Building shared library...
 mkdir -p m4
 autoreconf -i
 (cd "$builddir" &&
-  CFLAGS='-O3' CPPFLAGS='-DNDEBUG' LDFLAGS='-Wl,-s' ../configure --build="$build" --host="$build" --prefix="$prefix" &&
-  make -j4)
+  CPPFLAGS='-DNDEBUG'	\
+  CFLAGS='-O3 -ffunction-sections -fdata-sections'	\
+  LDFLAGS='-Wl,-s,--gc-sections'	\
+  ../configure --build="$build" --host="$build" --prefix="$prefix" && make -j4)
 
 echo Testing...
 cp -p "$builddir/lib/libmcfgthread.dll.a" "$builddir/lib/libmcfgthread-new.dll.a"
