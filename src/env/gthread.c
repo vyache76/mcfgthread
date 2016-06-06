@@ -3,6 +3,10 @@
 // Copyleft 2013 - 2016, LH_Mouse. All wrongs reserved.
 
 #include "gthread.h"
+#include "avl_tree.h"
+#include "heap.h"
+#include "mutex.h"
+#include "condition_variable.h"
 
 void __MCFCRT_GthreadTlsDestructor(intptr_t context, void *storage){
 	void (*const destructor)(void *) = (void (*)(void *))context;
@@ -83,7 +87,7 @@ static inline int ThreadControlComparatorNodes(const _MCFCRT_AvlNodeHeader *pObj
 	return ThreadControlComparatorNodeKey(pObj1, (intptr_t)(((const ThreadControl *)pObj2)->tid));
 }
 
-__MCFCRT_C_STDCALL __MCFCRT_HAS_EH_TOP
+__MCFCRT_C_STDCALL
 unsigned long GthreadProc(void *ctrl_ptr){
 	ThreadControl *const ctrl = ctrl_ptr;
 	_MCFCRT_ASSERT(ctrl);
@@ -93,11 +97,7 @@ unsigned long GthreadProc(void *ctrl_ptr){
 
 	void *exit_code;
 
-	__MCFCRT_EH_TOP_BEGIN
-	{
-		exit_code = (*proc)(param);
-	}
-	__MCFCRT_EH_TOP_END
+	exit_code = (*proc)(param);
 
 	__gthread_mutex_lock(&g_ctrlmap_mutex);
 	{
@@ -174,7 +174,9 @@ bool __MCFCRT_GthreadJoin(_MCFCRT_STD uintptr_t tid, void **restrict exit_code_r
 			do {
 				__gthread_cond_wait(&(ctrl->termination), &g_ctrlmap_mutex);
 			} while(ctrl->state != kStateJoined);
-			*exit_code_ret = ctrl->exit_code;
+			if(exit_code_ret){
+				*exit_code_ret = ctrl->exit_code;
+			}
 			joined = true;
 			_MCFCRT_AvlDetach((_MCFCRT_AvlNodeHeader *)ctrl);
 			_MCFCRT_CloseThread(ctrl->handle);
@@ -182,7 +184,9 @@ bool __MCFCRT_GthreadJoin(_MCFCRT_STD uintptr_t tid, void **restrict exit_code_r
 			break;
 		case kStateZombie:
 			ctrl->state = kStateJoined;
-			*exit_code_ret = ctrl->exit_code;
+			if(exit_code_ret){
+				*exit_code_ret = ctrl->exit_code;
+			}
 			joined = true;
 			_MCFCRT_AvlDetach((_MCFCRT_AvlNodeHeader *)ctrl);
 			_MCFCRT_CloseThread(ctrl->handle);
