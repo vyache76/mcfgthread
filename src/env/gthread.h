@@ -147,9 +147,6 @@ static inline int __gthread_recursive_mutex_trylock(__gthread_recursive_mutex_t 
 	const _MCFCRT_STD uintptr_t __self = _MCFCRT_GetCurrentThreadId();
 	const _MCFCRT_STD uintptr_t __old_owner = __atomic_load_n(&(__recur_mutex->__owner), __ATOMIC_RELAXED);
 	if(_MCFCRT_EXPECT_NOT(__old_owner != __self)){
-		if(__old_owner != 0){
-			return EBUSY;
-		}
 		const int __error = __gthread_mutex_trylock(&(__recur_mutex->__mutex));
 		if(__error != 0){
 			return __error;
@@ -285,7 +282,7 @@ static inline _MCFCRT_STD uint64_t __MCFCRT_GthreadTranslateTimeout(const __gthr
 	}
 	const _MCFCRT_STD uint64_t __mono_now_ms = _MCFCRT_GetFastMonoClock();
 	const _MCFCRT_STD uint64_t __complement_ms = (1ull << 48) - 1 - __mono_now_ms;
-	if(__delta_ms >= __complement_ms){
+	if(__delta_ms >= (double)__complement_ms){
 		return (_MCFCRT_STD uint64_t)-1;
 	}
 	return __mono_now_ms + (_MCFCRT_STD uint64_t)__delta_ms;
@@ -302,9 +299,6 @@ static inline int __gthread_recursive_mutex_timedlock(__gthread_recursive_mutex_
 	const _MCFCRT_STD uintptr_t __self = _MCFCRT_GetCurrentThreadId();
 	const _MCFCRT_STD uintptr_t __old_owner = __atomic_load_n(&(__recur_mutex->__owner), __ATOMIC_RELAXED);
 	if(_MCFCRT_EXPECT_NOT(__old_owner != __self)){
-		if(__old_owner != 0){
-			return EBUSY;
-		}
 		const int __error = __gthread_mutex_timedlock(&(__recur_mutex->__mutex), __timeout);
 		if(__error != 0){
 			return __error;
