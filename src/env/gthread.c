@@ -179,6 +179,7 @@ bool __MCFCRT_GthreadJoin(uintptr_t tid, void **restrict exit_code_ret){
 			}
 			joined = true;
 			_MCFCRT_AvlDetach((_MCFCRT_AvlNodeHeader *)ctrl);
+			_MCFCRT_WaitForThreadForever(ctrl->handle);
 			_MCFCRT_CloseThread(ctrl->handle);
 			_MCFCRT_free(ctrl);
 			break;
@@ -189,6 +190,7 @@ bool __MCFCRT_GthreadJoin(uintptr_t tid, void **restrict exit_code_ret){
 			}
 			joined = true;
 			_MCFCRT_AvlDetach((_MCFCRT_AvlNodeHeader *)ctrl);
+			_MCFCRT_WaitForThreadForever(ctrl->handle);
 			_MCFCRT_CloseThread(ctrl->handle);
 			_MCFCRT_free(ctrl);
 			break;
