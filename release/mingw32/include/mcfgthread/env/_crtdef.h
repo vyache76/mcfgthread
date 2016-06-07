@@ -13,33 +13,21 @@
 #	define _MCFCRT_CXX11                1
 #endif
 
+#include <stddef.h>
+#include <stdint.h>
+#include <limits.h>
+#include <stdbool.h>
+#include <stdalign.h>
+#include <assert.h>
+
 #ifdef __cplusplus
-#	include <cstddef>
-#	include <climits>
-#	include <cassert>
 #	define _MCFCRT_EXTERN_C_BEGIN       extern "C" {
 #	define _MCFCRT_EXTERN_C_END         }
-#	define _MCFCRT_STD                  ::std::
+#	define _MCFCRT_STD                  ::
 #else
-#	include <stddef.h>
-#	include <limits.h>
-#	include <stdbool.h>
-#	include <stdalign.h>
-#	include <assert.h>
 #	define _MCFCRT_EXTERN_C_BEGIN
 #	define _MCFCRT_EXTERN_C_END
 #	define _MCFCRT_STD                  //
-#endif
-
-#if defined(_MCFCRT_CXX11)
-#	include <cstdint>
-#elif defined(__cplusplus)
-#	include <stdint.h>
-// Assume the types required are in the global namespace. This is not only a dirty workaround but also our last hope.
-#	undef _MCFCRT_STD
-#	define _MCFCRT_STD                   ::
-#else
-#	include <stdint.h>
 #endif
 
 #define restrict                        __restrict__
