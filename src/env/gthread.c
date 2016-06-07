@@ -130,7 +130,7 @@ unsigned long GthreadProc(void *ctrl_ptr){
 	return 0;
 }
 
-_MCFCRT_STD uintptr_t __MCFCRT_GthreadCreateJoinable(void *(*proc)(void *), void *param){
+uintptr_t __MCFCRT_GthreadCreateJoinable(void *(*proc)(void *), void *param){
 	ThreadControl *const ctrl = _MCFCRT_malloc(sizeof(ThreadControl));
 	if(!ctrl){
 		return 0;
@@ -159,7 +159,7 @@ _MCFCRT_STD uintptr_t __MCFCRT_GthreadCreateJoinable(void *(*proc)(void *), void
 	_MCFCRT_ResumeThread(handle);
 	return tid;
 }
-bool __MCFCRT_GthreadJoin(_MCFCRT_STD uintptr_t tid, void **restrict exit_code_ret){
+bool __MCFCRT_GthreadJoin(uintptr_t tid, void **restrict exit_code_ret){
 	bool joined = false;
 
 	__gthread_mutex_lock(&g_ctrlmap_mutex);
@@ -205,7 +205,7 @@ done:
 
 	return joined;
 }
-bool __MCFCRT_GthreadDetach(_MCFCRT_STD uintptr_t tid){
+bool __MCFCRT_GthreadDetach(uintptr_t tid){
 	bool detached = false;
 
 	__gthread_mutex_lock(&g_ctrlmap_mutex);
