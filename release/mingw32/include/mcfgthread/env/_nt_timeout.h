@@ -14,15 +14,19 @@ _MCFCRT_EXTERN_C_BEGIN
 static inline void __MCF_CRT_InitializeNtTimeout(LARGE_INTEGER *__pliTimeout, _MCFCRT_STD uint64_t __u64UntilFastMonoClock) _MCFCRT_NOEXCEPT {
 	const _MCFCRT_STD uint64_t __u64Now = _MCFCRT_GetFastMonoClock();
 	if(__u64UntilFastMonoClock < __u64Now){
-		__pliTimeout->QuadPart = 0; // We should time out immediately.
+		// We should time out immediately.
+		__pliTimeout->QuadPart = 0;
 		return;
 	}
 	const _MCFCRT_STD uint64_t __u64DeltaMs = __u64UntilFastMonoClock - __u64Now;
 	if(__u64DeltaMs > INT64_MAX / 10000u){
-		__pliTimeout->QuadPart = INT64_MAX; // We should never time out.
+		// We should never time out.
+		__pliTimeout->QuadPart = INT64_MAX;
 		return;
 	}
-	__pliTimeout->QuadPart = -(_MCFCRT_STD int64_t)(__u64DeltaMs * 10000u); // If this value is negative, the duration is mensured by the absolute value of it, in 100 nanoseconds.
+	// If this value is negative, the duration is mensured by the absolute value of it, in 100 nanoseconds.
+	// An increment of 9999u makes sure we never timeout before the time point.
+	__pliTimeout->QuadPart = -(_MCFCRT_STD int64_t)(__u64DeltaMs * 10000u + 9999u);
 }
 
 _MCFCRT_EXTERN_C_END
