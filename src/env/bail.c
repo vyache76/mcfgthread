@@ -32,8 +32,8 @@ typedef enum tagHardErrorResponse {
 	kHardErrorResponseYes,
 } HardErrorResponse;
 
-extern __attribute__((__dllimport__, __stdcall__))
-NTSTATUS NtRaiseHardError(NTSTATUS lStatus, DWORD dwUnknown, DWORD dwParamCount, const ULONG_PTR *pulParams, HardErrorResponseOption eOption, HardErrorResponse *peResponse);
+__attribute__((__dllimport__, __stdcall__))
+extern NTSTATUS NtRaiseHardError(NTSTATUS lStatus, DWORD dwUnknown, DWORD dwParamCount, const ULONG_PTR *pulParams, HardErrorResponseOption eOption, HardErrorResponse *peResponse);
 
 static volatile bool g_bBailed = false;
 
