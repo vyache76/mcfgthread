@@ -25,7 +25,7 @@ static inline void __MCF_CRT_InitializeNtTimeout(LARGE_INTEGER *__pliTimeout, _M
 		return;
 	}
 	// If this value is negative, the duration is mensured by the absolute value of it, in 100 nanoseconds.
-	// An increment of 9999u makes sure we never timeout before the time point.
+	// An increment of 9999u makes sure we never time out before the time point.
 	__pliTimeout->QuadPart = -(_MCFCRT_STD int64_t)(__u64DeltaMs * 10000u + 9999u);
 }
 
