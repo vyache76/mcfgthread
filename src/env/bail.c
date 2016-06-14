@@ -33,7 +33,7 @@ typedef enum tagHardErrorResponse {
 } HardErrorResponse;
 
 __attribute__((__dllimport__, __stdcall__))
-extern NTSTATUS NtRaiseHardError(NTSTATUS lStatus, DWORD dwUnknown, DWORD dwParamCount, const ULONG_PTR *pulParams, HardErrorResponseOption eOption, HardErrorResponse *peResponse);
+extern NTSTATUS NtRaiseHardError(NTSTATUS lStatus, DWORD dwParamCount, DWORD dwUnknown, const ULONG_PTR *pulParams, HardErrorResponseOption eOption, HardErrorResponse *peResponse);
 
 static volatile bool g_bBailed = false;
 
@@ -50,11 +50,11 @@ _Noreturn void _MCFCRT_Bail(const wchar_t *pwszDescription){
 	const bool bCanBeDebugged = true;
 #endif
 
-	wchar_t awcBuffer[1024 + 256];
-	wchar_t *pwcWrite = _MCFCRT_wcpcpy(awcBuffer, L"The program has asked MCF CRT to terminated abnormally. Please contact the author for detailed information.");
+	wchar_t awcBuffer[1024 + 128];
+	wchar_t *pwcWrite = _MCFCRT_wcpcpy(awcBuffer, L"The program has asked MCF CRT to terminate it abnormally. Please contact the author for detailed information.");
 	if(pwszDescription){
 		pwcWrite = _MCFCRT_wcpcpy(pwcWrite, L"\n\nError description: \n");
-		pwcWrite = _MCFCRT_wcppcpy(pwcWrite, awcBuffer + 1024 + 128, pwszDescription); // Reserve some characters for the following sentence.
+		pwcWrite = _MCFCRT_wcppcpy(pwcWrite, awcBuffer + 1024, pwszDescription); // Reserve some characters for the following sentence.
 	}
 	pwcWrite = _MCFCRT_wcpcpy(pwcWrite, L"\n\nClick OK to terminate the program");
 	if(bCanBeDebugged){
@@ -85,9 +85,9 @@ _Noreturn void _MCFCRT_Bail(const wchar_t *pwszDescription){
 
 	UINT uType = (bCanBeDebugged ? MB_OKCANCEL : MB_OK) | MB_ICONERROR;
 
-	const ULONG_PTR aulParams[3] = { (ULONG_PTR)&ustrText, (ULONG_PTR)&ustrCaption, uType };
+	const ULONG_PTR aulParams[] = { (ULONG_PTR)&ustrText, (ULONG_PTR)&ustrCaption, uType, (ULONG_PTR)-1 };
 	HardErrorResponse eResponse;
-	const NTSTATUS lStatus = NtRaiseHardError(0x50000018, 4, 3, aulParams, kHardErrorOk, &eResponse);
+	const NTSTATUS lStatus = NtRaiseHardError(0x50000018, sizeof(aulParams) / sizeof(aulParams[0]), 3, aulParams, kHardErrorOk, &eResponse);
 	if(!NT_SUCCESS(lStatus)){
 		eResponse = kHardErrorResponseCancel;
 	}
