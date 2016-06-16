@@ -16,6 +16,7 @@ pkginclude_env_HEADERS =	\
 	src/env/clocks.h	\
 	src/env/condition_variable.h	\
 	src/env/gthread.h	\
+	src/env/c11thread.h	\
 	src/env/heap.h	\
 	src/env/mcfwin.h	\
 	src/env/mutex.h	\
@@ -24,6 +25,7 @@ pkginclude_env_HEADERS =	\
 	src/env/thread_env.h	\
 	src/env/_crtdef.h	\
 	src/env/_gthread_inl.h	\
+	src/env/_c11thread_inl.h	\
 	src/env/_nt_timeout.h
 
 pkginclude_extdir = $(pkgincludedir)/ext
@@ -42,6 +44,7 @@ bin_mcfgthread_dll_SOURCES =	\
 	src/env/clocks.c	\
 	src/env/condition_variable.c	\
 	src/env/gthread.c	\
+	src/env/c11thread.c	\
 	src/env/heap.c	\
 	src/env/mutex.c	\
 	src/env/once_flag.c	\
