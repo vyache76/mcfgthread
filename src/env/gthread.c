@@ -2,6 +2,7 @@
 // See MCFLicense.txt for licensing information.
 // Copyleft 2013 - 2016, LH_Mouse. All wrongs reserved.
 
+#define __MCFCRT_GTHREAD_INLINE_OR_EXTERN     extern
 #include "gthread.h"
 #include "avl_tree.h"
 #include "heap.h"
@@ -100,7 +101,7 @@ static void RelockCallbackNative(intptr_t context, intptr_t unlocked){
 	_MCFCRT_WaitForMutexForever(mutex, _MCFCRT_MUTEX_SUGGESTED_SPIN_COUNT);
 }
 
-__MCFCRT_C_STDCALL
+__MCFCRT_C_STDCALL __attribute__((__section__(".text$__MCFCRT")))
 static unsigned long GthreadProc(void *ctrl_ptr){
 	ThreadControl *const ctrl = ctrl_ptr;
 	_MCFCRT_ASSERT(ctrl);
@@ -110,7 +111,24 @@ static unsigned long GthreadProc(void *ctrl_ptr){
 
 	void *exit_code;
 
+#ifdef __SEH__
+	__asm__ volatile (
+		"53933: \n"
+		"	.seh_handler __C_specific_handler, @except \n"
+		"	.seh_handlerdata \n"
+		"	.long 1 \n"
+		"	.rva 53933b, 53933f, _gnu_exception_handler, 53933f \n"
+		"	.section .text$__MCFCRT \n"
+	);
+#endif
 	exit_code = (*proc)(param);
+#ifdef __SEH__
+	__asm__ volatile (
+		"	nop \n"
+		"	.balign 16 \n"
+		"53933: \n"
+	);
+#endif
 
 	_MCFCRT_WaitForMutexForever(&g_ctrlmap_mutex, _MCFCRT_MUTEX_SUGGESTED_SPIN_COUNT);
 	{

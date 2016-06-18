@@ -20,7 +20,7 @@ typedef enum __MCFCRT_tagOnceResult {
 	_MCFCRT_kOnceResultFinished = 3,
 } _MCFCRT_OnceResult;
 
-static inline void _MCFCRT_InitializeOnceFlag(_MCFCRT_OnceFlag *__pOnceFlag) _MCFCRT_NOEXCEPT {
+inline void _MCFCRT_InitializeOnceFlag(_MCFCRT_OnceFlag *__pOnceFlag) _MCFCRT_NOEXCEPT {
 	__atomic_store_n(&(__pOnceFlag->__u), 0, __ATOMIC_RELEASE);
 }
 

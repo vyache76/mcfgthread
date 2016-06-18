@@ -23,6 +23,7 @@ pkginclude_env_HEADERS =	\
 	src/env/thread.h	\
 	src/env/thread_env.h	\
 	src/env/_crtdef.h	\
+	src/env/_gthread_inl.h	\
 	src/env/_nt_timeout.h
 
 pkginclude_extdir = $(pkgincludedir)/ext
@@ -52,10 +53,10 @@ bin_mcfgthread_dll_SOURCES =	\
 	src/dll_startup.c
 
 bin_mcfgthread_dll_LDFLAGS =	\
-	-shared -nostdlib -Wl,-e__MCFCRT_DllStartup,--out-implib,libmcfgthread.dll.a,-subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import
+	-shared -static -nostdlib -Wl,-e__MCFCRT_DllStartup,--out-implib,libmcfgthread.dll.a,-subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import
 
 bin_mcfgthread_dll_LDADD =	\
-	-lkernel32 -lntdll
+	-lmingw32 -lmsvcrt -lkernel32 -lntdll
 
 lib_LIBRARIES =	\
 	lib/libmcfgthread.dll.a	\

@@ -17,7 +17,7 @@ typedef struct __MCFCRT_tagConditionVariable {
 typedef _MCFCRT_STD intptr_t (*_MCFCRT_ConditionVariableUnlockCallback)(_MCFCRT_STD intptr_t __nContext);
 typedef void (*_MCFCRT_ConditionVariableRelockCallback)(_MCFCRT_STD intptr_t __nContext, _MCFCRT_STD intptr_t __nUnlocked);
 
-static inline void _MCFCRT_InitializeConditionVariable(_MCFCRT_ConditionVariable *__pConditionVariable) _MCFCRT_NOEXCEPT {
+inline void _MCFCRT_InitializeConditionVariable(_MCFCRT_ConditionVariable *__pConditionVariable) _MCFCRT_NOEXCEPT {
 	__atomic_store_n(&(__pConditionVariable->__u), 0, __ATOMIC_RELEASE);
 }
 
