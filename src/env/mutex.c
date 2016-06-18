@@ -105,7 +105,7 @@ static inline bool ReallyWaitForMutex(volatile uintptr_t *puControl, size_t uMax
 			__MCF_CRT_InitializeNtTimeout(&liTimeout, u64UntilFastMonoClock);
 			NTSTATUS lStatus = NtWaitForKeyedEvent(nullptr, (void *)puControl, false, &liTimeout);
 			_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtWaitForKeyedEvent() failed.");
-			if(_MCFCRT_EXPECT(lStatus == STATUS_TIMEOUT)){
+			while(_MCFCRT_EXPECT(lStatus == STATUS_TIMEOUT)){
 				bool bDecremented;
 				{
 					uintptr_t uOld, uNew;
@@ -122,9 +122,9 @@ static inline bool ReallyWaitForMutex(volatile uintptr_t *puControl, size_t uMax
 				if(bDecremented){
 					return false;
 				}
-				lStatus = NtWaitForKeyedEvent(nullptr, (void *)puControl, false, nullptr);
+				liTimeout.QuadPart = 0;
+				lStatus = NtWaitForKeyedEvent(nullptr, (void *)puControl, false, &liTimeout);
 				_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtWaitForKeyedEvent() failed.");
-				_MCFCRT_ASSERT(lStatus != STATUS_TIMEOUT);
 			}
 		} else {
 			NTSTATUS lStatus = NtWaitForKeyedEvent(nullptr, (void *)puControl, false, nullptr);
