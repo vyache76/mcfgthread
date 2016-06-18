@@ -59,7 +59,7 @@ bin_mcfgthread_dll_LDFLAGS =	\
 	-shared -static -nostdlib -Wl,-e__MCFCRT_DllStartup,--out-implib,libmcfgthread.dll.a,-subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import
 
 bin_mcfgthread_dll_LDADD =	\
-	-lmingw32 -lmsvcrt -lkernel32 -lntdll
+	-lmingw32 -lkernel32 -lntdll -lmsvcrt
 
 lib_LIBRARIES =	\
 	lib/libmcfgthread.dll.a	\
