@@ -7,7 +7,8 @@ AM_CPPFLAGS = -std=c11 -Wall -Wextra -pedantic -pedantic-errors -Wstrict-prototy
 EXEEXT =
 
 pkginclude_HEADERS =	\
-	src/gthread.h
+	src/gthread.h	\
+	src/c11thread.h
 
 pkginclude_envdir = $(pkgincludedir)/env
 pkginclude_env_HEADERS =	\
@@ -24,10 +25,8 @@ pkginclude_env_HEADERS =	\
 	src/env/thread.h	\
 	src/env/thread_env.h	\
 	src/env/_crtdef.h	\
-	src/env/_eh_top.h	\
 	src/env/_gthread_inl.h	\
-	src/env/_c11thread_inl.h	\
-	src/env/_nt_timeout.h
+	src/env/_c11thread_inl.h
 
 pkginclude_extdir = $(pkgincludedir)/ext
 pkginclude_ext_HEADERS =	\
@@ -79,6 +78,3 @@ lib/libmcfgthread.a: bin/mcfgthread.dll
 	mkdir -p "$$(dirname '$@')"
 	## Due to Windows limitation we can't link this library statically.
 	cp -p libmcfgthread.dll.a '$@'
-
-EXTRA_DIST =	\
-	test/test.c
