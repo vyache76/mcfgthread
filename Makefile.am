@@ -24,6 +24,7 @@ pkginclude_env_HEADERS =	\
 	src/env/thread.h	\
 	src/env/thread_env.h	\
 	src/env/_crtdef.h	\
+	src/env/_eh_top.h	\
 	src/env/_gthread_inl.h	\
 	src/env/_c11thread_inl.h	\
 	src/env/_nt_timeout.h
@@ -50,6 +51,7 @@ bin_mcfgthread_dll_SOURCES =	\
 	src/env/once_flag.c	\
 	src/env/thread.c	\
 	src/env/thread_env.c	\
+	src/env/_eh_top.c	\
 	src/ext/assert.c	\
 	src/ext/itow.c	\
 	src/ext/wcpcpy.c	\
@@ -59,7 +61,7 @@ bin_mcfgthread_dll_LDFLAGS =	\
 	-shared -static -nostdlib -Wl,-e__MCFCRT_DllStartup,--out-implib,libmcfgthread.dll.a,-subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import
 
 bin_mcfgthread_dll_LDADD =	\
-	-lmingw32 -lkernel32 -lntdll -lmsvcrt
+	-lkernel32 -lntdll
 
 lib_LIBRARIES =	\
 	lib/libmcfgthread.dll.a	\

@@ -6,6 +6,7 @@
 #include "gthread.h"
 #include "avl_tree.h"
 #include "heap.h"
+#include "_eh_top.h"
 
 void __MCFCRT_GthreadTlsDestructor(intptr_t context, void *storage){
 	void (*const destructor)(void *) = (void (*)(void *))context;
@@ -109,24 +110,11 @@ static unsigned long GthreadProc(void *ctrl_ptr){
 
 	void *exit_code;
 
-#ifdef __SEH__
-	__asm__ volatile (
-		"53933: \n"
-		"	.seh_handler __C_specific_handler, @except \n"
-		"	.seh_handlerdata \n"
-		"	.long 1 \n"
-		"	.rva 53933b, 53933f, _gnu_exception_handler, 53933f \n"
-		"	.section .text$__MCFCRT \n"
-	);
-#endif
-	exit_code = (*proc)(param);
-#ifdef __SEH__
-	__asm__ volatile (
-		"	nop \n"
-		"	.balign 16 \n"
-		"53933: \n"
-	);
-#endif
+	__MCFCRT_EH_TOP_BEGIN
+	{
+		exit_code = (*proc)(param);
+	}
+	__MCFCRT_EH_TOP_END
 
 	_MCFCRT_WaitForMutexForever(&g_ctrlmap_mutex, _MCFCRT_MUTEX_SUGGESTED_SPIN_COUNT);
 	{
