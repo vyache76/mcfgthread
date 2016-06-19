@@ -262,7 +262,9 @@ intptr_t _MCFCRT_TlsGetContext(_MCFCRT_TlsKeyHandle hTlsKey){
 }
 
 bool _MCFCRT_TlsGet(_MCFCRT_TlsKeyHandle hTlsKey, void **restrict ppStorage){
-	*ppStorage = nullptr;
+#ifndef NDEBUG
+	*ppStorage = (void *)0xDEADBEEF;
+#endif
 
 	TlsKey *const pKey = (TlsKey *)hTlsKey;
 	if(!pKey){
@@ -271,17 +273,21 @@ bool _MCFCRT_TlsGet(_MCFCRT_TlsKeyHandle hTlsKey, void **restrict ppStorage){
 	}
 	TlsThread *const pThread = GetTlsForCurrentThread();
 	if(!pThread){
+		*ppStorage = nullptr;
 		return true;
 	}
 	TlsObject *const pObject = GetTlsObject(pThread, pKey);
 	if(!pObject){
+		*ppStorage = nullptr;
 		return true;
 	}
 	*ppStorage = pObject->abyStorage;
 	return true;
 }
 bool _MCFCRT_TlsRequire(_MCFCRT_TlsKeyHandle hTlsKey, void **restrict ppStorage){
-	*ppStorage = nullptr;
+#ifndef NDEBUG
+	*ppStorage = (void *)0xDEADBEEF;
+#endif
 
 	TlsKey *const pKey = (TlsKey *)hTlsKey;
 	if(!pKey){
