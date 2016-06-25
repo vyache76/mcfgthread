@@ -59,7 +59,7 @@ bin_mcfgthread_dll_SOURCES =	\
 bin_mcfgthread_dll_LDFLAGS =	\
 	-shared -static -nostdlib	\
 	-Wl,-e__MCFCRT_DllStartup,-subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import	\
-	-Wl,--disable-stdcall-fixup,--enable-auto-image-base,--no-insert-timestamp,--export-all-symbols,--out-implib,libmcfgthread.dll.a
+	-Wl,--disable-stdcall-fixup,--enable-auto-image-base,--export-all-symbols,--out-implib,libmcfgthread.dll.a
 
 bin_mcfgthread_dll_LDADD =	\
 	-lkernel32 -lntdll
