@@ -7,7 +7,6 @@
 #include "fenv.h"
 #include "_nt_timeout.h"
 #include "../ext/assert.h"
-#include <stdlib.h>
 #include <winternl.h>
 #include <ntdef.h>
 
