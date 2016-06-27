@@ -52,6 +52,4 @@
 #	define _MCFCRT_CONSTEXPR            static inline
 #endif
 
-#define __MCFCRT_RENAMED_PREFIXED(__ret_, __name_, __decl_)   __ret_ __name_ __decl_ __asm__("__MCFCRT_" #__name_)
-
 #endif

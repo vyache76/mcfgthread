@@ -20,9 +20,9 @@ autoreconf -i
   ../configure --build="$build" --host="$build" --prefix="$prefix" && make -j4)
 
 echo Testing...
-cp -p "$builddir/lib/libmcfgthread.dll.a" "$builddir/lib/libmcfgthread-new.dll.a"
-("$build"-gcc -std=c11 -Wall -Wextra -Wpedantic -Werror test/test.c -Isrc/env -L"$builddir/lib" -lmcfgthread-new -o test.exe &&
-  PATH="$builddir/bin:$PATH" ./test.exe)
+cp -p "$builddir/libmcfgthread.dll.a" "$builddir/libmcfgthread-new.dll.a"
+("$build"-gcc -std=c11 -Wall -Wextra -Wpedantic -Werror test/test.c -Isrc/env -L"$builddir" -lmcfgthread-new -o test.exe &&
+  PATH="$builddir:$PATH" ./test.exe)
 
 (cd "$builddir" &&
   make install)

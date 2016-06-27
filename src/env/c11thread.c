@@ -2,7 +2,7 @@
 // See MCFLicense.txt for licensing information.
 // Copyleft 2013 - 2016, LH_Mouse. All wrongs reserved.
 
-#define __MCFCRT_C11THREAD_INLINE_OR_EXTERN     extern
+#define __MCFCRT_C11THREAD_INLINE_OR_EXTERN     extern inline
 #include "c11thread.h"
 #include "avl_tree.h"
 #include "heap.h"
