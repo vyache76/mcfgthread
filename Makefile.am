@@ -58,7 +58,7 @@ mcfgthread_5_dll_SOURCES =	\
 
 mcfgthread_5_dll_LDFLAGS =	\
 	-shared -static -nostdlib	\
-	-Wl,-e__MCFCRT_DllStartup,-subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import	\
+	-Wl,-e@__MCFCRT_DllStartup,-subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import	\
 	-Wl,--disable-stdcall-fixup,--enable-auto-image-base,--export-all-symbols,--out-implib,libmcfgthread.dll.a
 
 mcfgthread_5_dll_LDADD =	\

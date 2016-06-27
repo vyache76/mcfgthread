@@ -7,7 +7,7 @@
 
 __MCFCRT_C_STDCALL
 BOOL __MCFCRT_DllStartup(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved)
-	__asm__("__MCFCRT_DllStartup");
+	__asm__("@__MCFCRT_DllStartup");
 
 static bool g_bInitialized = false;
 
