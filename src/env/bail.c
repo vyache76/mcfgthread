@@ -58,7 +58,7 @@ _Noreturn void _MCFCRT_Bail(const wchar_t *pwszDescription){
 	}
 	pwcWrite = _MCFCRT_wcpcpy(pwcWrite, L"\n\nClick OK to terminate the program");
 	if(bCanBeDebugged){
-		pwcWrite = _MCFCRT_wcpcpy(pwcWrite, L", click Cancel to debug thr program");
+		pwcWrite = _MCFCRT_wcpcpy(pwcWrite, L"; click Cancel to debug the program");
 	}
 	pwcWrite = _MCFCRT_wcpcpy(pwcWrite, L".\n");
 
