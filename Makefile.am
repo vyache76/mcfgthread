@@ -36,9 +36,9 @@ pkginclude_ext_HEADERS =	\
 	src/ext/wcpcpy.h
 
 bin_PROGRAMS =	\
-	mcfgthread-5.dll
+	mcfgthread-6.dll
 
-mcfgthread_5_dll_SOURCES =	\
+mcfgthread_6_dll_SOURCES =	\
 	src/env/avl_tree.c	\
 	src/env/bail.c	\
 	src/env/clocks.c	\
@@ -50,26 +50,26 @@ mcfgthread_5_dll_SOURCES =	\
 	src/env/once_flag.c	\
 	src/env/thread.c	\
 	src/env/thread_env.c	\
-	src/env/_eh_top.c	\
+	src/env/_seh_top.c	\
 	src/ext/assert.c	\
 	src/ext/itow.c	\
 	src/ext/wcpcpy.c	\
 	src/dll_startup.c
 
-mcfgthread_5_dll_LDFLAGS =	\
+mcfgthread_6_dll_LDFLAGS =	\
 	-shared -static -nostdlib	\
 	-Wl,-e@__MCFCRT_DllStartup,-subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import	\
 	-Wl,--disable-stdcall-fixup,--enable-auto-image-base,--export-all-symbols,--out-implib,libmcfgthread.dll.a
 
-mcfgthread_5_dll_LDADD =	\
+mcfgthread_6_dll_LDADD =	\
 	-lkernel32 -lntdll
 
 lib_LIBRARIES =	\
 	libmcfgthread.dll.a	\
 	libmcfgthread.a
 
-libmcfgthread.dll.a: mcfgthread-5.dll
+libmcfgthread.dll.a: mcfgthread-6.dll
 
-libmcfgthread.a: mcfgthread-5.dll
+libmcfgthread.a: mcfgthread-6.dll
 	## Due to Windows limitation we can't link this library statically.
 	cp -p libmcfgthread.dll.a '$@'

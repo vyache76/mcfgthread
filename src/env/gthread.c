@@ -6,7 +6,7 @@
 #include "gthread.h"
 #include "avl_tree.h"
 #include "heap.h"
-#include "_eh_top.h"
+#include "_seh_top.h"
 
 void __MCFCRT_GthreadTlsDestructor(intptr_t context, void *storage){
 	void (*const destructor)(void *) = (void (*)(void *))context;
@@ -100,7 +100,7 @@ static void RelockCallbackNative(intptr_t context, intptr_t unlocked){
 	_MCFCRT_WaitForMutexForever(mutex, _MCFCRT_MUTEX_SUGGESTED_SPIN_COUNT);
 }
 
-__MCFCRT_C_STDCALL __attribute__((__section__(".text$__MCFCRT")))
+__MCFCRT_C_STDCALL
 static unsigned long GthreadProc(void *ctrl_ptr){
 	ThreadControl *const ctrl = ctrl_ptr;
 	_MCFCRT_ASSERT(ctrl);
@@ -110,11 +110,11 @@ static unsigned long GthreadProc(void *ctrl_ptr){
 
 	void *exit_code;
 
-	__MCFCRT_EH_TOP_BEGIN
+	__MCFCRT_SEH_TOP_BEGIN
 	{
 		exit_code = (*proc)(param);
 	}
-	__MCFCRT_EH_TOP_END
+	__MCFCRT_SEH_TOP_END
 
 	_MCFCRT_WaitForMutexForever(&g_ctrlmap_mutex, _MCFCRT_MUTEX_SUGGESTED_SPIN_COUNT);
 	{
