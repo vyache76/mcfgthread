@@ -4,6 +4,7 @@
 
 #include "env/mcfwin.h"
 #include "env/thread_env.h"
+#include "env/_seh_top.h"
 
 __MCFCRT_C_STDCALL
 BOOL __MCFCRT_DllStartup(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved)
@@ -18,34 +19,38 @@ BOOL __MCFCRT_DllStartup(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved){
 
 	bool bRet = true;
 
-	switch(dwReason){
-	case DLL_PROCESS_ATTACH:
-		if(g_bInitialized){
+	__MCFCRT_SEH_TOP_BEGIN
+	{
+		switch(dwReason){
+		case DLL_PROCESS_ATTACH:
+			if(g_bInitialized){
+				break;
+			}
+			bRet = __MCFCRT_ThreadEnvInit();
+			if(!bRet){
+				break;
+			}
+			g_bInitialized = true;
+			break;
+
+		case DLL_THREAD_ATTACH:
+			break;
+
+		case DLL_THREAD_DETACH:
+			__MCFCRT_TlsCleanup();
+			break;
+
+		case DLL_PROCESS_DETACH:
+			if(!g_bInitialized){
+				break;
+			}
+			g_bInitialized = false;
+			__MCFCRT_TlsCleanup();
+			__MCFCRT_ThreadEnvUninit();
 			break;
 		}
-		bRet = __MCFCRT_ThreadEnvInit();
-		if(!bRet){
-			break;
-		}
-		g_bInitialized = true;
-		break;
-
-	case DLL_THREAD_ATTACH:
-		break;
-
-	case DLL_THREAD_DETACH:
-		__MCFCRT_TlsCleanup();
-		break;
-
-	case DLL_PROCESS_DETACH:
-		if(!g_bInitialized){
-			break;
-		}
-		g_bInitialized = false;
-		__MCFCRT_TlsCleanup();
-		__MCFCRT_ThreadEnvUninit();
-		break;
 	}
+	__MCFCRT_SEH_TOP_END
 
 	return bRet;
 }
