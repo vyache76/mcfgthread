@@ -2,6 +2,7 @@
 // See MCFLicense.txt for licensing information.
 // Copyleft 2013 - 2016, LH_Mouse. All wrongs reserved.
 
+#define __MCFCRT_INLINE_OR_EXTERN     extern inline
 #include "condition_variable.h"
 #include "_nt_timeout.h"
 #include "../ext/assert.h"
