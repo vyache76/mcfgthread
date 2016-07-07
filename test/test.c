@@ -11,6 +11,8 @@
 __gthread_key_t key;
 
 void tls_destructor(void *p){
+	assert(__gthread_getspecific(key) == nullptr);
+
 	printf("destructing tls data %u\n", *(unsigned *)p);
 	free(p);
 }
@@ -30,6 +32,10 @@ unsigned long test_thread_proc(void * param){
 	int ret = __gthread_setspecific(key, p);
 	assert(ret == 0);
 	printf("constructed tls data %u\n", *(unsigned *)p);
+
+	ret = __gthread_setspecific(key, p);
+	assert(ret == 0);
+	printf("set new tls data %u\n", *(unsigned *)p);
 
 	for(unsigned long i = 0; i < INCREMENT_PER_THREAD; ++i){
 		__gthread_mutex_lock(&mutex);
