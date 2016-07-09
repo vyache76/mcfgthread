@@ -52,6 +52,7 @@ mcfgthread_7_dll_SOURCES =	\
 	src/env/thread.c	\
 	src/env/thread_env.c	\
 	src/env/_seh_top.c	\
+	src/env/_nt_timeout.c	\
 	src/ext/assert.c	\
 	src/ext/itow.c	\
 	src/ext/wcpcpy.c	\
