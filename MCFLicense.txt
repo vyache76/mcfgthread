@@ -1,9 +1,11 @@
-Most files of this project come from the MCFCRT project and inherit its LGPL
-which is a bit overstrict for most projects. As long as LGPL permits, I hereby
-add an exception to it, placing all .h, .hh and .hpp files from this project
-into the public domain. Since (at the moment) mcfgthread can't be linked
-statically, this guarantees most developers enough freedom to do whatever
-they want with these headers.
+Most files of this project come from the MCFCRT project and inherit
+its LGPL which is a bit overstrict for most projects. As long as LGPL
+permits, I hereby add an exception to it, placing all header files
+from this project into the public domain. This exception covers every
+*.h, *.hh and *.hpp file notwithstanding its scope, be it part of
+the interfaces or implementation details. Since (at the moment)
+mcfgthread can't be linked statically, this guarantees most developers
+enough freedom to do whatever they want with these headers.
 
 ===============================================================================
 
