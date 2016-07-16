@@ -37,9 +37,9 @@ pkginclude_ext_HEADERS =	\
 	src/ext/wcpcpy.h
 
 bin_PROGRAMS =	\
-	mcfgthread-7.dll
+	mcfgthread-8.dll
 
-mcfgthread_7_dll_SOURCES =	\
+mcfgthread_8_dll_SOURCES =	\
 	src/env/avl_tree.c	\
 	src/env/bail.c	\
 	src/env/clocks.c	\
@@ -58,20 +58,20 @@ mcfgthread_7_dll_SOURCES =	\
 	src/ext/wcpcpy.c	\
 	src/dll_startup.c
 
-mcfgthread_7_dll_LDFLAGS =	\
+mcfgthread_8_dll_LDFLAGS =	\
 	-shared -static -nostdlib	\
 	-Wl,-e@__MCFCRT_DllStartup,-subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import	\
 	-Wl,--disable-stdcall-fixup,--enable-auto-image-base,--export-all-symbols,--out-implib,libmcfgthread.dll.a
 
-mcfgthread_7_dll_LDADD =	\
+mcfgthread_8_dll_LDADD =	\
 	-lkernel32 -lntdll
 
 lib_LIBRARIES =	\
 	libmcfgthread.dll.a	\
 	libmcfgthread.a
 
-libmcfgthread.dll.a: mcfgthread-7.dll
+libmcfgthread.dll.a: mcfgthread-8.dll
 
-libmcfgthread.a: mcfgthread-7.dll
+libmcfgthread.a: mcfgthread-8.dll
 	## Due to Windows limitation we can't link this library statically.
 	cp -p libmcfgthread.dll.a '$@'

@@ -14,6 +14,14 @@ extern void __MCFCRT_ThreadEnvUninit(void) _MCFCRT_NOEXCEPT;
 
 extern void __MCFCRT_TlsCleanup(void) _MCFCRT_NOEXCEPT;
 
+// mopthread = the mother of pthread
+// The parameter of the thread procedure will point to a copy of the memory block that __pParams and __uSize define.
+extern _MCFCRT_STD uintptr_t __MCFCRT_MopthreadCreate(void (*__pfnProc)(void *), const void *__pParams, _MCFCRT_STD size_t __uSizeOfParams) _MCFCRT_NOEXCEPT;
+__attribute__((__noreturn__))
+extern void __MCFCRT_MopthreadExit(void (*__pfnModifier)(void *, _MCFCRT_STD intptr_t), _MCFCRT_STD intptr_t __nContext) _MCFCRT_NOEXCEPT;
+extern bool __MCFCRT_MopthreadJoin(_MCFCRT_STD uintptr_t __uTid, void *__pParams) _MCFCRT_NOEXCEPT;
+extern bool __MCFCRT_MopthreadDetach(_MCFCRT_STD uintptr_t __uTid) _MCFCRT_NOEXCEPT;
+
 // The constructor shall return 0 upon success. Otherwise, see comments above _MCFCRT_TlsRequire().
 typedef unsigned long (*_MCFCRT_TlsConstructor)(_MCFCRT_STD intptr_t __nContext, void *__pStorage);
 typedef void (*_MCFCRT_TlsDestructor)(_MCFCRT_STD intptr_t __nContext, void *__pStorage);

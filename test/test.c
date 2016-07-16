@@ -24,8 +24,7 @@ volatile unsigned long counter = 0;
 #define INCREMENT_PER_THREAD   1000000ul
 #define THREAD_COUNT           4ul
 
-__MCFCRT_C_STDCALL
-unsigned long test_thread_proc(void * param){
+void *test_thread_proc(void *param){
 	unsigned *p = malloc(sizeof(unsigned));
 	assert(p);
 	*p = (unsigned)(uintptr_t)param;
@@ -53,17 +52,14 @@ int main(){
 	assert(ret == 0);
 	printf("key = %p\n", (void *)key);
 
-	_MCFCRT_ThreadHandle threads[THREAD_COUNT];
+	__gthread_t threads[THREAD_COUNT];
 	for(unsigned i = 0; i < THREAD_COUNT; ++i){
-		_MCFCRT_ThreadHandle h = _MCFCRT_CreateNativeThread(&test_thread_proc, (void *)(intptr_t)i, false, nullptr);
-		assert(h);
-		threads[i] = h;
+		int err = __gthread_create(&threads[i], &test_thread_proc, (void *)(intptr_t)i);
+		assert(err == 0);
 	}
 	for(unsigned i = 0; i < THREAD_COUNT; ++i){
-		_MCFCRT_ThreadHandle h = threads[i];
 		printf("waiting for thread %u\n", i);
-		_MCFCRT_WaitForThreadForever(h);
-		_MCFCRT_CloseThread(h);
+		__gthread_join(threads[i], nullptr);
 	}
 	printf("counter = %lu\n", counter);
 
