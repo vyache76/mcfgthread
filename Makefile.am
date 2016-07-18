@@ -1,7 +1,7 @@
 ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = no-exeext foreign subdir-objects
 AM_CPPFLAGS = -std=c11 -Wall -Wextra -pedantic -pedantic-errors	\
-	-Wstrict-prototypes -Wconversion -Wsign-conversion -Wsuggest-attribute=noreturn -Wundef -Wshadow -Wwrite-strings	\
+	-Wwrite-strings -Wstrict-prototypes -Wconversion -Wsign-conversion -Wsuggest-attribute=noreturn -Wundef -Wshadow -Wstrict-aliasing=2 -Wstrict-overflow=5	\
 	-pipe -mfpmath=both -march=nocona -mno-stack-arg-probe -mno-accumulate-outgoing-args -mpush-args -masm=intel
 
 ## I think you GNU people should just STFU and stop confusing the linker.
@@ -36,10 +36,7 @@ pkginclude_ext_HEADERS =	\
 	src/ext/itow.h	\
 	src/ext/wcpcpy.h
 
-bin_PROGRAMS =	\
-	mcfgthread-8.dll
-
-mcfgthread_8_dll_SOURCES =	\
+mcfgthread_sources =	\
 	src/env/avl_tree.c	\
 	src/env/bail.c	\
 	src/env/clocks.c	\
@@ -58,6 +55,12 @@ mcfgthread_8_dll_SOURCES =	\
 	src/ext/wcpcpy.c	\
 	src/dll_startup.c
 
+bin_PROGRAMS =	\
+	mcfgthread-8.dll
+
+mcfgthread_8_dll_SOURCES =	\
+	${mcfgthread_sources}
+
 mcfgthread_8_dll_LDFLAGS =	\
 	-shared -static -nostdlib	\
 	-Wl,-e@__MCFCRT_DllStartup,-subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import	\
@@ -72,6 +75,9 @@ lib_LIBRARIES =	\
 
 libmcfgthread.dll.a: mcfgthread-8.dll
 
+##libmcfgthread_a_SOURCES =	\
+##	${mcfgthread_sources}
+
+## Due to Windows limitation we can't link this library statically.
 libmcfgthread.a: mcfgthread-8.dll
-	## Due to Windows limitation we can't link this library statically.
 	cp -p libmcfgthread.dll.a '$@'
