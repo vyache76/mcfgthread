@@ -33,7 +33,6 @@ m4
 missing
 stamp-h1
 
-lib
-bin
-sbin
 build-*
+
+!/release/**
