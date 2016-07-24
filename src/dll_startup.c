@@ -4,7 +4,7 @@
 
 #include "env/mcfwin.h"
 #include "env/module.h"
-#include "env/thread_env.h"
+#include "env/thread.h"
 #include "env/_seh_top.h"
 
 __MCFCRT_C_STDCALL

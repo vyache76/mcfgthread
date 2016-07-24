@@ -24,7 +24,6 @@ pkginclude_env_HEADERS =	\
 	src/env/mutex.h	\
 	src/env/once_flag.h	\
 	src/env/thread.h	\
-	src/env/thread_env.h	\
 	src/env/module.h	\
 	src/env/_crtdef.h	\
 	src/env/_gthread_inl.h	\
@@ -48,7 +47,6 @@ mcfgthread_sources =	\
 	src/env/mutex.c	\
 	src/env/once_flag.c	\
 	src/env/thread.c	\
-	src/env/thread_env.c	\
 	src/env/module.c	\
 	src/env/_seh_top.c	\
 	src/env/_nt_timeout.c	\
