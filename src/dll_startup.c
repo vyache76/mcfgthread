@@ -3,6 +3,7 @@
 // Copyleft 2013 - 2016, LH_Mouse. All wrongs reserved.
 
 #include "env/mcfwin.h"
+#include "env/module.h"
 #include "env/thread_env.h"
 #include "env/_seh_top.h"
 
@@ -26,8 +27,13 @@ BOOL __MCFCRT_DllStartup(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved){
 			if(g_bInitialized){
 				break;
 			}
+			bRet = __MCFCRT_ModuleInit();
+			if(!bRet){
+				break;
+			}
 			bRet = __MCFCRT_ThreadEnvInit();
 			if(!bRet){
+				__MCFCRT_ModuleUninit();
 				break;
 			}
 			g_bInitialized = true;
@@ -47,6 +53,7 @@ BOOL __MCFCRT_DllStartup(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved){
 			g_bInitialized = false;
 			__MCFCRT_TlsCleanup();
 			__MCFCRT_ThreadEnvUninit();
+			__MCFCRT_ModuleUninit();
 			break;
 		}
 	}
