@@ -29,12 +29,11 @@ BOOL __MCFCRT_DllStartup(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved){
 			}
 			bRet = __MCFCRT_ModuleInit();
 			if(!bRet){
-				break;
+				goto jCleanup_00;
 			}
 			bRet = __MCFCRT_ThreadEnvInit();
 			if(!bRet){
-				__MCFCRT_ModuleUninit();
-				break;
+				goto jCleanup_01;
 			}
 			g_bInitialized = true;
 			break;
@@ -53,7 +52,9 @@ BOOL __MCFCRT_DllStartup(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved){
 			g_bInitialized = false;
 			__MCFCRT_TlsCleanup();
 			__MCFCRT_ThreadEnvUninit();
+		jCleanup_01:
 			__MCFCRT_ModuleUninit();
+		jCleanup_00:
 			break;
 		}
 	}
