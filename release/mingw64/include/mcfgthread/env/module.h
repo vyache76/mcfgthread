@@ -27,6 +27,7 @@ extern const char __MCFCRT_ImageBase[]
 __MCFCRT_MODULE_INLINE_OR_EXTERN void *_MCFCRT_GetModuleBase(void) _MCFCRT_NOEXCEPT {
 	return (void *)__MCFCRT_ImageBase;
 }
+
 _MCFCRT_EXTERN_C_END
 
 #endif
