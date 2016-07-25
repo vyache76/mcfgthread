@@ -9,6 +9,9 @@
 
 _MCFCRT_EXTERN_C_BEGIN
 
+extern bool __MCFCRT_ThreadEnvInit(void) _MCFCRT_NOEXCEPT;
+extern void __MCFCRT_ThreadEnvUninit(void) _MCFCRT_NOEXCEPT;
+
 typedef unsigned long (__attribute__((__stdcall__)) *_MCFCRT_NativeThreadProc)(void *__pParam);
 
 typedef struct __MCFCRT_tagThreadHandle {
@@ -33,9 +36,6 @@ extern void _MCFCRT_WaitForThreadForever(_MCFCRT_ThreadHandle __hThread) _MCFCRT
 
 __attribute__((__const__))
 extern _MCFCRT_STD uintptr_t _MCFCRT_GetCurrentThreadId(void) _MCFCRT_NOEXCEPT;
-
-extern bool __MCFCRT_ThreadEnvInit(void) _MCFCRT_NOEXCEPT;
-extern void __MCFCRT_ThreadEnvUninit(void) _MCFCRT_NOEXCEPT;
 
 // mopthread = the mother of pthread
 typedef enum __MCFCRT_tagMopthreadErrorCode {
