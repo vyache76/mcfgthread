@@ -81,4 +81,4 @@ libmcfgthread.dll.a: mcfgthread-9.dll
 
 ## Due to Windows limitation we can't link this library statically.
 libmcfgthread.a: mcfgthread-9.dll
-	cp -p libmcfgthread.dll.a $@
+	cp --no-preserve=timestamps libmcfgthread.dll.a $@
