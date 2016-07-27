@@ -33,6 +33,5 @@ m4
 missing
 stamp-h1
 
-build-*
-
+!/debug/**
 !/release/**

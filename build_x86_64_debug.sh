@@ -2,10 +2,10 @@
 
 set -e
 
-prefix="$(pwd)/release/mingw64"
+prefix="$(pwd)/debug/mingw64"
 mkdir -p "$prefix"
 
-builddir="$(pwd)/build_x86_64"
+builddir="$(pwd)/.build_x86_64_debug"
 mkdir -p "$builddir"
 
 build=x86_64-w64-mingw32
@@ -14,9 +14,9 @@ echo Building shared library...
 mkdir -p m4
 autoreconf -i
 (cd "$builddir" &&
-  CPPFLAGS='-DNDEBUG'	\
-  CFLAGS='-O3 -ffunction-sections -fdata-sections'	\
-  LDFLAGS='-Wl,-s,--gc-sections'	\
+  CPPFLAGS=''	\
+  CFLAGS='-O0 -g'	\
+  LDFLAGS='-O0'	\
   ../configure --build="$build" --host="$build" --prefix="$prefix" && make -j4)
 
 echo Testing...
