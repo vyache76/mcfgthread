@@ -27,7 +27,8 @@ pkginclude_env_HEADERS =	\
 	src/env/module.h	\
 	src/env/_crtdef.h	\
 	src/env/_gthread_inl.h	\
-	src/env/_c11thread_inl.h
+	src/env/_c11thread_inl.h	\
+	src/env/_seh_top.h
 
 pkginclude_extdir = ${pkgincludedir}/ext
 pkginclude_ext_HEADERS =	\
