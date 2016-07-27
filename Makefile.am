@@ -11,7 +11,7 @@ pkginclude_HEADERS =	\
 	src/gthread.h	\
 	src/c11thread.h
 
-pkginclude_envdir = $(pkgincludedir)/env
+pkginclude_envdir = ${pkgincludedir}/env
 pkginclude_env_HEADERS =	\
 	src/env/avl_tree.h	\
 	src/env/bail.h	\
@@ -29,7 +29,7 @@ pkginclude_env_HEADERS =	\
 	src/env/_gthread_inl.h	\
 	src/env/_c11thread_inl.h
 
-pkginclude_extdir = $(pkgincludedir)/ext
+pkginclude_extdir = ${pkgincludedir}/ext
 pkginclude_ext_HEADERS =	\
 	src/ext/assert.h	\
 	src/ext/expect.h	\
