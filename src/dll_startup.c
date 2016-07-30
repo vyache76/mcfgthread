@@ -8,7 +8,7 @@
 #include "env/_seh_top.h"
 
 __MCFCRT_C_STDCALL
-BOOL __MCFCRT_DllStartup(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved)
+extern BOOL __MCFCRT_DllStartup(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved)
 	__asm__("@__MCFCRT_DllStartup");
 
 static bool RealStartup(void *pInstance, unsigned uReason, bool bDynamic){
