@@ -15,10 +15,15 @@ static bool RealStartup(void *pInstance, unsigned uReason, bool bDynamic){
 	(void)pInstance;
 	(void)bDynamic;
 
+	static bool s_bInitialized = false;
+
 	bool bRet = true;
 
 	switch(uReason){
 	case DLL_PROCESS_ATTACH:
+		if(s_bInitialized){
+			break;
+		}
 		bRet = __MCFCRT_ModuleInit();
 		if(!bRet){
 			goto jCleanup_00;
@@ -27,6 +32,7 @@ static bool RealStartup(void *pInstance, unsigned uReason, bool bDynamic){
 		if(!bRet){
 			goto jCleanup_01;
 		}
+		s_bInitialized = true;
 		break;
 
 	case DLL_THREAD_ATTACH:
@@ -37,6 +43,10 @@ static bool RealStartup(void *pInstance, unsigned uReason, bool bDynamic){
 		break;
 
 	case DLL_PROCESS_DETACH:
+		if(!s_bInitialized){
+			break;
+		}
+		s_bInitialized = false;
 		__MCFCRT_TlsCleanup();
 		__MCFCRT_ThreadEnvUninit();
 	jCleanup_01:
@@ -52,13 +62,9 @@ __MCFCRT_C_STDCALL
 BOOL __MCFCRT_DllStartup(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved){
 	bool bRet;
 
-	void *const pInstance  = (void *)hDll;
-	const unsigned uReason = dwReason;
-	const bool bDynamic    = !pReserved;
-
 	__MCFCRT_SEH_TOP_BEGIN
 	{
-		bRet = RealStartup(pInstance, uReason, bDynamic);
+		bRet = RealStartup((void *)hDll, (unsigned)dwReason, !pReserved);
 	}
 	__MCFCRT_SEH_TOP_END
 
