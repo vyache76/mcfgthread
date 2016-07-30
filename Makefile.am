@@ -11,6 +11,10 @@ pkginclude_HEADERS =	\
 	src/gthread.h	\
 	src/c11thread.h
 
+pkginclude_predir = ${pkgincludedir}/pre
+pkginclude_pre_HEADERS =	\
+	src/pre/module.h
+
 pkginclude_envdir = ${pkgincludedir}/env
 pkginclude_env_HEADERS =	\
 	src/env/avl_tree.h	\
@@ -24,7 +28,7 @@ pkginclude_env_HEADERS =	\
 	src/env/mutex.h	\
 	src/env/once_flag.h	\
 	src/env/thread.h	\
-	src/env/module.h	\
+	src/env/crt_module.h	\
 	src/env/_crtdef.h	\
 	src/env/_gthread_inl.h	\
 	src/env/_c11thread_inl.h	\
@@ -37,6 +41,9 @@ pkginclude_ext_HEADERS =	\
 	src/ext/itow.h	\
 	src/ext/wcpcpy.h
 
+mcfgthread_pre_sources =	\
+	src/pre/module.c
+
 mcfgthread_sources =	\
 	src/env/avl_tree.c	\
 	src/env/bail.c	\
@@ -48,18 +55,19 @@ mcfgthread_sources =	\
 	src/env/mutex.c	\
 	src/env/once_flag.c	\
 	src/env/thread.c	\
-	src/env/module.c	\
+	src/env/crt_module.c	\
 	src/env/_seh_top.c	\
 	src/env/_nt_timeout.c	\
 	src/ext/assert.c	\
 	src/ext/itow.c	\
-	src/ext/wcpcpy.c	\
-	src/dll_startup.c
+	src/ext/wcpcpy.c
 
 bin_PROGRAMS =	\
 	mcfgthread-9.dll
 
 mcfgthread_9_dll_SOURCES =	\
+	src/dll_startup.c	\
+	${mcfgthread_pre_sources}	\
 	${mcfgthread_sources}
 
 mcfgthread_9_dll_LDFLAGS =	\

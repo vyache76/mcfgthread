@@ -3,9 +3,9 @@
 // Copyleft 2013 - 2016, LH_Mouse. All wrongs reserved.
 
 #include "env/mcfwin.h"
-#include "env/module.h"
-#include "env/thread.h"
 #include "env/_seh_top.h"
+#include "pre/module.h"
+#include "env/thread.h"
 
 __MCFCRT_C_STDCALL
 extern BOOL __MCFCRT_DllStartup(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved)
