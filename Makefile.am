@@ -20,7 +20,7 @@ __pch.h: ${srcdir}/src/env/_crtdef.h
 	echo "#include \"$<\"" > $@
 
 __pch.h.gch: __pch.h
-	${CC} -x c-header @DEFS@ ${AM_CPPFLAGS} ${CPPFLAGS} $$(echo ${AM_CFLAGS} | sed 's/-include __pch.h//') ${CFLAGS} $< -o $@
+	${CC} -x c-header @DEFS@ ${AM_CPPFLAGS} ${CPPFLAGS} $$(echo "${AM_CFLAGS}" | sed "s/-include __pch\\.h//") ${CFLAGS} $< -o $@
 
 pkginclude_HEADERS =	\
 	src/gthread.h	\
