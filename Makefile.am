@@ -1,11 +1,26 @@
 ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = no-exeext foreign subdir-objects
-AM_CPPFLAGS = -std=c11 -Wall -Wextra -pedantic -pedantic-errors -Werror	\
-	-Wwrite-strings -Wstrict-prototypes -Wconversion -Wsign-conversion -Wsuggest-attribute=noreturn -Wundef -Wshadow -Wstrict-aliasing=2 -Wstrict-overflow=5	\
+AM_CPPFLAGS = -Wall -Wextra -pedantic -pedantic-errors -Werror	\
+	-Wwrite-strings -Wconversion -Wsign-conversion -Wsuggest-attribute=noreturn -Wundef -Wshadow -Wstrict-aliasing=2 -Wstrict-overflow=5	\
 	-pipe -mfpmath=both -march=nocona -mno-stack-arg-probe -mno-accumulate-outgoing-args -mpush-args -masm=intel
+AM_CFLAGS = -include __pch.h -std=c11 -Wstrict-prototypes
 
 ## I think you GNU people should just STFU and stop confusing the linker.
 EXEEXT =
+
+BUILT_SOURCES = \
+	__pch.h	\
+	__pch.h.gch
+
+CLEANFILES = \
+	__pch.h	\
+	__pch.h.gch
+
+__pch.h: ${srcdir}/src/env/_crtdef.h
+	echo "#include \"$<\"" > $@
+
+__pch.h.gch: __pch.h
+	${CC} -x c-header @DEFS@ ${AM_CPPFLAGS} ${CPPFLAGS} $$(echo ${AM_CFLAGS} | sed 's/-include __pch.h//') ${CFLAGS} $< -o $@
 
 pkginclude_HEADERS =	\
 	src/gthread.h	\
