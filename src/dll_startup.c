@@ -21,18 +21,17 @@ static bool RealStartup(void *pInstance, unsigned uReason, bool bDynamic){
 
 	switch(uReason){
 	case DLL_PROCESS_ATTACH:
-		if(s_bInitialized){
-			break;
+		if(!s_bInitialized){
+			bRet = __MCFCRT_ModuleInit();
+			if(!bRet){
+				goto jCleanup_00;
+			}
+			bRet = __MCFCRT_ThreadEnvInit();
+			if(!bRet){
+				goto jCleanup_01;
+			}
+			s_bInitialized = true;
 		}
-		bRet = __MCFCRT_ModuleInit();
-		if(!bRet){
-			goto jCleanup_00;
-		}
-		bRet = __MCFCRT_ThreadEnvInit();
-		if(!bRet){
-			goto jCleanup_01;
-		}
-		s_bInitialized = true;
 		break;
 
 	case DLL_THREAD_ATTACH:
@@ -43,15 +42,15 @@ static bool RealStartup(void *pInstance, unsigned uReason, bool bDynamic){
 		break;
 
 	case DLL_PROCESS_DETACH:
-		if(!s_bInitialized){
-			break;
-		}
-		s_bInitialized = false;
-		__MCFCRT_TlsCleanup();
-		__MCFCRT_ThreadEnvUninit();
+		if(s_bInitialized){
+			s_bInitialized = false;
+			__MCFCRT_TlsCleanup();
+			__MCFCRT_ThreadEnvUninit();
 	jCleanup_01:
-		__MCFCRT_ModuleUninit();
+			__MCFCRT_ModuleUninit();
 	jCleanup_00:
+			;
+		}
 		break;
 	}
 
