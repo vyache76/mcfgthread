@@ -6,6 +6,7 @@
 #include "env/_seh_top.h"
 #include "pre/module.h"
 #include "env/thread.h"
+#include "env/crt_module.h"
 
 __MCFCRT_C_STDCALL
 extern BOOL __MCFCRT_DllStartup(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved)
@@ -48,6 +49,7 @@ static bool RealStartup(void *pInstance, unsigned uReason, bool bDynamic){
 			__MCFCRT_ThreadEnvUninit();
 	jCleanup_01:
 			__MCFCRT_ModuleUninit();
+			__MCFCRT_DiscardCrtModuleQuickExitCallbacks();
 	jCleanup_00:
 			;
 		}
