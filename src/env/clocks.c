@@ -14,11 +14,11 @@ static uint64_t GetTimeZoneOffsetInMillisecondsOnce(void){
 	if(!pInited){
 		pInited = &s_u64Value;
 
-		DYNAMIC_TIME_ZONE_INFORMATION vInfo;
-		if(GetDynamicTimeZoneInformation(&vInfo) == TIME_ZONE_ID_INVALID){
-			_MCFCRT_Bail(L"GetDynamicTimeZoneInformation() failed.");
+		TIME_ZONE_INFORMATION vTzInfo;
+		if(GetTimeZoneInformation(&vTzInfo) == TIME_ZONE_ID_INVALID){
+			_MCFCRT_Bail(L"GetTimeZoneInformation() failed.");
 		}
-		*pInited = (uint64_t)(vInfo.Bias * -60000ll);
+		*pInited = (uint64_t)(vTzInfo.Bias * -60000ll);
 
 		__atomic_store_n(&s_pu64Inited, pInited, __ATOMIC_RELEASE);
 	}
