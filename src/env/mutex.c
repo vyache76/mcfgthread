@@ -26,7 +26,8 @@ extern NTSTATUS NtReleaseKeyedEvent(HANDLE hKeyedEvent, void *pKey, BOOLEAN bAle
 #define THREAD_TRAPPED_ONE      ((uintptr_t)(MASK_THREADS_TRAPPED & -MASK_THREADS_TRAPPED))
 #define THREAD_TRAPPED_MAX      ((uintptr_t)(MASK_THREADS_TRAPPED / THREAD_TRAPPED_ONE))
 
-static bool ReallyWaitForMutex(volatile uintptr_t *puControl, size_t uMaxSpinCount, bool bMayTimeOut, uint64_t u64UntilFastMonoClock){
+__attribute__((__always_inline__))
+static inline bool ReallyWaitForMutex(volatile uintptr_t *puControl, size_t uMaxSpinCount, bool bMayTimeOut, uint64_t u64UntilFastMonoClock){
 	{
 		uintptr_t uOld, uNew;
 		uOld = __atomic_load_n(puControl, __ATOMIC_RELAXED);
@@ -134,7 +135,8 @@ static bool ReallyWaitForMutex(volatile uintptr_t *puControl, size_t uMaxSpinCou
 		}
 	}
 }
-static void ReallySignalMutex(volatile uintptr_t *puControl){
+__attribute__((__always_inline__))
+static inline void ReallySignalMutex(volatile uintptr_t *puControl){
 	bool bSignalOne;
 	{
 		uintptr_t uOld, uNew;
