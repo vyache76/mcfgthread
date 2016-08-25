@@ -14,8 +14,8 @@ extern void __MCFCRT_OnAssertionFailure(const wchar_t *__pwszExpression, const w
 
 _MCFCRT_EXTERN_C_END
 
-#define __MCFCRT_ASSERT_WIDEN_X(__s_)           L ## __s_
-#define __MCFCRT_ASSERT_WIDEN(__s_)             __MCFCRT_ASSERT_WIDEN_X(__s_)
+#define __MCFCRT_ASSERT_WIDEN_(__s_)            L ## __s_
+#define __MCFCRT_ASSERT_WIDEN(__s_)             __MCFCRT_ASSERT_WIDEN_(__s_)
 
 #define _MCFCRT_ASSERT(__expr_)                 ((void)(((__expr_) ? true : false) ||	\
                                                   (__MCFCRT_ON_ASSERTION_FAILURE(__MCFCRT_ASSERT_WIDEN(#__expr_),	\
