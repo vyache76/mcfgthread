@@ -11,7 +11,7 @@
 wchar_t *_MCFCRT_wcpcpy(wchar_t *restrict dst, const wchar_t *restrict src){
 	register wchar_t *wp = dst;
 	register const wchar_t *rp = src;
-	// Align rp to word boundaries, only by then can we read one word at a time.
+	// Align `rp` to word boundaries, only by then can we read one word at a time.
 	// Since memory access applies to pages, as long as we read an aligned word we can never access across pages,
 	// which leads to a segment fault if the current page is readable but the next page is not.
 	while(((uintptr_t)rp & 31) != 0){
@@ -59,7 +59,7 @@ wchar_t *_MCFCRT_wcppcpy(wchar_t *dst, wchar_t *end, const wchar_t *restrict src
 	register wchar_t *wp = dst;
 	wchar_t *const wend = end - 1;
 	register const wchar_t *rp = src;
-	// Align rp to word boundaries, only by then can we read one word at a time.
+	// Align `rp` to word boundaries, only by then can we read one word at a time.
 	// Since memory access applies to pages, as long as we read an aligned word we can never access across pages,
 	// which leads to a segment fault if the current page is readable but the next page is not.
 	while(((uintptr_t)rp & 31) != 0){
