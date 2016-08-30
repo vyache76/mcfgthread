@@ -70,7 +70,7 @@ _Noreturn void _MCFCRT_Bail(const wchar_t *pwszDescription){
 			WriteConsoleW(hStdErr, awcBuffer, (DWORD)(pwcWrite - awcBuffer), &dwCharsWritten, nullptr);
 		}
 	}
-	*(pwcWrite--) = 0;
+	--pwcWrite;
 
 	UNICODE_STRING ustrText;
 	ustrText.Length        = (unsigned short)((char *)pwcWrite - (char *)awcBuffer);
