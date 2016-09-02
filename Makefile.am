@@ -52,6 +52,7 @@ pkginclude_env_HEADERS =	\
 pkginclude_extdir = ${pkgincludedir}/ext
 pkginclude_ext_HEADERS =	\
 	src/ext/assert.h	\
+	src/ext/pp.h	\
 	src/ext/expect.h	\
 	src/ext/itow.h	\
 	src/ext/wcpcpy.h
