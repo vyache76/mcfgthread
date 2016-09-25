@@ -5,8 +5,8 @@ build:
   commands:
     - autoreconf -ifv
     - CPPFLAGS='-O3' ./configure
-    - make -j$$(nproc)
-    - make distcheck -j$$(nproc)
+    - make -j$(nproc)
+    - make distcheck -j$(nproc)
     - mv libmcfgthread.dll.a  libmcfgthread-new.dll.a
     - gcc test/test.c -lmcfgthread-new -L.
     - ./a
