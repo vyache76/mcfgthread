@@ -14,7 +14,7 @@ build:
 notify:
   irc:
     prefix: build
-    nick: mcfgthread-tea-ci
+    nick: mcfgthread-cibot
     channel: mcfproj
     server:
       host: chat.freenode.net
