@@ -1,7 +1,7 @@
 build:
   image: teaci/msys$$arch
   pull: true
-  shell: msys$$arch
+  shell: mingw$$arch
   commands:
     - autoreconf -ifv
     - CPPFLAGS='-O3' ./configure
