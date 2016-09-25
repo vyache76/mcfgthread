@@ -1,0 +1,26 @@
+build:
+  image: teaci/msys$$arch
+  pull: true
+  shell: msys$$arch
+  commands:
+    - autoreconf -ifv
+    - CPPFLAGS='-O3' ./configure
+    - make -j$$(nproc)
+    - make distcheck -j$$(nproc)
+    - mv libmcfgthread.dll.a  libmcfgthread-new.dll.a
+    - gcc test/test.c -lmcfgthread-new -L.
+    - ./a
+
+notify:
+  irc:
+    prefix: build
+    nick: mcfgthread-tea-ci
+    channel: mcfproj
+    server:
+      host: chat.freenode.net
+      port: 6667
+
+matrix:
+  arch:
+    - 64
+    - 32
