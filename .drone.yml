@@ -9,7 +9,8 @@ build:
     - make distcheck -j$(nproc)
     - mv libmcfgthread.dll.a  libmcfgthread-new.dll.a
     - gcc test/test.c -lmcfgthread-new -L.
-    - ./a
+# FIXME: At the moment this crashes on Wine. We must have a REAL Windows to test it.
+#    - ./a
 
 notify:
   irc:
