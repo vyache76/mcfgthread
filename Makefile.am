@@ -22,19 +22,19 @@ __pch.h: ${srcdir}/src/env/_crtdef.h
 __pch.h.gch: __pch.h
 	${CC} -x c-header @DEFS@ ${AM_CPPFLAGS} ${CPPFLAGS} $$(echo "" "${AM_CFLAGS}" | sed "s/-include __pch\\.h//") ${CFLAGS} $< -o $@
 
-noinst_HEADERS =	\
+noinst_HEADERS = \
 	src/env/_nt_timeout.h
 
-pkginclude_HEADERS =	\
+pkginclude_HEADERS = \
 	src/gthread.h	\
 	src/c11thread.h
 
 pkginclude_predir = ${pkgincludedir}/pre
-pkginclude_pre_HEADERS =	\
+pkginclude_pre_HEADERS = \
 	src/pre/module.h
 
 pkginclude_envdir = ${pkgincludedir}/env
-pkginclude_env_HEADERS =	\
+pkginclude_env_HEADERS = \
 	src/env/avl_tree.h	\
 	src/env/bail.h	\
 	src/env/clocks.h	\
@@ -53,17 +53,17 @@ pkginclude_env_HEADERS =	\
 	src/env/_seh_top.h
 
 pkginclude_extdir = ${pkgincludedir}/ext
-pkginclude_ext_HEADERS =	\
+pkginclude_ext_HEADERS = \
 	src/ext/assert.h	\
 	src/ext/pp.h	\
 	src/ext/expect.h	\
 	src/ext/itow.h	\
 	src/ext/wcpcpy.h
 
-mcfgthread_pre_sources =	\
+mcfgthread_pre_sources = \
 	src/pre/module.c
 
-mcfgthread_sources =	\
+mcfgthread_sources = \
 	src/env/avl_tree.c	\
 	src/env/bail.c	\
 	src/env/clocks.c	\
@@ -81,34 +81,32 @@ mcfgthread_sources =	\
 	src/ext/itow.c	\
 	src/ext/wcpcpy.c
 
-bin_PROGRAMS =	\
+bin_PROGRAMS = \
 	mcfgthread-9.dll
 
-mcfgthread_9_dll_SOURCES =	\
+mcfgthread_9_dll_SOURCES = \
 	src/dll_startup.c	\
 	${mcfgthread_pre_sources}	\
 	${mcfgthread_sources}
 
-mcfgthread_9_dll_LDFLAGS =	\
+mcfgthread_9_dll_LDFLAGS = \
 	-shared -static -nostdlib	\
 	-Wl,-e@__MCFCRT_DllStartup,-subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import	\
 	-Wl,--export-all-symbols,--exclude-symbols,@__MCFCRT_DllStartup,--exclude-libs,ALL	\
 	-Wl,--disable-stdcall-fixup,--enable-auto-image-base,--out-implib,libmcfgthread.dll.a
 
-mcfgthread_9_dll_LDADD =	\
+mcfgthread_9_dll_LDADD = \
 	-lkernel32 -lntdll
 
-lib_LIBRARIES =	\
+lib_LIBRARIES = \
 	libmcfgthread.dll.a	\
 	libmcfgthread.a
 
 libmcfgthread_dll_a_SOURCES =
-
 libmcfgthread.dll.a: mcfgthread-9.dll
 
 libmcfgthread_a_SOURCES =
-
-##libmcfgthread_a_SOURCES =	\
+##libmcfgthread_a_SOURCES = \
 ##	${mcfgthread_sources}
 
 ## Due to Windows limitation we can't link this library statically.
