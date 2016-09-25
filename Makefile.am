@@ -22,6 +22,9 @@ __pch.h: ${srcdir}/src/env/_crtdef.h
 __pch.h.gch: __pch.h
 	${CC} -x c-header @DEFS@ ${AM_CPPFLAGS} ${CPPFLAGS} $$(echo "" "${AM_CFLAGS}" | sed "s/-include __pch\\.h//") ${CFLAGS} $< -o $@
 
+noinst_HEADERS =	\
+	src/env/_nt_timeout.h
+
 pkginclude_HEADERS =	\
 	src/gthread.h	\
 	src/c11thread.h
@@ -98,7 +101,11 @@ lib_LIBRARIES =	\
 	libmcfgthread.dll.a	\
 	libmcfgthread.a
 
+libmcfgthread_dll_a_SOURCES =
+
 libmcfgthread.dll.a: mcfgthread-9.dll
+
+libmcfgthread_a_SOURCES =
 
 ##libmcfgthread_a_SOURCES =	\
 ##	${mcfgthread_sources}
