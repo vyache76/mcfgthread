@@ -3,12 +3,13 @@ build:
   pull: true
   shell: mingw$$arch
   commands:
+    - git clean -fdx
     - mkdir -p m4
     - autoreconf -ifv
     - CPPFLAGS='-O3' ./configure
     - make -j$(nproc)
     - make distcheck -j$(nproc)
-    - mv libmcfgthread.dll.a  libmcfgthread-new.dll.a
+    - cp -p libmcfgthread.dll.a  libmcfgthread-new.dll.a
     - gcc test/test.c -lmcfgthread-new -L.
 # FIXME: At the moment this crashes on Wine. We must have a REAL Windows to test it.
 #    - ./a
