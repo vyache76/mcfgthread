@@ -3,6 +3,7 @@ build:
   pull: true
   shell: mingw$$arch
   commands:
+    - mkdir -p m4
     - autoreconf -ifv
     - CPPFLAGS='-O3' ./configure
     - make -j$(nproc)
