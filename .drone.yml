@@ -16,7 +16,7 @@ build:
 
 notify:
   irc:
-    prefix: lh_mouse
+    prefix:
     nick: mcfgthread-cibot
     channel: mcfproj
     server:
