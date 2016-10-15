@@ -17,7 +17,7 @@ autoreconf -i
   CPPFLAGS=''	\
   CFLAGS='-O0 -g'	\
   LDFLAGS='-O0'	\
-  ../configure --build="$build" --host="$build" --prefix="$prefix" && make -j4)
+  (test -f Makefile || ../configure --build="$build" --host="$build" --prefix="$prefix") && make -j4)
 
 echo Testing...
 cp -p "$builddir/libmcfgthread.dll.a" "$builddir/libmcfgthread-new.dll.a"
