@@ -22,9 +22,6 @@ __pch.h: ${srcdir}/src/env/_crtdef.h
 __pch.h.gch: __pch.h
 	${CC} -x c-header @DEFS@ ${AM_CPPFLAGS} ${CPPFLAGS} $$(echo "" "${AM_CFLAGS}" | sed "s/-include __pch\\.h//") ${CFLAGS} $< -o $@
 
-noinst_HEADERS = \
-	src/env/_nt_timeout.h
-
 pkginclude_HEADERS = \
 	src/gthread.h	\
 	src/c11thread.h
@@ -50,7 +47,8 @@ pkginclude_env_HEADERS = \
 	src/env/_crtdef.h	\
 	src/env/_gthread_inl.h	\
 	src/env/_c11thread_inl.h	\
-	src/env/_seh_top.h
+	src/env/_seh_top.h	\
+	src/env/_nt_timeout.h
 
 pkginclude_extdir = ${pkgincludedir}/ext
 pkginclude_ext_HEADERS = \
