@@ -39,8 +39,8 @@ public:
 };
 
 int main(){
-	constexpr std::size_t n_threads = 20;
-	constexpr std::size_t n_loops = 100000;
+	constexpr std::size_t n_threads = 4;
+	constexpr std::size_t n_loops = 1000000;
 
 	std::atomic<std::size_t> n_ping(0), n_pong(0);
 
