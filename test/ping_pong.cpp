@@ -25,7 +25,7 @@ public:
 public:
 	void p(){
 		std::unique_lock<std::mutex> lock(x_m);
-		x_cv.wait(lock, [&]{ return x_n > 0; });
+		x_cv.wait_for(lock, std::chrono::hours(1), [&]{ return x_n > 0; });
 		--x_n;
 	}
 	void v(){

@@ -1,6 +1,6 @@
 // This file is part of MCFCRT.
 // See MCFLicense.txt for licensing information.
-// Copyleft 2013 - 2016, LH_Mouse. All wrongs reserved.
+// Copyleft 2013 - 2017, LH_Mouse. All wrongs reserved.
 
 #ifndef __MCFCRT_ENV_AVL_H_
 #define __MCFCRT_ENV_AVL_H_
