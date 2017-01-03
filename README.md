@@ -66,7 +66,7 @@ If everything goes well you will see something like this (the value of the TLS k
     waiting for thread 3
     counter = 4000000
 
-现在我们看到所有的 TLS 都被正确创建并析构，而受到互斥体保护的 counter 上并未出现顺序竞争。祝贺你！  
+现在我们看到所有的 TLS 都被正确创建并析构，而受到互斥体保护的 counter 上并未出现数据竞争。祝贺你！  
 Now we can tell that all TLS slots have been constructed and destructed without leaks and the counter protected by a mutex has suffered from no data races. Cheers!  
 
 ### IRC channel:
