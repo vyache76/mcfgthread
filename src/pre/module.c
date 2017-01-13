@@ -21,7 +21,7 @@ typedef struct tagAtExitCallbackBlock {
 } AtExitCallbackBlock;
 
 static _MCFCRT_Mutex         g_vAtExitMutex      = { 0 };
-static AtExitCallbackBlock * g_pAtExitLast       = nullptr;
+static AtExitCallbackBlock * g_pAtExitLast       = _MCFCRT_NULLPTR;
 
 static volatile bool         g_bAtExitSpareInUse = false;
 static AtExitCallbackBlock   g_vAtExitSpare;
@@ -119,7 +119,7 @@ static struct object g_eh_object;
 
 static void RegisterFrameInfo(void){
 	if(__register_frame_info){
-		const void *base = nullptr;
+		const void *base = _MCFCRT_NULLPTR;
 		ModuleSectionInfo section;
 		for(bool valid = EnumerateFirstModuleSection(&section); valid; valid = EnumerateNextModuleSection(&section)){
 			const char *const begin = section.pBase;
@@ -141,7 +141,7 @@ static void DeregisterFrameInfo(void){
 		if(!base){
 			return;
 		}
-		g_eh_base = nullptr;
+		g_eh_base = _MCFCRT_NULLPTR;
 		__deregister_frame_info(base);
 	}
 }

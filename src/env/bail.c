@@ -67,7 +67,7 @@ _Noreturn void _MCFCRT_Bail(const wchar_t *pwszDescription){
 		DWORD dwMode;
 		if(GetConsoleMode(hStdErr, &dwMode)){
 			DWORD dwCharsWritten;
-			WriteConsoleW(hStdErr, awcBuffer, (DWORD)(pwcWrite - awcBuffer), &dwCharsWritten, nullptr);
+			WriteConsoleW(hStdErr, awcBuffer, (DWORD)(pwcWrite - awcBuffer), &dwCharsWritten, _MCFCRT_NULLPTR);
 		}
 	}
 	--pwcWrite;
