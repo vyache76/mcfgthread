@@ -11,7 +11,7 @@
 __gthread_key_t key;
 
 void tls_destructor(void *p){
-	assert(__gthread_getspecific(key) == nullptr);
+	assert(__gthread_getspecific(key) == 0);
 
 	printf("destructing tls data %u\n", *(unsigned *)p);
 	free(p);
@@ -59,7 +59,7 @@ int main(){
 	}
 	for(unsigned i = 0; i < THREAD_COUNT; ++i){
 		printf("waiting for thread %u\n", i);
-		__gthread_join(threads[i], nullptr);
+		__gthread_join(threads[i], 0);
 	}
 	printf("counter = %lu\n", counter);
 
