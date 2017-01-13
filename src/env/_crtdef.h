@@ -42,7 +42,7 @@
 #	define _MCFCRT_NOEXCEPT             noexcept
 #	define _MCFCRT_CONSTEXPR            constexpr
 #	define _MCFCRT_RESTRICT             __restrict__
-#	define _MCFCRT_NULLPTR              _MCFCRT_NULLPTR
+#	define _MCFCRT_NULLPTR              nullptr
 #elif defined(__cplusplus)
 #	define _MCFCRT_NOEXCEPT             throw()
 #	define _MCFCRT_CONSTEXPR            static inline
