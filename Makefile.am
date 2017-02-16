@@ -44,6 +44,7 @@ pkginclude_env_HEADERS = \
 	src/env/once_flag.h	\
 	src/env/thread.h	\
 	src/env/crt_module.h	\
+	src/env/_avl_tree_inl.h	\
 	src/env/_crtdef.h	\
 	src/env/_gthread_inl.h	\
 	src/env/_c11thread_inl.h	\
