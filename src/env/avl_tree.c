@@ -2,6 +2,7 @@
 // See MCFLicense.txt for licensing information.
 // Copyleft 2013 - 2017, LH_Mouse. All wrongs reserved.
 
+#define __MCFCRT_AVL_TREE_INLINE_OR_EXTERN     extern inline
 #include "avl_tree.h"
 #include "../ext/assert.h"
 
