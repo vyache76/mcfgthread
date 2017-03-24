@@ -15,7 +15,7 @@ build:
     ## FIXME: At the moment this crashes on Wine. We must have a REAL Windows to test it.
     ## - ./a
     # Make sure that all `#include` directives in our headers are met.
-    - gcc -x c -Wall -Wextra -std=c11 `find src -name "*.h" | grep -Fv "_inl."` -c /dev/null
+    - gcc -x c -Wall -Wextra -Werror -std=c11 `find src -name "*.h" | grep -Fv "_inl."` -c /dev/null
 
 notify:
   irc:
