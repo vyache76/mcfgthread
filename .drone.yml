@@ -15,7 +15,10 @@ build:
     ## FIXME: At the moment this crashes on Wine. We must have a REAL Windows to test it.
     ## - ./a
     # Make sure that all `#include` directives in our headers are met.
-    - gcc -x c -Wall -Wextra -Werror -std=c11 `find src -name "*.h" | grep -Fv "_inl."` -c /dev/null
+    - for cmd in {"gcc -x c -std=c99","gcc -x c -std=c11","g++ -x c++ -std=c++98","g++ -x c++ -std=c++11"}; do
+    -   echo "Checking #include directives: " $cmd
+    -   $cmd -Wall -Wextra -Werror `find src -name "*.h" | grep -Fv "_inl."` -c /dev/null
+    - done
 
 notify:
   irc:
