@@ -3,16 +3,19 @@ build:
   pull: true
   shell: mingw$$arch
   commands:
-    - git clean -fdx
+    # Run `make_distcheck` normally.
     - mkdir -p m4
     - autoreconf -ifv
     - CFLAGS='-O3 -g' ./configure
     - make -j$(nproc)
     - make distcheck -j$(nproc)
+    # Compile and run (?) the sample program.
     - cp -p libmcfgthread.dll.a  libmcfgthread-new.dll.a
     - gcc test/test.c -lmcfgthread-new -L.
-# FIXME: At the moment this crashes on Wine. We must have a REAL Windows to test it.
-#    - ./a
+    ## FIXME: At the moment this crashes on Wine. We must have a REAL Windows to test it.
+    ## - ./a
+    # Make sure that all `#include` directives in our headers are met.
+    - gcc -x c -Wall -Wextra -std=c11 `find src -name "*.h" | grep -Fv "_inl."` -c /dev/null
 
 notify:
   irc:
