@@ -14,7 +14,6 @@
 #undef GetCurrentThread
 #define GetCurrentThread()   ((HANDLE)-2)
 
-
 bool _MCFCRT_AtCrtModuleExit(_MCFCRT_AtCrtModuleExitCallback pfnProc, intptr_t nContext){
 	return _MCFCRT_AtModuleExit(pfnProc, nContext);
 }
