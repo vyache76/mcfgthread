@@ -15,8 +15,8 @@ mkdir -p m4
 autoreconf -i
 (cd "$builddir" &&
   (test -f Makefile ||	\
-    CPPFLAGS='-DNDEBUG'	\
-    CFLAGS='-O3 -ffunction-sections -fdata-sections'	\
+    CPPFLAGS=''	\
+    CFLAGS='-O0 -g'	\
     LDFLAGS='-Wl,-s,--gc-sections'	\
     ../configure --build="$build" --host="$build" --prefix="$prefix") &&
   make -j4)
