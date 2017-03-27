@@ -1,3 +1,5 @@
+[![Build Status](https://tea-ci.org/api/badges/lhmouse/mcfgthread/status.svg)](https://tea-ci.org/lhmouse/mcfgthread)
+
 ### 简介
 ### Introduction
 
