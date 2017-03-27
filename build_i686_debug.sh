@@ -17,7 +17,7 @@ autoreconf -i
   (test -f Makefile ||	\
     CPPFLAGS=''	\
     CFLAGS='-O0 -g'	\
-    LDFLAGS='-Wl,-s,--gc-sections'	\
+    LDFLAGS=''	\
     ../configure --build="$build" --host="$build" --prefix="$prefix") &&
   make -j4)
 
