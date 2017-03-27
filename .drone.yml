@@ -4,21 +4,21 @@ build:
   shell: mingw$$arch
   commands:
     # Run `make_distcheck` normally.
-    - mkdir -p m4
-    - autoreconf -ifv
-    - CFLAGS='-O3 -g' ./configure
-    - make -j$(nproc)
-    - make distcheck -j$(nproc)
+    - "mkdir -p m4"
+    - "autoreconf -ifv"
+    - "CFLAGS='-O3 -g' ./configure"
+    - "make -j$(nproc)"
+    - "make distcheck -j$(nproc)"
+    - "cp -p libmcfgthread.dll.a  libmcfgthread-new.dll.a"
     # Compile and run (?) the sample program.
-    - cp -p libmcfgthread.dll.a  libmcfgthread-new.dll.a
-    - gcc test/test.c -lmcfgthread-new -L.
     ## FIXME: At the moment this crashes on Wine. We must have a REAL Windows to test it.
     ## - ./a
+    - "gcc test/test.c -lmcfgthread-new -L."
     # Make sure that all `#include` directives in our headers are met.
-    - for cmd in {"gcc -x c -std=c99","gcc -x c -std=c11","g++ -x c++ -std=c++98","g++ -x c++ -std=c++11"}; do
-    -   echo "Checking include directives using command:" $cmd
-    -   $cmd -Wall -Wextra -Werror `find src -name "*.h" | grep -Fv "_inl."` -c /dev/null
-    - done
+    - "for cmd in {\"gcc -x c -std=c99\",\"gcc -x c -std=c11\",\"g++ -x c++ -std=c++98\",\"g++ -x c++ -std=c++11\"}; do"
+    - "  echo \"Checking include directives using command:\" $cmd"
+    - "  $cmd -Wall -Wextra -Werror `find src -name \"*.h\" | grep -Fv \"_inl.\"` -c /dev/null"
+    - "done"
 
 notify:
   irc:
