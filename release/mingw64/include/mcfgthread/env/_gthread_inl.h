@@ -9,7 +9,6 @@
 #	error Do not use this header directly.
 #endif
 
-#include <errno.h>
 #include "../ext/assert.h"
 #include "../ext/expect.h"
 

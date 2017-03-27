@@ -15,6 +15,7 @@
 #include "clocks.h"
 
 #include <time.h> // struct timespec
+#include <errno.h>
 
 #ifdef __GTHREADS
 #	error __GTHREADS is already defined. (Thread model confliction detected?)
