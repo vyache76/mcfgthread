@@ -5,7 +5,7 @@
 #include "env/mcfwin.h"
 #include "env/_seh_top.h"
 #include "pre/module.h"
-#include "env/thread.h"
+#include "env/tls.h"
 #include "env/crt_module.h"
 
 __MCFCRT_C_STDCALL
@@ -27,7 +27,7 @@ static bool RealStartup(void *pInstance, unsigned uReason, bool bDynamic){
 			if(!bRet){
 				goto jCleanup_00;
 			}
-			bRet = __MCFCRT_ThreadEnvInit();
+			bRet = __MCFCRT_TlsInit();
 			if(!bRet){
 				goto jCleanup_01;
 			}
@@ -46,7 +46,7 @@ static bool RealStartup(void *pInstance, unsigned uReason, bool bDynamic){
 		if(s_bInitialized){
 			s_bInitialized = false;
 			__MCFCRT_TlsCleanup();
-			__MCFCRT_ThreadEnvUninit();
+			__MCFCRT_TlsUninit();
 	jCleanup_01:
 			__MCFCRT_ModuleUninit();
 			__MCFCRT_DiscardCrtModuleQuickExitCallbacks();

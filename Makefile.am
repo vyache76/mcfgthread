@@ -44,12 +44,14 @@ pkginclude_env_HEADERS = \
 	src/env/once_flag.h	\
 	src/env/thread.h	\
 	src/env/crt_module.h	\
+	src/env/tls.h	\
 	src/env/_avl_tree_inl.h	\
 	src/env/_crtdef.h	\
 	src/env/_gthread_inl.h	\
 	src/env/_c11thread_inl.h	\
 	src/env/_seh_top.h	\
-	src/env/_nt_timeout.h
+	src/env/_nt_timeout.h	\
+	src/env/_mopthread.h
 
 pkginclude_extdir = ${pkgincludedir}/ext
 pkginclude_ext_HEADERS = \
@@ -74,27 +76,29 @@ mcfgthread_sources = \
 	src/env/once_flag.c	\
 	src/env/thread.c	\
 	src/env/crt_module.c	\
+	src/env/tls.c	\
 	src/env/_seh_top.c	\
 	src/env/_nt_timeout.c	\
+	src/env/_mopthread.c	\
 	src/ext/assert.c	\
 	src/ext/itow.c	\
 	src/ext/wcpcpy.c
 
 bin_PROGRAMS = \
-	mcfgthread-10.dll
+	mcfgthread-11.dll
 
-mcfgthread_10_dll_SOURCES = \
+mcfgthread_11_dll_SOURCES = \
 	src/dll_startup.c	\
 	${mcfgthread_pre_sources}	\
 	${mcfgthread_sources}
 
-mcfgthread_10_dll_LDFLAGS = \
+mcfgthread_11_dll_LDFLAGS = \
 	-shared -static -nostdlib	\
 	-Wl,-e@__MCFCRT_DllStartup,--subsystem,windows,--disable-runtime-pseudo-reloc,--disable-auto-import	\
 	-Wl,--export-all-symbols,--exclude-symbols,@__MCFCRT_DllStartup,--exclude-libs,ALL	\
 	-Wl,--disable-stdcall-fixup,--enable-auto-image-base,--out-implib,libmcfgthread.dll.a
 
-mcfgthread_10_dll_LDADD = \
+mcfgthread_11_dll_LDADD = \
 	-lkernel32 -lntdll
 
 lib_LIBRARIES = \
@@ -102,12 +106,12 @@ lib_LIBRARIES = \
 	libmcfgthread.a
 
 libmcfgthread_dll_a_SOURCES =
-libmcfgthread.dll.a: mcfgthread-10.dll
+libmcfgthread.dll.a: mcfgthread-11.dll
 
 libmcfgthread_a_SOURCES =
 ##libmcfgthread_a_SOURCES = \
 ##	${mcfgthread_sources}
 
 ## Due to Windows limitation we can't link this library statically.
-libmcfgthread.a: mcfgthread-10.dll
+libmcfgthread.a: mcfgthread-11.dll
 	cp --no-preserve=timestamps libmcfgthread.dll.a $@
