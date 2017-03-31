@@ -244,7 +244,7 @@ static inline uintptr_t ReallyCreateMopthread(void (*pfnProc)(void *), const voi
 	_MCFCRT_InitializeConditionVariable(&(pControl->vTermination));
 
 	uintptr_t uTid;
-	const _MCFCRT_ThreadHandle hThread = _MCFCRT_CreateNativeThread(&MopthreadProcNative, pControl, bJoinable, &uTid);
+	const _MCFCRT_ThreadHandle hThread = _MCFCRT_CreateNativeThread(&MopthreadProcNative, pControl, true, &uTid);
 	if(!hThread){
 		_MCFCRT_free(pControl);
 		return 0;
@@ -252,15 +252,14 @@ static inline uintptr_t ReallyCreateMopthread(void (*pfnProc)(void *), const voi
 	pControl->uTid    = uTid;
 	pControl->hThread = hThread;
 
-	if(bJoinable){
-		_MCFCRT_WaitForMutexForever(&g_vMopthreadMutex, _MCFCRT_MUTEX_SUGGESTED_SPIN_COUNT);
-		{
-			_MCFCRT_AvlAttach(&g_avlMopthreadControls, (_MCFCRT_AvlNodeHeader *)pControl, &MopthreadControlComparatorNodes);
-		}
-		_MCFCRT_SignalMutex(&g_vMopthreadMutex);
-
-		_MCFCRT_ResumeThread(hThread);
+	_MCFCRT_WaitForMutexForever(&g_vMopthreadMutex, _MCFCRT_MUTEX_SUGGESTED_SPIN_COUNT);
+	{
+		_MCFCRT_AvlAttach(&g_avlMopthreadControls, (_MCFCRT_AvlNodeHeader *)pControl, &MopthreadControlComparatorNodes);
 	}
+	_MCFCRT_SignalMutex(&g_vMopthreadMutex);
+
+	_MCFCRT_ResumeThread(hThread);
+
 	return uTid;
 }
 
