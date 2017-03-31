@@ -32,6 +32,13 @@ pkginclude_pre_HEADERS = \
 
 pkginclude_envdir = ${pkgincludedir}/env
 pkginclude_env_HEADERS = \
+	src/env/_avl_tree_inl.h	\
+	src/env/_crtdef.h	\
+	src/env/_gthread_inl.h	\
+	src/env/_c11thread_inl.h	\
+	src/env/_seh_top.h	\
+	src/env/_nt_timeout.h	\
+	src/env/_mopthread.h	\
 	src/env/avl_tree.h	\
 	src/env/bail.h	\
 	src/env/clocks.h	\
@@ -45,13 +52,7 @@ pkginclude_env_HEADERS = \
 	src/env/thread.h	\
 	src/env/crt_module.h	\
 	src/env/tls.h	\
-	src/env/_avl_tree_inl.h	\
-	src/env/_crtdef.h	\
-	src/env/_gthread_inl.h	\
-	src/env/_c11thread_inl.h	\
-	src/env/_seh_top.h	\
-	src/env/_nt_timeout.h	\
-	src/env/_mopthread.h
+	src/env/inline_mem.h
 
 pkginclude_extdir = ${pkgincludedir}/ext
 pkginclude_ext_HEADERS = \
@@ -65,6 +66,9 @@ mcfgthread_pre_sources = \
 	src/pre/module.c
 
 mcfgthread_sources = \
+	src/env/_seh_top.c	\
+	src/env/_nt_timeout.c	\
+	src/env/_mopthread.c	\
 	src/env/avl_tree.c	\
 	src/env/bail.c	\
 	src/env/clocks.c	\
@@ -77,9 +81,6 @@ mcfgthread_sources = \
 	src/env/thread.c	\
 	src/env/crt_module.c	\
 	src/env/tls.c	\
-	src/env/_seh_top.c	\
-	src/env/_nt_timeout.c	\
-	src/env/_mopthread.c	\
 	src/ext/assert.c	\
 	src/ext/itow.c	\
 	src/ext/wcpcpy.c
