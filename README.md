@@ -35,7 +35,7 @@ Assuming the working directory is this project, run the following commands in ba
 
     $ mkdir -p m4
     $ autoreconf -i
-    $ CFLAGS='-O3' LDFLAGS='-Wl,-s' ./configure
+    $ /configure
     $ make -j4
     $ ls *.dll.a
 
