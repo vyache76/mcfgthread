@@ -35,5 +35,7 @@ missing
 stamp-h1
 
 .build*
+__pch.*
+
 !/debug/**
 !/release/**
