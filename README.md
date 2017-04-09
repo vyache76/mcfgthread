@@ -28,15 +28,15 @@ The author gives no warranty for this project. Use it at your own risk.
 ### How to build
 
 我们建议你在 MSYS2 中编译这个项目。你可以在 [这里](https://msys2.github.io/) 下载。  
-We suggest you build this project in MSYS2, which can be downloaded [here](https://msys2.github.io/).  
+We suggest you build this project in MSYS2, which can be obtained [here](https://msys2.github.io/).  
 
 如果你刚刚安装 MSYS2，你需要一些基本的开发工具包。如果你已经有 MSYS2 的开发环境请跳过这一步：  
 If you have just installed a fresh MSYS2, you would have to install a few development packages. You may skip this step if you have already had MSYS2 development environment set up:  
 
     $ pacman -Sy
     $ pacman -S base-devel mingw-w64-{i686,x86_64}-toolchain --noconfirm
-    $ pacman -R gdb # Usually you should remove it because it is for MSYS2 and not for native toolchains.
-                    # To install native GDBs, type the following command:
+    $ pacman -R gdb # Usually you should remove it because it is for MSYS2 programs and not for native programs.
+                    # You may install native GDB using the following command:
                     #     pacman -S mingw-w64-{i686,x86_64}-gdb
 
 假设当前目录是在该项目中，在 bash 中运行以下命令：  
