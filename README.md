@@ -11,8 +11,8 @@ C++0x 线程支持处于实验阶段。
 The C++0x thread support is currently experimental.  
 All the other features including once-initialization, mutex, recursive mutex, condition variable and thread local storage (TLS) have been implemented.  
 
-该项目是从 MCF CRT (https://github.com/lhmouse/MCF/tree/master/MCFCRT) 中 fork 出来的。  
-This project was forked from MCF CRT (https://github.com/lhmouse/MCF/tree/master/MCFCRT).  
+该项目是从 [MCF CRT](https://github.com/lhmouse/MCF/tree/master/MCFCRT>) 中 fork 出来的。  
+This project was forked from [MCF CRT](https://github.com/lhmouse/MCF/tree/master/MCFCRT).  
 
 ** WARNING **  
 该项目目前仅在 x86 和 x64 下开发以及测试，其它处理器架构未有验证。  
@@ -27,8 +27,17 @@ The author gives no warranty for this project. Use it at your own risk.
 ### 构建
 ### How to build
 
-你将需要一个 mingw-w64 的工具链。你可以在这里找到： http://mingw-w64.sf.net/  
-You are gonna need a toolchain from the mingw-w64 project. You can get one here: http://mingw-w64.sf.net/  
+我们建议你在 MSYS2 中编译这个项目。你可以在 [这里](https://msys2.github.io/) 下载。  
+We suggest you build this project in MSYS2, which can be downloaded [here](https://msys2.github.io/).  
+
+如果你刚刚安装 MSYS2，你需要一些基本的开发工具包。如果你已经有 MSYS2 的开发环境请跳过这一步：  
+If you have just installed a fresh MSYS2, you would have to install a few development packages. You may skip this step if you have already had MSYS2 development environment set up:  
+
+    $ pacman -Sy
+    $ pacman -S base-devel mingw-w64-{i686,x86_64}-toolchain --noconfirm
+    $ pacman -R gdb # Usually you should remove it because it is for MSYS2 and not for native toolchains.
+                    # To install native GDBs, type the following command:
+                    #     pacman -S mingw-w64-{i686,x86_64}-gdb
 
 假设当前目录是在该项目中，在 bash 中运行以下命令：  
 Assuming the working directory is this project, run the following commands in bash:  
