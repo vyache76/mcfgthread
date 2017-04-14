@@ -40,7 +40,7 @@ static inline bool ReallyWaitForMutex(volatile uintptr_t *puControl, size_t uMax
 				if(!bTaken){
 					if(uMaxSpinCount != 0){
 						const size_t uThreadsSpinning = (uOld & MASK_THREADS_SPINNING) / THREADS_SPINNING_ONE;
-						bSpinnable = (uThreadsSpinning < THREADS_SPINNING_MAX);
+						bSpinnable = uThreadsSpinning < THREADS_SPINNING_MAX;
 					}
 					if(!bSpinnable){
 						break;

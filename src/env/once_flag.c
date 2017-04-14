@@ -75,7 +75,7 @@ static inline _MCFCRT_OnceResult ReallyWaitForOnceFlag(volatile uintptr_t *puCon
 					uOld = __atomic_load_n(puControl, __ATOMIC_RELAXED);
 					do {
 						const size_t uThreadsTrapped = (uOld & MASK_THREADS_TRAPPED) / THREADS_TRAPPED_ONE;
-						bDecremented = (uThreadsTrapped > 0);
+						bDecremented = uThreadsTrapped != 0;
 						if(!bDecremented){
 							break;
 						}
