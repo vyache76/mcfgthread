@@ -63,7 +63,6 @@ static inline _MCFCRT_OnceResult ReallyWaitForOnceFlag(volatile uintptr_t *puCon
 		if(_MCFCRT_EXPECT(bTaken)){
 			return _MCFCRT_kOnceResultInitial;
 		}
-
 		if(bMayTimeOut){
 			LARGE_INTEGER liTimeout;
 			__MCFCRT_InitializeNtTimeout(&liTimeout, u64UntilFastMonoClock);

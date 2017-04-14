@@ -99,7 +99,6 @@ static inline bool ReallyWaitForMutex(volatile uintptr_t *puControl, size_t uMax
 		if(_MCFCRT_EXPECT(bTaken)){
 			return true;
 		}
-
 		if(bMayTimeOut){
 			LARGE_INTEGER liTimeout;
 			__MCFCRT_InitializeNtTimeout(&liTimeout, u64UntilFastMonoClock);
