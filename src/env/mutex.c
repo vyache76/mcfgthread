@@ -140,7 +140,6 @@ static inline void ReallySignalMutex(volatile uintptr_t *puControl){
 		uOld = __atomic_load_n(puControl, __ATOMIC_RELAXED);
 		do {
 			_MCFCRT_ASSERT_MSG(uOld & MASK_LOCKED, L"This mutex isn't locked by any thread.");
-
 			uNew = uOld - MASK_LOCKED;
 			bSignalOne = (uOld & MASK_THREADS_TRAPPED) != 0;
 			uNew -= bSignalOne * THREADS_TRAPPED_ONE;
@@ -148,7 +147,7 @@ static inline void ReallySignalMutex(volatile uintptr_t *puControl){
 	}
 	// If `RtlDllShutdownInProgress()` is `true`, other threads will have been terminated.
 	// Calling `NtReleaseKeyedEvent()` when no thread is waiting results in deadlocks. Don't do that.
-	if(bSignalOne && !RtlDllShutdownInProgress()){
+	if(_MCFCRT_EXPECT_NOT(bSignalOne && !RtlDllShutdownInProgress())){
 		NTSTATUS lStatus = NtReleaseKeyedEvent(_MCFCRT_NULLPTR, (void *)puControl, false, _MCFCRT_NULLPTR);
 		_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtReleaseKeyedEvent() failed.");
 		_MCFCRT_ASSERT(lStatus != STATUS_TIMEOUT);

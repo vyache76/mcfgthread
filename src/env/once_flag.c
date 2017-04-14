@@ -105,7 +105,6 @@ static inline void ReallySignalOnceFlag(volatile uintptr_t *puControl, bool bFin
 		do {
 			_MCFCRT_ASSERT_MSG(uOld & MASK_LOCKED,      L"This once flag isn't locked by any thread.");
 			_MCFCRT_ASSERT_MSG(!(uOld & MASK_FINISHED), L"This once flag has been disposed.");
-
 			uNew = uOld - MASK_LOCKED;
 			uNew |= (uintptr_t)-bFinished & MASK_FINISHED;
 			const size_t uThreadsTrapped = (uOld & MASK_THREADS_TRAPPED) / THREADS_TRAPPED_ONE;
@@ -116,7 +115,7 @@ static inline void ReallySignalOnceFlag(volatile uintptr_t *puControl, bool bFin
 	}
 	// If `RtlDllShutdownInProgress()` is `true`, other threads will have been terminated.
 	// Calling `NtReleaseKeyedEvent()` when no thread is waiting results in deadlocks. Don't do that.
-	if((uCountToSignal > 0) && !RtlDllShutdownInProgress()){
+	if(_MCFCRT_EXPECT_NOT((uCountToSignal > 0) && !RtlDllShutdownInProgress())){
 		for(size_t i = 0; i < uCountToSignal; ++i){
 			NTSTATUS lStatus = NtReleaseKeyedEvent(_MCFCRT_NULLPTR, (void *)puControl, false, _MCFCRT_NULLPTR);
 			_MCFCRT_ASSERT_MSG(NT_SUCCESS(lStatus), L"NtReleaseKeyedEvent() failed.");
