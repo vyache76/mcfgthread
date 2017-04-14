@@ -53,7 +53,7 @@ static inline _MCFCRT_OnceResult ReallyWaitForOnceFlag(volatile uintptr_t *puCon
 				if(!bTaken){
 					uNew = uOld + THREADS_TRAPPED_ONE;
 				} else {
-					uNew = uOld | MASK_LOCKED;
+					uNew = uOld + MASK_LOCKED;
 				}
 			} while(_MCFCRT_EXPECT_NOT(!__atomic_compare_exchange_n(puControl, &uOld, uNew, false, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE)));
 		}
@@ -107,7 +107,7 @@ static inline void ReallySignalOnceFlag(volatile uintptr_t *puControl, bool bFin
 			_MCFCRT_ASSERT_MSG(uOld & MASK_LOCKED,      L"This once flag isn't locked by any thread.");
 			_MCFCRT_ASSERT_MSG(!(uOld & MASK_FINISHED), L"This once flag has been disposed.");
 
-			uNew = uOld & ~MASK_LOCKED;
+			uNew = uOld - MASK_LOCKED;
 			uNew |= (uintptr_t)-bFinished & MASK_FINISHED;
 			const size_t uThreadsTrapped = (uOld & MASK_THREADS_TRAPPED) / THREADS_TRAPPED_ONE;
 			const uintptr_t uMaxCountToSignal = (uintptr_t)(1 - bFinished * 2);
