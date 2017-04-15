@@ -33,49 +33,59 @@ We suggest you build this project in MSYS2, which can be obtained [here](https:/
 如果你刚刚安装 MSYS2，你需要一些基本的开发工具包。如果你已经有 MSYS2 的开发环境请跳过这一步：  
 If you have just installed a fresh MSYS2, you would have to install a few development packages. You may skip this step if you have already had MSYS2 development environment set up:  
 
-    $ pacman -Sy
-    $ pacman -S base-devel mingw-w64-{i686,x86_64}-toolchain --noconfirm
-    $ pacman -R gdb # Usually you should remove it because it is for MSYS2 programs and not for native programs.
-                    # You may install native GDB using the following command:
-                    #     pacman -S mingw-w64-{i686,x86_64}-gdb
+```bash
+$ pacman -Sy
+$ pacman -S base-devel mingw-w64-{i686,x86_64}-toolchain --noconfirm
+$ pacman -R gdb # Usually you should remove it because it is for MSYS2 programs and not for native programs.
+                # You may install native GDB using the following command:
+                #     pacman -S mingw-w64-{i686,x86_64}-gdb
+```
 
 假设当前目录是在该项目中，在 bash 中运行以下命令：  
 Assuming the working directory is this project, run the following commands in bash:  
 
-    $ mkdir -p m4
-    $ autoreconf -i
-    $ ./configure
-    $ make -j4
-    $ ls *.dll.a
+```bash
+$ mkdir -p m4
+$ autoreconf -i
+$ ./configure
+$ make -j4
+$ ls *.dll.a
+```
 
 如果构建是成功的，你将会看到这个文件：  
 If the DLL is built successfully, you will see the follow file:  
 
-    libmcfgthread.dll.a
+```text
+libmcfgthread.dll.a
+```
 
 现在看看这个 DLL 是否正常工作：  
 Now check whether it is working:  
 
-    $ gcc -std=c11 test/test.c -otest.exe -Isrc/env -L. -lmcfgthread
-    $ PATH=".:$PATH" ./test.exe
+```bash
+$ gcc -std=c11 test/test.c -otest.exe -Isrc/env -L. -lmcfgthread
+$ PATH=".:$PATH" ./test.exe
+```
 
 如果一切顺利，你将会看到类似这样的输出（TLS key 的值是机器相关的，而 TLS 的析构函数是乱序执行的）：  
 If everything goes well you will see something like this (the value of the TLS key is machine-dependent and TLS destructors are executed out-of-order):  
 
-    key = 00342D20
-    constructed tls data 0
-    waiting for thread 0
-    constructed tls data 1
-    constructed tls data 2
-    constructed tls data 3
-    destructing tls data 1
-    destructing tls data 3
-    destructing tls data 2
-    destructing tls data 0
-    waiting for thread 1
-    waiting for thread 2
-    waiting for thread 3
-    counter = 4000000
+```text
+key = 00342D20
+constructed tls data 0
+waiting for thread 0
+constructed tls data 1
+constructed tls data 2
+constructed tls data 3
+destructing tls data 1
+destructing tls data 3
+destructing tls data 2
+destructing tls data 0
+waiting for thread 1
+waiting for thread 2
+waiting for thread 3
+counter = 4000000
+```
 
 现在我们看到所有的 TLS 都被正确创建并析构，而受到互斥体保护的 counter 上并未出现数据竞争。祝贺你！  
 Now we can tell that all TLS slots have been constructed and destructed without leaks and the counter protected by a mutex has suffered from no data races. Cheers!  
