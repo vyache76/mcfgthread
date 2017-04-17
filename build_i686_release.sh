@@ -17,7 +17,7 @@ autoreconf -i
   (test -f Makefile ||	\
     CPPFLAGS='-DNDEBUG'	\
     CFLAGS='-O3 -ffunction-sections -fdata-sections'	\
-    LDFLAGS='-Wl,-s,--gc-sections'	\
+    LDFLAGS='-O3 -Wl,-s,--gc-sections'	\
     ../configure --build="$build" --host="$build" --prefix="$prefix") &&
   make -j4)
 
