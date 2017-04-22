@@ -103,10 +103,10 @@ static inline void ReallySignalOnceFlag(volatile uintptr_t *puControl, bool bFin
 		uintptr_t uOld, uNew;
 		uOld = __atomic_load_n(puControl, __ATOMIC_RELAXED);
 		do {
-			_MCFCRT_ASSERT_MSG(uOld & MASK_LOCKED,      L"This once flag isn't locked by any thread.");
+			_MCFCRT_ASSERT_MSG(uOld & MASK_LOCKED, L"This once flag isn't locked by any thread.");
 			_MCFCRT_ASSERT_MSG(!(uOld & MASK_FINISHED), L"This once flag has been disposed.");
-			uNew = uOld - MASK_LOCKED;
-			uNew |= (uintptr_t)-bFinished & MASK_FINISHED;
+			uNew = uOld & ~MASK_LOCKED; // uNew = uOld - MASK_LOCKED;
+			uNew |= bFinished * MASK_FINISHED;
 			const size_t uThreadsTrapped = (uOld & MASK_THREADS_TRAPPED) / THREADS_TRAPPED_ONE;
 			const uintptr_t uMaxCountToSignal = (uintptr_t)(1 - bFinished * 2);
 			uCountToSignal = (uThreadsTrapped <= uMaxCountToSignal) ? uThreadsTrapped : uMaxCountToSignal;
