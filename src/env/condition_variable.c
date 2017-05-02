@@ -93,8 +93,10 @@ static inline bool ReallyWaitForConditionVariable(volatile uintptr_t *puControl,
 	if(_MCFCRT_EXPECT(bSpinnable)){
 		nUnlocked = (*pfnUnlockCallback)(nContext);
 		for(size_t i = 0; _MCFCRT_EXPECT(i < uMaxSpinCount); ++i){
-			__atomic_thread_fence(__ATOMIC_SEQ_CST);
-			__builtin_ia32_pause();
+			for(unsigned j = 8; j != 0; --j){
+				__atomic_thread_fence(__ATOMIC_SEQ_CST);
+				__builtin_ia32_pause();
+			}
 			__atomic_thread_fence(__ATOMIC_SEQ_CST);
 			{
 				uintptr_t uOld, uNew;
