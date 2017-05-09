@@ -44,7 +44,7 @@ typedef struct __MCFCRT_tagC11threadConditionVariable {
 // Mutex
 typedef struct __MCFCRT_tagC11threadMutex {
 	int __mask;
-	volatile thrd_t __owner;
+	thrd_t __owner;
 	_MCFCRT_STD size_t __count;
 	_MCFCRT_Mutex __mutex;
 	_MCFCRT_STD uintptr_t __reserved[3];
