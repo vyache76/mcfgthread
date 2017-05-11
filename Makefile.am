@@ -32,10 +32,7 @@ pkginclude_pre_HEADERS = \
 
 pkginclude_envdir = ${pkgincludedir}/env
 pkginclude_env_HEADERS = \
-	src/env/_avl_tree_inl.h	\
 	src/env/_crtdef.h	\
-	src/env/_gthread_inl.h	\
-	src/env/_c11thread_inl.h	\
 	src/env/_seh_top.h	\
 	src/env/_nt_timeout.h	\
 	src/env/_mopthread.h	\
