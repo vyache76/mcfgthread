@@ -18,7 +18,7 @@ void tls_destructor(void *p){
 }
 
 // mutex
-__gthread_mutex_t mutex = { 0 };
+__gthread_mutex_t mutex = __GTHREAD_MUTEX_INIT;
 volatile unsigned long counter = 0;
 
 #define INCREMENT_PER_THREAD   1000000ul
@@ -28,12 +28,12 @@ void *test_thread_proc(void *param){
 	unsigned *p = malloc(sizeof(unsigned));
 	assert(p);
 	*p = (unsigned)(uintptr_t)param;
-	int ret = __gthread_setspecific(key, p);
-	assert(ret == 0);
+	int err = __gthread_setspecific(key, p);
+	assert(err == 0);
 	printf("constructed tls data %u\n", *(unsigned *)p);
 
-	ret = __gthread_setspecific(key, p);
-	assert(ret == 0);
+	err = __gthread_setspecific(key, p);
+	assert(err == 0);
 	printf("set new tls data %u\n", *(unsigned *)p);
 
 	for(unsigned long i = 0; i < INCREMENT_PER_THREAD; ++i){
@@ -48,18 +48,19 @@ void *test_thread_proc(void *param){
 }
 
 int main(){
-	int ret = __gthread_key_create(&key, &tls_destructor);
-	assert(ret == 0);
+	int err = __gthread_key_create(&key, &tls_destructor);
+	assert(err == 0);
 	printf("key = %p\n", (void *)key);
 
 	__gthread_t threads[THREAD_COUNT];
 	for(unsigned i = 0; i < THREAD_COUNT; ++i){
-		int err = __gthread_create(&threads[i], &test_thread_proc, (void *)(intptr_t)i);
+		err = __gthread_create(&threads[i], &test_thread_proc, (void *)(intptr_t)i);
 		assert(err == 0);
 	}
 	for(unsigned i = 0; i < THREAD_COUNT; ++i){
 		printf("waiting for thread %u\n", i);
-		__gthread_join(threads[i], 0);
+		err = __gthread_join(threads[i], 0);
+		assert(err == 0);
 	}
 	printf("counter = %lu\n", counter);
 
