@@ -25,7 +25,8 @@ __pch.h.gch: __pch.h
 pkginclude_HEADERS = \
 	src/mcfcrt.h	\
 	src/gthread.h	\
-	src/c11thread.h
+	src/c11thread.h	\
+	src/libcxxthread.h
 
 pkginclude_envdir = ${pkgincludedir}/env
 pkginclude_env_HEADERS = \
@@ -43,6 +44,7 @@ pkginclude_env_HEADERS = \
 	src/env/condition_variable.h	\
 	src/env/gthread.h	\
 	src/env/c11thread.h	\
+	src/env/libcxxthread.h	\
 	src/env/heap.h	\
 	src/env/mcfwin.h	\
 	src/env/mutex.h	\
@@ -69,6 +71,7 @@ mcfgthread_sources = \
 	src/env/condition_variable.c	\
 	src/env/gthread.c	\
 	src/env/c11thread.c	\
+	src/env/libcxxthread.c	\
 	src/env/heap.c	\
 	src/env/mutex.c	\
 	src/env/once_flag.c	\
