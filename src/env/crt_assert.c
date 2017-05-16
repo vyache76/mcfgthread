@@ -2,7 +2,7 @@
 // See MCFLicense.txt for licensing information.
 // Copyleft 2013 - 2017, LH_Mouse. All wrongs reserved.
 
-#include "crtassert.h"
+#include "crt_assert.h"
 #include "bail.h"
 #include "../ext/wcpcpy.h"
 #include "../ext/itow.h"

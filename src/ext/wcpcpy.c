@@ -4,7 +4,7 @@
 
 #include "wcpcpy.h"
 #include "../env/expect.h"
-#include "../env/crtassert.h"
+#include "../env/crt_assert.h"
 
 #ifdef __SSE2__
 
