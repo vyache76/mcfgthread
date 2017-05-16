@@ -37,7 +37,7 @@ pkginclude_env_HEADERS = \
 	src/env/_nt_timeout.h	\
 	src/env/_mopthread.h	\
 	src/env/avl_tree.h	\
-	src/env/crt_assert.h	\
+	src/env/xassert.h	\
 	src/env/pp.h	\
 	src/env/expect.h	\
 	src/env/bail.h	\
@@ -67,7 +67,7 @@ mcfgthread_sources = \
 	src/env/_nt_timeout.c	\
 	src/env/_mopthread.c	\
 	src/env/avl_tree.c	\
-	src/env/crt_assert.c	\
+	src/env/xassert.c	\
 	src/env/bail.c	\
 	src/env/clocks.c	\
 	src/env/condition_variable.c	\
