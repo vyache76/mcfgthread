@@ -2,10 +2,10 @@
 // See MCFLicense.txt for licensing information.
 // Copyleft 2013 - 2017, LH_Mouse. All wrongs reserved.
 
-#include "assert.h"
+#include "crtassert.h"
+#include "bail.h"
 #include "../ext/wcpcpy.h"
 #include "../ext/itow.h"
-#include "../env/bail.h"
 
 __attribute__((__noreturn__))
 void __MCFCRT_OnAssertionFailure(const wchar_t *pwszExpression, const wchar_t *pwszFile, unsigned long ulLine, const wchar_t *pwszMessage){

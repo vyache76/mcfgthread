@@ -3,8 +3,8 @@
 // Copyleft 2013 - 2017, LH_Mouse. All wrongs reserved.
 
 #include "wcpcpy.h"
-#include "expect.h"
-#include "assert.h"
+#include "../env/expect.h"
+#include "../env/crtassert.h"
 
 #ifdef __SSE2__
 

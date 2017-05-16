@@ -37,6 +37,9 @@ pkginclude_env_HEADERS = \
 	src/env/_nt_timeout.h	\
 	src/env/_mopthread.h	\
 	src/env/avl_tree.h	\
+	src/env/crtassert.h	\
+	src/env/pp.h	\
+	src/env/expect.h	\
 	src/env/bail.h	\
 	src/env/clocks.h	\
 	src/env/condition_variable.h	\
@@ -53,9 +56,6 @@ pkginclude_env_HEADERS = \
 
 pkginclude_extdir = ${pkgincludedir}/ext
 pkginclude_ext_HEADERS = \
-	src/ext/assert.h	\
-	src/ext/pp.h	\
-	src/ext/expect.h	\
 	src/ext/itow.h	\
 	src/ext/wcpcpy.h
 
@@ -67,6 +67,7 @@ mcfgthread_sources = \
 	src/env/_nt_timeout.c	\
 	src/env/_mopthread.c	\
 	src/env/avl_tree.c	\
+	src/env/crtassert.c	\
 	src/env/bail.c	\
 	src/env/clocks.c	\
 	src/env/condition_variable.c	\
@@ -78,7 +79,6 @@ mcfgthread_sources = \
 	src/env/thread.c	\
 	src/env/crt_module.c	\
 	src/env/tls.c	\
-	src/ext/assert.c	\
 	src/ext/itow.c	\
 	src/ext/wcpcpy.c
 
