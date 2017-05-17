@@ -9,8 +9,6 @@ __MCFCRT_C_STDCALL
 extern BOOL __MCFCRT_DllStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved)
 	__asm__("@__MCFCRT_DllStartup");
 
-extern bool __MCFCRT_Startup(void *__pModuleBase, unsigned __uReason, bool __bDynamic) _MCFCRT_NOEXCEPT;
-
 __MCFCRT_C_STDCALL
 BOOL __MCFCRT_DllStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved){
 	(void)hInstance;
