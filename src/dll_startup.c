@@ -39,13 +39,11 @@ static bool RealStartup(void *pInstance, unsigned uReason, bool bDynamic){
 		break;
 
 	case DLL_THREAD_DETACH:
-		__MCFCRT_TlsCleanup();
 		break;
 
 	case DLL_PROCESS_DETACH:
 		if(s_bInitialized){
 			s_bInitialized = false;
-			__MCFCRT_TlsCleanup();
 			__MCFCRT_TlsUninit();
 	jCleanup_01:
 			__MCFCRT_ModuleUninit();
