@@ -23,6 +23,7 @@ __pch.h.gch: __pch.h
 	${CC} -x c-header @DEFS@ ${AM_CPPFLAGS} ${CPPFLAGS} $$(echo "" "${AM_CFLAGS}" | sed "s/-include __pch\\.h//") ${CFLAGS} $< -o $@
 
 pkginclude_HEADERS = \
+	src/mcfcrt.h	\
 	src/gthread.h	\
 	src/c11thread.h
 
@@ -63,6 +64,7 @@ mcfgthread_pre_sources = \
 	src/pre/module.c
 
 mcfgthread_sources = \
+	src/mcfcrt.c	\
 	src/env/_seh_top.c	\
 	src/env/_nt_timeout.c	\
 	src/env/_mopthread.c	\
@@ -110,6 +112,6 @@ libmcfgthread_a_SOURCES =
 ##libmcfgthread_a_SOURCES = \
 ##	${mcfgthread_sources}
 
-## Due to Windows limitation we can't link this library statically.
+## TODO: Modify MinGW-w64 start up code to perform CRT initialization before __main().
 libmcfgthread.a: mcfgthread-11.dll
 	cp --no-preserve=timestamps libmcfgthread.dll.a $@

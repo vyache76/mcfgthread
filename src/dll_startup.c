@@ -2,68 +2,29 @@
 // See MCFLicense.txt for licensing information.
 // Copyleft 2013 - 2017, LH_Mouse. All wrongs reserved.
 
-#include "env/mcfwin.h"
+#include "mcfcrt.h"
 #include "env/_seh_top.h"
-#include "pre/module.h"
-#include "env/tls.h"
-#include "env/crt_module.h"
 
 __MCFCRT_C_STDCALL
-extern BOOL __MCFCRT_DllStartup(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved)
+extern BOOL __MCFCRT_DllStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved)
 	__asm__("@__MCFCRT_DllStartup");
 
-static bool RealStartup(void *pInstance, unsigned uReason, bool bDynamic){
-	(void)pInstance;
-	(void)bDynamic;
+extern bool __MCFCRT_Startup(void *__pModuleBase, unsigned __uReason, bool __bDynamic) _MCFCRT_NOEXCEPT;
 
-	static bool s_bInitialized = false;
+__MCFCRT_C_STDCALL
+BOOL __MCFCRT_DllStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved){
+	(void)hInstance;
+	(void)pReserved;
 
 	bool bRet = true;
 
-	switch(uReason){
-	case DLL_PROCESS_ATTACH:
-		if(!s_bInitialized){
-			bRet = __MCFCRT_ModuleInit();
-			if(!bRet){
-				goto jCleanup_00;
-			}
-			bRet = __MCFCRT_TlsInit();
-			if(!bRet){
-				goto jCleanup_01;
-			}
-			s_bInitialized = true;
-		}
-		break;
-
-	case DLL_THREAD_ATTACH:
-		break;
-
-	case DLL_THREAD_DETACH:
-		break;
-
-	case DLL_PROCESS_DETACH:
-		if(s_bInitialized){
-			s_bInitialized = false;
-			__MCFCRT_TlsUninit();
-	jCleanup_01:
-			__MCFCRT_ModuleUninit();
-			__MCFCRT_DiscardCrtModuleQuickExitCallbacks();
-	jCleanup_00:
-			;
-		}
-		break;
-	}
-
-	return bRet;
-}
-
-__MCFCRT_C_STDCALL
-BOOL __MCFCRT_DllStartup(HINSTANCE hDll, DWORD dwReason, LPVOID pReserved){
-	bool bRet;
-
 	__MCFCRT_SEH_TOP_BEGIN
 	{
-		bRet = RealStartup((void *)hDll, (unsigned)dwReason, !pReserved);
+		if(dwReason == DLL_PROCESS_ATTACH){
+			bRet = __MCFCRT_Init();
+		} else if(dwReason == DLL_PROCESS_DETACH){
+			__MCFCRT_Uninit();
+		}
 	}
 	__MCFCRT_SEH_TOP_END
 
