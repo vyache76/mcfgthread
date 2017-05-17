@@ -112,6 +112,6 @@ libmcfgthread_a_SOURCES =
 ##libmcfgthread_a_SOURCES = \
 ##	${mcfgthread_sources}
 
-## TODO: Modify MinGW-w64 start up code to perform CRT initialization before __main().
+## TODO: Modify MinGW-w64 startup code to perform CRT initialization before __main().
 libmcfgthread.a: mcfgthread-11.dll
 	cp --no-preserve=timestamps libmcfgthread.dll.a $@
