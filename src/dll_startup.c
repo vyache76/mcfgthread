@@ -12,8 +12,7 @@ extern BOOL __MCFCRT_DllStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID pRes
 
 __MCFCRT_C_STDCALL
 BOOL __MCFCRT_DllStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved){
-	(void)hInstance;
-	(void)pReserved;
+	(void)hInstance, (void)pReserved;
 
 	bool bRet = true;
 
@@ -35,6 +34,7 @@ BOOL __MCFCRT_DllStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved){
 			__MCFCRT_TlsCleanup();
 			break;
 		case DLL_PROCESS_DETACH:
+			__MCFCRT_TlsCleanup();
 			__MCFCRT_ModuleUninit();
 			__MCFCRT_UninitRecursive();
 			break;
