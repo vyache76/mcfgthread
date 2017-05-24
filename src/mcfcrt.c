@@ -25,7 +25,8 @@ void __MCFCRT_UninitRecursive(void){
 	--nCounter;
 	g_nCounter = nCounter;
 	if(nCounter == 0){
-		__MCFCRT_TlsUninit();
 		// Add more uninitialization...
+		__MCFCRT_TlsCleanup();
+		__MCFCRT_TlsUninit();
 	}
 }
