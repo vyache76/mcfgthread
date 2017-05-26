@@ -4,6 +4,7 @@
 
 #include "mcfcrt.h"
 #include "env/tls.h"
+#include "env/crt_module.h"
 
 static ptrdiff_t g_nCounter = 0;
 
@@ -27,5 +28,6 @@ void __MCFCRT_UninitRecursive(void){
 	if(nCounter == 0){
 		// Add more uninitialization...
 		__MCFCRT_TlsUninit();
+		__MCFCRT_DiscardCrtModuleQuickExitCallbacks();
 	}
 }
