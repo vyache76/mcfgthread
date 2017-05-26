@@ -27,10 +27,6 @@ pkginclude_HEADERS = \
 	src/gthread.h	\
 	src/c11thread.h
 
-pkginclude_predir = ${pkgincludedir}/pre
-pkginclude_pre_HEADERS = \
-	src/pre/module.h
-
 pkginclude_envdir = ${pkgincludedir}/env
 pkginclude_env_HEADERS = \
 	src/env/_crtdef.h	\
@@ -60,9 +56,6 @@ pkginclude_ext_HEADERS = \
 	src/ext/itow.h	\
 	src/ext/wcpcpy.h
 
-mcfgthread_pre_sources = \
-	src/pre/module.c
-
 mcfgthread_sources = \
 	src/mcfcrt.c	\
 	src/env/_seh_top.c	\
@@ -89,7 +82,6 @@ bin_PROGRAMS = \
 
 mcfgthread_11_dll_SOURCES = \
 	src/dll_startup.c	\
-	${mcfgthread_pre_sources}	\
 	${mcfgthread_sources}
 
 mcfgthread_11_dll_LDFLAGS = \

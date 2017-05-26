@@ -25,8 +25,6 @@
 #include "ext/itow.h"
 #include "ext/wcpcpy.h"
 
-#include "pre/module.h"
-
 _MCFCRT_EXTERN_C_BEGIN
 
 extern bool __MCFCRT_InitRecursive(void) _MCFCRT_NOEXCEPT;
