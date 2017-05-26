@@ -20,10 +20,7 @@ BOOL __MCFCRT_DllStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved){
 	{
 		switch(dwReason){
 		case DLL_PROCESS_ATTACH:
-			if(!__MCFCRT_InitRecursive()){
-				bRet = false;
-				break;
-			}
+			bRet = __MCFCRT_InitRecursive();
 			break;
 		case DLL_THREAD_DETACH:
 			__MCFCRT_TlsCleanup();
