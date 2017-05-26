@@ -3,7 +3,6 @@
 // Copyleft 2013 - 2017, LH_Mouse. All wrongs reserved.
 
 #include "crt_module.h"
-#include "../pre/module.h"
 #include "mcfwin.h"
 #include "mutex.h"
 #include "heap.h"
