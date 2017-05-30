@@ -6,6 +6,7 @@
 #include "mcfwin.h"
 #include "mutex.h"
 #include "heap.h"
+#include "bail.h"
 
 #undef GetCurrentProcess
 #define GetCurrentProcess()  ((HANDLE)-1)
@@ -109,23 +110,34 @@ void __MCFCRT_DiscardCrtModuleQuickExitCallbacks(void){
 	_MCFCRT_SignalMutex(&g_vAtQuickExitMutex);
 }
 
-__attribute__((__noreturn__))
-void _MCFCRT_ExitProcess(unsigned uExitCode, _MCFCRT_ExitType eExitType){
-	static volatile bool s_bExiting = false;
+static volatile DWORD s_dwExitingThreadId = 0;
 
-	const bool bBailing = __atomic_exchange_n(&s_bExiting, true, __ATOMIC_RELAXED);
-	if(bBailing){
-		TerminateThread(GetCurrentThread(), uExitCode);
-		__builtin_unreachable();
+static void CheckExitingThread(unsigned uExitCode){
+	const DWORD dwCurrentThreadId = GetCurrentThreadId();
+	DWORD dwOldExitingThreadId = 0;
+	__atomic_compare_exchange_n(&s_dwExitingThreadId, &dwOldExitingThreadId, dwCurrentThreadId, false, __ATOMIC_RELAXED, __ATOMIC_RELAXED);
+	if(dwOldExitingThreadId != 0){
+		if(dwOldExitingThreadId == dwCurrentThreadId){
+			_MCFCRT_Bail(L"_MCFCRT_QuickExit() or _MCFCRT_Exit() is called recursively.\n"
+				"This is probably caused by calling exit() or quick_exit() inside the destructor of a static or thread_local object.");
+		}
+		ExitThread(uExitCode);
+		__builtin_trap();
 	}
+}
 
-	if(eExitType == _MCFCRT_kExitTypeQuick){
-		PumpAtModuleQuickExit();
-	}
-	if(eExitType != _MCFCRT_kExitTypeNormal){
-		TerminateProcess(GetCurrentProcess(), uExitCode);
-	} else {
-		ExitProcess(uExitCode);
-	}
-	__builtin_unreachable();
+_Noreturn void _MCFCRT_ImmediateExit(unsigned uExitCode){
+	TerminateProcess(GetCurrentProcess(), uExitCode);
+	__builtin_trap();
+}
+_Noreturn void _MCFCRT_QuickExit(unsigned uExitCode){
+	CheckExitingThread(uExitCode);
+	PumpAtModuleQuickExit();
+	_MCFCRT_ImmediateExit(uExitCode);
+	__builtin_trap();
+}
+_Noreturn void _MCFCRT_Exit(unsigned uExitCode){
+	CheckExitingThread(uExitCode);
+	ExitProcess(uExitCode);
+	__builtin_trap();
 }
