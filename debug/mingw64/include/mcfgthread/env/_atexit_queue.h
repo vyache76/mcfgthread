@@ -28,7 +28,9 @@ typedef struct __MCFCRT_tagAtExitQueue {
 	__MCFCRT_AtExitQueueNode __spare;
 } __MCFCRT_AtExitQueue;
 
+#if (__STDC_VERSION__ + 0 >= 201112l) || (__cplusplus + 0 >= 201103l)
 static_assert(sizeof(__MCFCRT_AtExitQueue) % 256 == 0, "??");
+#endif
 
 static inline bool __MCFCRT_AtExitQueuePush(__MCFCRT_AtExitQueue *_MCFCRT_RESTRICT __queue, const __MCFCRT_AtExitElement *_MCFCRT_RESTRICT __elem) _MCFCRT_NOEXCEPT {
 	_MCFCRT_WaitForMutexForever(&(__queue->__mutex), _MCFCRT_MUTEX_SUGGESTED_SPIN_COUNT);
