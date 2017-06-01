@@ -20,7 +20,7 @@
 #include <errno.h>
 
 #ifndef __MCFCRT_C11THREAD_INLINE_OR_EXTERN
-#	define __MCFCRT_C11THREAD_INLINE_OR_EXTERN     __attribute__((__gnu_inline__)) extern inline
+#  define __MCFCRT_C11THREAD_INLINE_OR_EXTERN     __attribute__((__gnu_inline__)) extern inline
 #endif
 
 _MCFCRT_EXTERN_C_BEGIN
@@ -29,7 +29,7 @@ _MCFCRT_EXTERN_C_BEGIN
 // 7.26.1 Introduction
 //-----------------------------------------------------------------------------
 #if !defined(__cplusplus)
-#	define thread_local        _Thread_local
+#  define thread_local         _Thread_local
 #endif
 
 #define ONCE_FLAG_INIT         { 0 }

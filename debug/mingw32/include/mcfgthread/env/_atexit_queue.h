@@ -28,7 +28,7 @@ typedef struct __MCFCRT_tagAtExitQueue {
 	__MCFCRT_AtExitQueueNode __spare;
 } __MCFCRT_AtExitQueue;
 
-#if (__STDC_VERSION__ + 0 >= 201112l) || (__cplusplus + 0 >= 201103l)
+#if defined(_MCFCRT_C11) || defined(_MCFCRT_CXX11)
 static_assert(sizeof(__MCFCRT_AtExitQueue) % 256 == 0, "??");
 #endif
 
@@ -41,7 +41,7 @@ static inline bool __MCFCRT_AtExitQueuePush(__MCFCRT_AtExitQueue *_MCFCRT_RESTRI
 			__node = &(__queue->__spare);
 		}
 		if(__node->__size >= sizeof(__node->__data) / sizeof(__node->__data[0])){
-			__next = _MCFCRT_malloc(sizeof(*__next));
+			__next = (__MCFCRT_AtExitQueueNode *)_MCFCRT_malloc(sizeof(*__next));
 			if(!__next){
 				_MCFCRT_SignalMutex(&(__queue->__mutex));
 				return false;
