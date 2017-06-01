@@ -33,6 +33,7 @@ pkginclude_env_HEADERS = \
 	src/env/_seh_top.h	\
 	src/env/_nt_timeout.h	\
 	src/env/_mopthread.h	\
+	src/env/_atexit_queue.h	\
 	src/env/avl_tree.h	\
 	src/env/xassert.h	\
 	src/env/pp.h	\
