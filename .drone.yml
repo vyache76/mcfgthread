@@ -22,8 +22,8 @@ build:
 
 notify:
   irc:
-    prefix:
-    nick: mcfgthread-cibot
+    prefix: lh_mouse
+    nick: mcfgthread-ci
     channel: mcfproj
     server:
       host: chat.freenode.net
