@@ -10,11 +10,11 @@
 _MCFCRT_EXTERN_C_BEGIN
 
 __attribute__((__malloc__))
-extern void *__MCFCRT_HeapAlloc(_MCFCRT_STD size_t __uNewSize, bool __bFillsWithZero, const void *__pRetAddr) _MCFCRT_NOEXCEPT;
+extern void *__MCFCRT_HeapAlloc(_MCFCRT_STD size_t __uNewSize, bool __bFillsWithZero, const void *__pRetAddrOuter) _MCFCRT_NOEXCEPT;
 __attribute__((__nonnull__(1)))
-extern void *__MCFCRT_HeapRealloc(void *__pOldBlock, _MCFCRT_STD size_t __uNewSize, bool __bFillsWithZero, const void *__pRetAddr) _MCFCRT_NOEXCEPT;
+extern void *__MCFCRT_HeapRealloc(void *__pOldBlock, _MCFCRT_STD size_t __uNewSize, bool __bFillsWithZero, const void *__pRetAddrOuter) _MCFCRT_NOEXCEPT;
 __attribute__((__nonnull__(1)))
-extern void __MCFCRT_HeapFree(void *__pOldBlock, const void *__pRetAddr) _MCFCRT_NOEXCEPT;
+extern void __MCFCRT_HeapFree(void *__pOldBlock, const void *__pRetAddrOuter) _MCFCRT_NOEXCEPT;
 
 __attribute__((__always_inline__, __malloc__))
 static inline void *_MCFCRT_malloc(_MCFCRT_STD size_t  __size) _MCFCRT_NOEXCEPT {
