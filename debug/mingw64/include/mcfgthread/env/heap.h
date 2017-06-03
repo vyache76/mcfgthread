@@ -24,8 +24,8 @@ static inline void *_MCFCRT_malloc(_MCFCRT_STD size_t __uSize) _MCFCRT_NOEXCEPT 
 __attribute__((__always_inline__))
 static inline void *_MCFCRT_realloc(void *__pBlock, _MCFCRT_STD size_t __uSize) _MCFCRT_NOEXCEPT {
 	if(!__pBlock){
-		return __MCFCRT_HeapAlloc(__uSize,
-			false, __builtin_return_address(0));
+		return __MCFCRT_HeapAlloc(__uSize, false,
+			__builtin_return_address(0));
 	}
 	return __MCFCRT_HeapRealloc(__pBlock, __uSize, false,
 		__builtin_return_address(0));
