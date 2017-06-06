@@ -255,7 +255,7 @@ typedef struct __MCFCRT_tagC11threadControlBlock {
 } __MCFCRT_C11threadControlBlock;
 
 extern void __MCFCRT_C11threadMopWrapper(void *__params) _MCFCRT_NOEXCEPT;
-extern void __MCFCRT_C11threadMopExitModifier(void *__params, _MCFCRT_STD intptr_t __context) _MCFCRT_NOEXCEPT;
+extern void __MCFCRT_C11threadMopExitModifier(void *__params, _MCFCRT_STD size_t __size_of_params, _MCFCRT_STD intptr_t __context) _MCFCRT_NOEXCEPT;
 
 __MCFCRT_C11THREAD_INLINE_OR_EXTERN int __MCFCRT_thrd_create(thrd_t *__tid_ret, thrd_start_t __proc, void *__param) _MCFCRT_NOEXCEPT {
 	__MCFCRT_C11threadControlBlock __control = { __proc, __param, (int)0xDEADBEEF };
@@ -275,13 +275,14 @@ __MCFCRT_C11THREAD_INLINE_OR_EXTERN int __MCFCRT_thrd_join(thrd_t __tid, int *__
 		return thrd_error; // XXX: EDEADLK
 	}
 	if(__exit_code_ret){
-		__MCFCRT_C11threadControlBlock __control;
-		if(!__MCFCRT_MopthreadJoin(__tid, &__control)){
+		__MCFCRT_C11threadControlBlock __control = { 0 };
+		_MCFCRT_STD size_t __bytes_copied = sizeof(__control);
+		if(!__MCFCRT_MopthreadJoin(__tid, &__control, &__bytes_copied)){
 			return thrd_error; // XXX: ESRCH
 		}
 		*__exit_code_ret = __control.__exit_code;
 	} else {
-		if(!__MCFCRT_MopthreadJoin(__tid, _MCFCRT_NULLPTR)){
+		if(!__MCFCRT_MopthreadJoin(__tid, _MCFCRT_NULLPTR, _MCFCRT_NULLPTR)){
 			return thrd_error; // XXX: ESRCH
 		}
 	}

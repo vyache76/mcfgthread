@@ -79,19 +79,19 @@ mcfgthread_sources = \
 	src/ext/wcpcpy.c
 
 bin_PROGRAMS = \
-	mcfgthread-11.dll
+	mcfgthread-12.dll
 
-mcfgthread_11_dll_SOURCES = \
+mcfgthread_12_dll_SOURCES = \
 	src/dll_startup.c	\
 	${mcfgthread_sources}
 
-mcfgthread_11_dll_LDFLAGS = \
+mcfgthread_12_dll_LDFLAGS = \
 	-shared -static -nostdlib	\
 	-Wl,-e@__MCFCRT_DllStartup,--subsystem,windows:6.0,--disable-runtime-pseudo-reloc,--disable-auto-import	\
 	-Wl,--export-all-symbols,--exclude-symbols,@__MCFCRT_DllStartup,--exclude-libs,ALL	\
 	-Wl,--disable-stdcall-fixup,--enable-auto-image-base,--out-implib,libmcfgthread.dll.a
 
-mcfgthread_11_dll_LDADD = \
+mcfgthread_12_dll_LDADD = \
 	-lkernel32 -lntdll
 
 lib_LIBRARIES = \
@@ -99,12 +99,12 @@ lib_LIBRARIES = \
 	libmcfgthread.a
 
 libmcfgthread_dll_a_SOURCES =
-libmcfgthread.dll.a: mcfgthread-11.dll
+libmcfgthread.dll.a: mcfgthread-12.dll
 
 libmcfgthread_a_SOURCES =
 ##libmcfgthread_a_SOURCES = \
 ##	${mcfgthread_sources}
 
 ## TODO: Modify MinGW-w64 startup code to perform CRT initialization before __main().
-libmcfgthread.a: mcfgthread-11.dll
+libmcfgthread.a: mcfgthread-12.dll
 	cp --no-preserve=timestamps libmcfgthread.dll.a $@

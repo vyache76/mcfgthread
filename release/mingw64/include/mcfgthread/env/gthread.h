@@ -283,13 +283,14 @@ __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_join(__gthread_t __tid, v
 		return EDEADLK;
 	}
 	if(__exit_code_ret){
-		__MCFCRT_GthreadControlBlock __control;
-		if(!__MCFCRT_MopthreadJoin(__tid, &__control)){
+		__MCFCRT_GthreadControlBlock __control = { 0 };
+		_MCFCRT_STD size_t __size_copied = sizeof(__control);
+		if(!__MCFCRT_MopthreadJoin(__tid, &__control, &__size_copied)){
 			return ESRCH;
 		}
 		*__exit_code_ret = __control.__exit_code;
 	} else {
-		if(!__MCFCRT_MopthreadJoin(__tid, _MCFCRT_NULLPTR)){
+		if(!__MCFCRT_MopthreadJoin(__tid, _MCFCRT_NULLPTR, _MCFCRT_NULLPTR)){
 			return ESRCH;
 		}
 	}
