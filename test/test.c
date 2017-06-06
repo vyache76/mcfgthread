@@ -44,7 +44,7 @@ void *test_thread_proc(void *param){
 		__gthread_mutex_unlock(&mutex);
 	}
 
-	return 0;
+	return (void *)(uintptr_t)*(unsigned *)p;
 }
 
 int main(){
@@ -59,8 +59,10 @@ int main(){
 	}
 	for(unsigned i = 0; i < THREAD_COUNT; ++i){
 		printf("waiting for thread %u\n", i);
-		err = __gthread_join(threads[i], 0);
+		void *exit_code;
+		err = __gthread_join(threads[i], &exit_code);
 		assert(err == 0);
+		printf("exit code was %u\n", (unsigned)(uintptr_t)exit_code);
 	}
 	printf("counter = %lu\n", counter);
 

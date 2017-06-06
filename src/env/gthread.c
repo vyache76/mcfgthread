@@ -6,7 +6,7 @@
 #include "gthread.h"
 #include "_seh_top.h"
 
-void __MCFCRT_GthreadTlsDestructor(intptr_t context, void *storage){
+void __MCFCRT_gthread_tls_destructor(intptr_t context, void *storage){
 	void (*const destructor)(void *) = (void (*)(void *))context;
 
 	void *const value = *(void **)storage;
@@ -18,20 +18,20 @@ void __MCFCRT_GthreadTlsDestructor(intptr_t context, void *storage){
 	(*destructor)(value);
 }
 
-intptr_t __MCFCRT_GthreadUnlockCallbackMutex(intptr_t context){
+intptr_t __MCFCRT_gthread_unlock_callback_mutex(intptr_t context){
 	__gthread_mutex_t *const mutex = (__gthread_mutex_t *)context;
 
 	__gthread_mutex_unlock(mutex);
 	return 1;
 }
-void __MCFCRT_GthreadRelockCallbackMutex(intptr_t context, intptr_t unlocked){
+void __MCFCRT_gthread_relock_callback_mutex(intptr_t context, intptr_t unlocked){
 	__gthread_mutex_t *const mutex = (__gthread_mutex_t *)context;
 
 	_MCFCRT_ASSERT((size_t)unlocked == 1);
 	__gthread_mutex_lock(mutex);
 }
 
-intptr_t __MCFCRT_GthreadUnlockCallbackRecursiveMutex(intptr_t context){
+intptr_t __MCFCRT_gthread_unlock_callback_recursive_mutex(intptr_t context){
 	__gthread_recursive_mutex_t *const recur_mutex = (__gthread_recursive_mutex_t *)context;
 	_MCFCRT_ASSERT(_MCFCRT_GetCurrentThreadId() == __atomic_load_n(&(recur_mutex->__owner), __ATOMIC_RELAXED));
 
@@ -42,7 +42,7 @@ intptr_t __MCFCRT_GthreadUnlockCallbackRecursiveMutex(intptr_t context){
 	__gthread_mutex_unlock(&(recur_mutex->__mutex));
 	return (intptr_t)old_count;
 }
-void __MCFCRT_GthreadRelockCallbackRecursiveMutex(intptr_t context, intptr_t unlocked){
+void __MCFCRT_gthread_relock_callback_recursive_mutex(intptr_t context, intptr_t unlocked){
 	__gthread_recursive_mutex_t *const recur_mutex = (__gthread_recursive_mutex_t *)context;
 
 	_MCFCRT_ASSERT((size_t)unlocked >= 1);
@@ -53,8 +53,8 @@ void __MCFCRT_GthreadRelockCallbackRecursiveMutex(intptr_t context, intptr_t unl
 	recur_mutex->__count = (size_t)unlocked;
 }
 
-void __MCFCRT_GthreadMopWrapper(void *params){
-	__MCFCRT_GthreadControlBlock *const control = params;
+void __MCFCRT_gthread_mopthread_wrapper(void *params){
+	__MCFCRT_gthread_control_t *const control = params;
 
 	void *exit_code;
 

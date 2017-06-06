@@ -40,10 +40,10 @@ _MCFCRT_CONSTEXPR int __gthread_active_p(void) _MCFCRT_NOEXCEPT {
 //-----------------------------------------------------------------------------
 typedef _MCFCRT_TlsKeyHandle __gthread_key_t;
 
-extern void __MCFCRT_GthreadTlsDestructor(_MCFCRT_STD intptr_t __context, void *__storage) _MCFCRT_NOEXCEPT;
+extern void __MCFCRT_gthread_tls_destructor(_MCFCRT_STD intptr_t __context, void *__storage) _MCFCRT_NOEXCEPT;
 
 __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_key_create(__gthread_key_t *__key_ret, void (*__destructor)(void *)) _MCFCRT_NOEXCEPT {
-	const __gthread_key_t __key = _MCFCRT_TlsAllocKey(sizeof(void *), _MCFCRT_NULLPTR, __destructor ? &__MCFCRT_GthreadTlsDestructor : _MCFCRT_NULLPTR, (_MCFCRT_STD intptr_t)__destructor);
+	const __gthread_key_t __key = _MCFCRT_TlsAllocKey(sizeof(void *), _MCFCRT_NULLPTR, __destructor ? &__MCFCRT_gthread_tls_destructor : _MCFCRT_NULLPTR, (_MCFCRT_STD intptr_t)__destructor);
 	if(!__key){
 		return ENOMEM;
 	}
@@ -144,7 +144,7 @@ __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_mutex_unlock(__gthread_mu
 //-----------------------------------------------------------------------------
 // Recursive mutex
 //-----------------------------------------------------------------------------
-typedef struct __MCFCRT_tagGthreadRecursiveMutex {
+typedef struct __MCFCRT_gthread_recursive_mutex {
 	_MCFCRT_STD uintptr_t __owner;
 	_MCFCRT_STD size_t __count;
 	__gthread_mutex_t __mutex;
@@ -215,11 +215,11 @@ typedef _MCFCRT_ConditionVariable __gthread_cond_t;
 #define __GTHREAD_COND_INIT             { 0 }
 #define __GTHREAD_COND_INIT_FUNCTION    __gthread_cond_init_function
 
-extern _MCFCRT_STD intptr_t __MCFCRT_GthreadUnlockCallbackMutex(_MCFCRT_STD intptr_t __context) _MCFCRT_NOEXCEPT;
-extern void __MCFCRT_GthreadRelockCallbackMutex(_MCFCRT_STD intptr_t __context, _MCFCRT_STD intptr_t __unlocked) _MCFCRT_NOEXCEPT;
+extern _MCFCRT_STD intptr_t __MCFCRT_gthread_unlock_callback_mutex(_MCFCRT_STD intptr_t __context) _MCFCRT_NOEXCEPT;
+extern void __MCFCRT_gthread_relock_callback_mutex(_MCFCRT_STD intptr_t __context, _MCFCRT_STD intptr_t __unlocked) _MCFCRT_NOEXCEPT;
 
-extern _MCFCRT_STD intptr_t __MCFCRT_GthreadUnlockCallbackRecursiveMutex(_MCFCRT_STD intptr_t __context) _MCFCRT_NOEXCEPT;
-extern void __MCFCRT_GthreadRelockCallbackRecursiveMutex(_MCFCRT_STD intptr_t __context, _MCFCRT_STD intptr_t __unlocked) _MCFCRT_NOEXCEPT;
+extern _MCFCRT_STD intptr_t __MCFCRT_gthread_unlock_callback_recursive_mutex(_MCFCRT_STD intptr_t __context) _MCFCRT_NOEXCEPT;
+extern void __MCFCRT_gthread_relock_callback_recursive_mutex(_MCFCRT_STD intptr_t __context, _MCFCRT_STD intptr_t __unlocked) _MCFCRT_NOEXCEPT;
 
 __MCFCRT_GTHREAD_INLINE_OR_EXTERN void __MCFCRT_gthread_cond_init_function(__gthread_cond_t *__cond) _MCFCRT_NOEXCEPT {
 	_MCFCRT_InitializeConditionVariable(__cond);
@@ -230,11 +230,11 @@ __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_cond_destroy(__gthread_co
 }
 
 __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_cond_wait(__gthread_cond_t *__cond, __gthread_mutex_t *__mutex) _MCFCRT_NOEXCEPT {
-	_MCFCRT_WaitForConditionVariableForever(__cond, &__MCFCRT_GthreadUnlockCallbackMutex, &__MCFCRT_GthreadRelockCallbackMutex, (_MCFCRT_STD intptr_t)__mutex, _MCFCRT_CONDITION_VARIABLE_SUGGESTED_SPIN_COUNT);
+	_MCFCRT_WaitForConditionVariableForever(__cond, &__MCFCRT_gthread_unlock_callback_mutex, &__MCFCRT_gthread_relock_callback_mutex, (_MCFCRT_STD intptr_t)__mutex, _MCFCRT_CONDITION_VARIABLE_SUGGESTED_SPIN_COUNT);
 	return 0;
 }
 __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_cond_wait_recursive(__gthread_cond_t *__cond, __gthread_recursive_mutex_t *__recur_mutex) _MCFCRT_NOEXCEPT {
-	_MCFCRT_WaitForConditionVariableForever(__cond, &__MCFCRT_GthreadUnlockCallbackRecursiveMutex, &__MCFCRT_GthreadRelockCallbackRecursiveMutex, (_MCFCRT_STD intptr_t)__recur_mutex, _MCFCRT_CONDITION_VARIABLE_SUGGESTED_SPIN_COUNT);
+	_MCFCRT_WaitForConditionVariableForever(__cond, &__MCFCRT_gthread_unlock_callback_recursive_mutex, &__MCFCRT_gthread_relock_callback_recursive_mutex, (_MCFCRT_STD intptr_t)__recur_mutex, _MCFCRT_CONDITION_VARIABLE_SUGGESTED_SPIN_COUNT);
 	return 0;
 }
 __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_cond_signal(__gthread_cond_t *__cond) _MCFCRT_NOEXCEPT {
@@ -261,17 +261,17 @@ __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_cond_broadcast(__gthread_
 
 typedef _MCFCRT_STD uintptr_t __gthread_t;
 
-typedef struct __MCFCRT_tagGthreadControlBlock {
+typedef struct __MCFCRT_gthread_control {
 	void *(*__proc)(void *);
 	void *__param;
 	void *__exit_code;
-} __MCFCRT_GthreadControlBlock;
+} __MCFCRT_gthread_control_t;
 
-extern void __MCFCRT_GthreadMopWrapper(void *__params) _MCFCRT_NOEXCEPT;
+extern void __MCFCRT_gthread_mopthread_wrapper(void *__params) _MCFCRT_NOEXCEPT;
 
 __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_create(__gthread_t *__tid_ret, void *(*__proc)(void *), void *__param) _MCFCRT_NOEXCEPT {
-	__MCFCRT_GthreadControlBlock __control = { __proc, __param, (void *)0xDEADBEEF };
-	const _MCFCRT_STD uintptr_t __tid = __MCFCRT_MopthreadCreate(&__MCFCRT_GthreadMopWrapper, &__control, sizeof(__control));
+	__MCFCRT_gthread_control_t __control = { __proc, __param, (void *)0xDEADBEEF };
+	const _MCFCRT_STD uintptr_t __tid = __MCFCRT_MopthreadCreate(&__MCFCRT_gthread_mopthread_wrapper, &__control, sizeof(__control));
 	if(__tid == 0){
 		return EAGAIN;
 	}
@@ -283,7 +283,7 @@ __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_join(__gthread_t __tid, v
 		return EDEADLK;
 	}
 	if(__exit_code_ret){
-		__MCFCRT_GthreadControlBlock __control = { 0 };
+		__MCFCRT_gthread_control_t __control = { 0 };
 		_MCFCRT_STD size_t __size_copied = sizeof(__control);
 		if(!__MCFCRT_MopthreadJoin(__tid, &__control, &__size_copied)){
 			return ESRCH;
@@ -331,7 +331,7 @@ __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_yield(void) _MCFCRT_NOEXC
 //-----------------------------------------------------------------------------
 typedef struct timespec __gthread_time_t;
 
-__MCFCRT_GTHREAD_INLINE_OR_EXTERN _MCFCRT_STD uint64_t __MCFCRT_GthreadTranslateTimeout(const __gthread_time_t *_MCFCRT_RESTRICT __utc_timeout) _MCFCRT_NOEXCEPT {
+__MCFCRT_GTHREAD_INLINE_OR_EXTERN _MCFCRT_STD uint64_t __MCFCRT_gthread_translate_timeout(const __gthread_time_t *_MCFCRT_RESTRICT __utc_timeout) _MCFCRT_NOEXCEPT {
 	const double __utc_timeout_ms = (double)__utc_timeout->tv_sec * 1.0e3 + (double)__utc_timeout->tv_nsec / 1.0e6;
 	const double __utc_now_ms = (double)_MCFCRT_GetUtcClock();
 	const double __delta_ms = __utc_timeout_ms - __utc_now_ms;
@@ -350,7 +350,7 @@ __MCFCRT_GTHREAD_INLINE_OR_EXTERN _MCFCRT_STD uint64_t __MCFCRT_GthreadTranslate
 }
 
 __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_mutex_timedlock(__gthread_mutex_t *_MCFCRT_RESTRICT __mutex, const __gthread_time_t *_MCFCRT_RESTRICT __timeout) _MCFCRT_NOEXCEPT {
-	const _MCFCRT_STD uint64_t __mono_timeout_ms = __MCFCRT_GthreadTranslateTimeout(__timeout);
+	const _MCFCRT_STD uint64_t __mono_timeout_ms = __MCFCRT_gthread_translate_timeout(__timeout);
 	if(!_MCFCRT_WaitForMutex(__mutex, _MCFCRT_MUTEX_SUGGESTED_SPIN_COUNT, __mono_timeout_ms)){
 		return ETIMEDOUT;
 	}
@@ -371,8 +371,8 @@ __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_recursive_mutex_timedlock
 	return 0;
 }
 __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_cond_timedwait(__gthread_cond_t *_MCFCRT_RESTRICT __cond, __gthread_mutex_t *_MCFCRT_RESTRICT __mutex, const __gthread_time_t *_MCFCRT_RESTRICT __timeout) _MCFCRT_NOEXCEPT {
-	const _MCFCRT_STD uint64_t __mono_timeout_ms = __MCFCRT_GthreadTranslateTimeout(__timeout);
-	if(!_MCFCRT_WaitForConditionVariable(__cond, &__MCFCRT_GthreadUnlockCallbackMutex, &__MCFCRT_GthreadRelockCallbackMutex, (_MCFCRT_STD intptr_t)__mutex, _MCFCRT_CONDITION_VARIABLE_SUGGESTED_SPIN_COUNT, __mono_timeout_ms)){
+	const _MCFCRT_STD uint64_t __mono_timeout_ms = __MCFCRT_gthread_translate_timeout(__timeout);
+	if(!_MCFCRT_WaitForConditionVariable(__cond, &__MCFCRT_gthread_unlock_callback_mutex, &__MCFCRT_gthread_relock_callback_mutex, (_MCFCRT_STD intptr_t)__mutex, _MCFCRT_CONDITION_VARIABLE_SUGGESTED_SPIN_COUNT, __mono_timeout_ms)){
 		return ETIMEDOUT;
 	}
 	return 0;
