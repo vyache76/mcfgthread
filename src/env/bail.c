@@ -6,7 +6,6 @@
 #include "mcfwin.h"
 #include "../ext/wcpcpy.h"
 #include <ntdef.h>
-#include <ntstatus.h>
 
 #undef GetCurrentProcess
 #define GetCurrentProcess()  ((HANDLE)-1)
