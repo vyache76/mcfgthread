@@ -1,6 +1,6 @@
 // This file is put into the Public Domain.
 
-#include "../src/env/gthread.h"
+#include "../src/gthread.h"
 
 #include <stdio.h>
 #include <stdlib.h>

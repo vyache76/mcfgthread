@@ -1,6 +1,6 @@
 // This file is put into the Public Domain.
 
-#include "../src/env/c11thread.h"
+#include "../src/c11thread.h"
 
 #include <stdio.h>
 
