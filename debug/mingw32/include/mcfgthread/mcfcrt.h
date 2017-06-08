@@ -7,23 +7,27 @@
 
 #include "env/_crtdef.h"
 
-#include "env/avl_tree.h"
-#include "env/bail.h"
-#include "env/clocks.h"
-#include "env/condition_variable.h"
-#include "env/xassert.h"
-#include "env/crt_module.h"
-#include "env/expect.h"
-#include "env/heap.h"
-#include "env/inline_mem.h"
-#include "env/mutex.h"
-#include "env/once_flag.h"
-#include "env/pp.h"
-#include "env/thread.h"
-#include "env/tls.h"
-
-#include "ext/itow.h"
-#include "ext/wcpcpy.h"
+#ifndef __MCFCRT_NO_GENERAL_INCLUDES
+// ------------------------------ env ------------------------------
+#  include "env/avl_tree.h"
+#  include "env/bail.h"
+#  include "env/clocks.h"
+#  include "env/condition_variable.h"
+#  include "env/xassert.h"
+#  include "env/crt_module.h"
+#  include "env/expect.h"
+#  include "env/heap.h"
+#  include "env/inline_mem.h"
+#  include "env/mutex.h"
+#  include "env/once_flag.h"
+#  include "env/pp.h"
+#  include "env/thread.h"
+#  include "env/tls.h"
+// ------------------------------ ext ------------------------------
+#  include "ext/itow.h"
+#  include "ext/wcpcpy.h"
+// -----------------------------------------------------------------
+#endif
 
 _MCFCRT_EXTERN_C_BEGIN
 

@@ -3,6 +3,7 @@
 // Copyleft 2013 - 2017, LH_Mouse. All wrongs reserved.
 
 #include "mcfcrt.h"
+#include "env/xassert.h"
 #include "env/_mopthread.h"
 #include "env/tls.h"
 #include "env/crt_module.h"
