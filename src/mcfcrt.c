@@ -3,6 +3,7 @@
 // Copyleft 2013 - 2017, LH_Mouse. All wrongs reserved.
 
 #include "mcfcrt.h"
+#include "env/_mopthread.h"
 #include "env/tls.h"
 #include "env/crt_module.h"
 
@@ -12,6 +13,10 @@ bool __MCFCRT_InitRecursive(void){
 	ptrdiff_t nCounter = g_nCounter;
 	if(nCounter == 0){
 		if(!__MCFCRT_TlsInit()){
+			return false;
+		}
+		if(!__MCFCRT_MopthreadInit()){
+			__MCFCRT_TlsUninit();
 			return false;
 		}
 		// Add more initialization...
@@ -27,6 +32,7 @@ void __MCFCRT_UninitRecursive(void){
 	g_nCounter = nCounter;
 	if(nCounter == 0){
 		// Add more uninitialization...
+		__MCFCRT_MopthreadUninit();
 		__MCFCRT_TlsUninit();
 		__MCFCRT_DiscardCrtModuleQuickExitCallbacks();
 	}
