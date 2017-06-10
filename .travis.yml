@@ -13,8 +13,9 @@ before_install:
   - "sudo apt-get -qq update"
   - "_pkgarch=$(echo \"${_arch}\" | sed \"s/[^a-zA-Z0-9]/-/g\")"
   - "sudo apt-get install -y \"gcc-mingw-w64-${_pkgarch}\" \"mingw-w64-${_pkgarch}-dev\""
-  - "export CC=\"${_arch}-w64-mingw32\"-gcc"
-  - "export CXX=\"${_arch}-w64-mingw32\"-g++"
+  - "test -n "${CC}" && unset CC"
+  - "alias gcc=\"${_arch}-w64-mingw32-gcc\""
+  - "alias g++=\"${_arch}-w64-mingw32-g++\""
 
 install:
   # Run `make check` normally.
