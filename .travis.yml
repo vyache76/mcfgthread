@@ -12,7 +12,7 @@ matrix:
 before_install:
   - "sudo apt-get -qq update"
   - "_pkgarch=$(echo \"${_arch}\" | sed \"s/[^a-zA-Z0-9]/-/g\")"
-  - "sudo apt-get install -y \"gcc-mingw-w64-${_pkgarch}\" \"mingw-w64-${_pkgarch}-dev\""
+  - "sudo apt-get install -y \"mingw-w64-${_pkgarch}-dev\" \"gcc-mingw-w64-${_pkgarch}\" \"g++-mingw-w64-${_pkgarch}\""
   - "test -n \"${CC}\" && unset CC"
 
 install:
