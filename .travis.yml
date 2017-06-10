@@ -1,0 +1,41 @@
+language:
+  - c
+
+matrix:
+  include:
+    - os: linux
+      env:
+        - _matrix_env="_build=i686-w64-mingw32"
+    - os: linux
+      env:
+        - _matrix_env="_build=x86_64-w64-mingw32"
+
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y mingw-w64-i686-dev mingw-w64-x86-64-dev
+  - eval "${_matrix_env}"
+
+install:
+  # Run `make distcheck` normally.
+  - "mkdir -p m4"
+  - "autoreconf -ifv"
+  - "CFLAGS='-O3 -g' ./configure --build=\"${_build}\""
+  - "make -j$(nproc)"
+  - "make distcheck -j$(nproc)"
+  - "cp -p libmcfgthread.dll.a  libmcfgthread-new.dll.a"
+  # Compile and run (?) the sample program.
+  ## FIXME: At the moment this crashes on Wine. We must have a REAL Windows to test it.
+  ## - ./a
+  - "gcc test/test.c -lmcfgthread-new -L."
+  # Make sure that all `#include` directives in our headers are met.
+  - "for cmd in {\"gcc -x c -std=c99\",\"gcc -x c -std=c11\",\"g++ -x c++ -std=c++98\",\"g++ -x c++ -std=c++11\"}; do"
+  - "  echo \"Checking #include directives using command:\" $cmd"
+  - "  $cmd -Wall -Wextra -Werror `find src -name \"*.h\"` -c /dev/null"
+  - "done"
+
+notifications:
+  irc:
+    channels:
+      - "ircs://chat.freenode.net:6697/#mcfproj"
+    template:
+      - "lh_mouse %{repository_slug}#%{commit} %{result} (%{build_url})"
