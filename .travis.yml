@@ -25,7 +25,7 @@ install:
   - "make -j$(nproc)"
   - "make check"
   - "cp -p libmcfgthread.dll.a  libmcfgthread-new.dll.a"
-  - "gcc test/test.c -lmcfgthread-new -L."
+  - "gcc -std=c11 test/test.c -lmcfgthread-new -L."
   # Make sure that all `#include` directives in our headers are met.
   - "for cmd in {\"gcc -x c -std=c99\",\"gcc -x c -std=c11\",\"g++ -x c++ -std=c++98\",\"g++ -x c++ -std=c++11\"}; do"
   - "  echo \"Checking #include directives using command:\" $cmd"
