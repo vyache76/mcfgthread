@@ -2,7 +2,7 @@ ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = no-exeext foreign subdir-objects
 AM_CPPFLAGS = -Wall -Wextra -pedantic -pedantic-errors -Werror -Wno-error=unused-parameter -Winvalid-pch	\
 	-Wwrite-strings -Wconversion -Wsign-conversion -Wdouble-promotion -Wsuggest-attribute=noreturn -Wundef -Wshadow -Wstrict-aliasing=2	\
-	-pipe -mno-stack-arg-probe -mno-accumulate-outgoing-args -mpush-args -masm=intel -ffreestanding -fno-rtti -fno-exceptions
+	-pipe -mno-stack-arg-probe -mno-accumulate-outgoing-args -mpush-args -masm=intel -ffreestanding
 AM_CFLAGS = -include __pch.h -std=c11 -Wstrict-prototypes
 
 ## I think you GNU people should just STFU and stop confusing the linker.
@@ -20,7 +20,7 @@ __pch.h: ${srcdir}/src/env/_crtdef.h
 	echo "#include \"$$(cygpath -m "$<")\"" > $@
 
 __pch.h.gch: __pch.h
-	${CC} -x c-header @DEFS@ ${AM_CPPFLAGS} ${CPPFLAGS} $$(echo "" "${AM_CFLAGS}" | sed "s/-include __pch\\.h//") ${CFLAGS} $< -o $@
+	${CC} -x c-header @DEFS@ ${AM_CPPFLAGS} ${CPPFLAGS} $$(echo "" "${AM_CFLAGS}" | sed "s/-include __pch\\.h//") ${CFLAGS} -Wno-error $< -o $@
 
 pkginclude_HEADERS = \
 	src/mcfcrt.h	\
