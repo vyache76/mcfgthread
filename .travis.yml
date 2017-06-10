@@ -6,18 +6,19 @@ sudo: required
 
 matrix:
   include:
-    - env: "_host=i686-w64-mingw32"
-    - env: "_host=x86_64-w64-mingw32"
+    - env: "_arch=i686"
+    - env: "_arch=x86_64"
 
 before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y mingw-w64-i686-dev mingw-w64-x86-64-dev
+  - "sudo apt-get -qq update"
+  - "_pkgarch=$(_echo \"${_arch}\" | sed \"s/[^a-zA-Z0-9]/-/g\")"
+  - "sudo apt-get install -y gcc-mingw-w64-${_pkgarch} mingw-w64-${_pkgarch}-dev\""
 
 install:
   # Run `make distcheck` normally.
   - "mkdir -p m4"
   - "autoreconf -ifv"
-  - "CFLAGS='-O3 -g' ./configure --host=${_host}"
+  - "CFLAGS='-O3 -g' ./configure --host=\"${_arch}-w64-mingw32\""
   - "make -j$(nproc)"
   - "make distcheck -j$(nproc)"
   - "cp -p libmcfgthread.dll.a  libmcfgthread-new.dll.a"
