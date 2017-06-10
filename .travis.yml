@@ -5,8 +5,10 @@ dist: trusty
 sudo: required
 
 matrix:
-  env:
-    - "_build=i686-w64-mingw32"
+# FIXME: Why the fuck does GCC try enabling exceptions for C ??
+#        > error: unwind tables currently require either a frame pointer or -maccumulate-outgoing-args for correctness [-Werror]
+#  env:
+#    - "_build=i686-w64-mingw32"
   env:
     - "_build=x86_64-w64-mingw32"
 
@@ -18,7 +20,7 @@ install:
   # Run `make distcheck` normally.
   - "mkdir -p m4"
   - "autoreconf -ifv"
-  - "CFLAGS='-O3 -g -fno-exceptions' ./configure --build=${_build}"
+  - "CFLAGS='-O3 -g' ./configure --build=${_build}"
   - "make -j$(nproc)"
   - "make distcheck -j$(nproc)"
   - "cp -p libmcfgthread.dll.a  libmcfgthread-new.dll.a"
