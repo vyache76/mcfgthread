@@ -6,8 +6,8 @@ sudo: required
 
 matrix:
   include:
-    - env: "_build=i686-w64-mingw32"
-    - env: "_build=x86_64-w64-mingw32"
+    - env: "_host=i686-w64-mingw32"
+    - env: "_host=x86_64-w64-mingw32"
 
 before_install:
   - sudo apt-get -qq update
@@ -17,13 +17,13 @@ install:
   # Run `make distcheck` normally.
   - "mkdir -p m4"
   - "autoreconf -ifv"
-  - "CFLAGS='-O3 -g' ./configure --build=${_build}"
+  - "CFLAGS='-O3 -g' ./configure --host=${_host}"
   - "make -j$(nproc)"
   - "make distcheck -j$(nproc)"
   - "cp -p libmcfgthread.dll.a  libmcfgthread-new.dll.a"
-  - "${_build}-gcc test/test.c -lmcfgthread-new -L."
+  - "${_host}-gcc test/test.c -lmcfgthread-new -L."
   # Make sure that all `#include` directives in our headers are met.
-  - "for cmd in {\"${_build}-gcc -x c -std=c99\",\"${_build}-gcc -x c -std=c11\",\"g++ -x c++ -std=c++98\",\"g++ -x c++ -std=c++11\"}; do"
+  - "for cmd in {\"${_host}-gcc -x c -std=c99\",\"${_host}-gcc -x c -std=c11\",\"g++ -x c++ -std=c++98\",\"g++ -x c++ -std=c++11\"}; do"
   - "  echo \"Checking #include directives using command:\" $cmd"
   - "  $cmd -Wall -Wextra -Werror `find src -name \"*.h\"` -c /dev/null"
   - "done"
