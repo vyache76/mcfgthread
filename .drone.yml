@@ -8,12 +8,12 @@ build:
   pull: true
   shell: mingw$$arch
   commands:
-    # Run `make distcheck` normally.
+    # Run `make check` normally.
     - "mkdir -p m4"
     - "autoreconf -ifv"
     - "CFLAGS='-O3 -g' ./configure"
     - "make -j$(nproc)"
-    - "make distcheck -j$(nproc)"
+    - "make check -j$(nproc)"
     - "cp -p libmcfgthread.dll.a  libmcfgthread-new.dll.a"
     # Compile and run (?) the sample program.
     ## FIXME: At the moment this crashes on Wine. We must have a REAL Windows to test it.
