@@ -1,19 +1,18 @@
-language:
-  - c
+language: c
+dist: xenial
 
 matrix:
   include:
     - os: linux
       env:
-        - _matrix_env="_build=i686-w64-mingw32"
+        - _build="_build=i686-w64-mingw32"
     - os: linux
       env:
-        - _matrix_env="_build=x86_64-w64-mingw32"
+        - _build="_build=x86_64-w64-mingw32"
 
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y mingw-w64-i686-dev mingw-w64-x86-64-dev
-  - eval "${_matrix_env}"
 
 install:
   # Run `make distcheck` normally.
@@ -38,4 +37,4 @@ notifications:
     channels:
       - "ircs://chat.freenode.net:6697/#mcfproj"
     template:
-      - "lh_mouse %{repository_slug}#%{commit} %{result} (%{build_url})"
+      - "[ lh_mouse %{repository_slug}#%{commit}] %{result} (%{build_url})"

@@ -27,8 +27,8 @@ build:
 
 notify:
   irc:
-    prefix: lh_mouse
-    nick: teaci-mcfgthread
+    prefix: " lh_mouse"
+    nick: tea-ci
     channel: mcfproj
     server:
       host: chat.freenode.net
