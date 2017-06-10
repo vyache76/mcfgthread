@@ -13,7 +13,8 @@ before_install:
   - "sudo apt-get -qq update"
   - "_pkgarch=$(echo \"${_arch}\" | sed \"s/[^a-zA-Z0-9]/-/g\")"
   - "sudo apt-get install -y \"gcc-mingw-w64-${_pkgarch}\" \"mingw-w64-${_pkgarch}-dev\""
-  - test -n "${CC}" && unset CC
+  - "export CC=\"${_arch}-w64-mingw32\"-gcc"
+  - "export CXX=\"${_arch}-w64-mingw32\"-g++"
 
 install:
   # Run `make check` normally.
@@ -23,9 +24,9 @@ install:
   - "make -j$(nproc)"
   - "make check"
   - "cp -p libmcfgthread.dll.a  libmcfgthread-new.dll.a"
-  - "${_host}-gcc test/test.c -lmcfgthread-new -L."
+  - "gcc test/test.c -lmcfgthread-new -L."
   # Make sure that all `#include` directives in our headers are met.
-  - "for cmd in {\"${_host}-gcc -x c -std=c99\",\"${_host}-gcc -x c -std=c11\",\"g++ -x c++ -std=c++98\",\"g++ -x c++ -std=c++11\"}; do"
+  - "for cmd in {\"gcc -x c -std=c99\",\"gcc -x c -std=c11\",\"g++ -x c++ -std=c++98\",\"g++ -x c++ -std=c++11\"}; do"
   - "  echo \"Checking #include directives using command:\" $cmd"
   - "  $cmd -Wall -Wextra -Werror `find src -name \"*.h\"` -c /dev/null"
   - "done"
