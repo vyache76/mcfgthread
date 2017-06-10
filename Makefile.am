@@ -2,7 +2,7 @@ ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = no-exeext foreign subdir-objects
 AM_CPPFLAGS = -Wall -Wextra -pedantic -pedantic-errors -Werror -Wno-error=unused-parameter -Winvalid-pch	\
 	-Wwrite-strings -Wconversion -Wsign-conversion -Wdouble-promotion -Wsuggest-attribute=noreturn -Wundef -Wshadow -Wstrict-aliasing=2	\
-	-pipe -mno-stack-arg-probe -mno-accumulate-outgoing-args -mpush-args -masm=intel -ffreestanding
+	-pipe -mno-stack-arg-probe -mno-accumulate-outgoing-args -mpush-args -masm=intel -ffreestanding -fno-rtti -fno-exceptions
 AM_CFLAGS = -include __pch.h -std=c11 -Wstrict-prototypes
 
 ## I think you GNU people should just STFU and stop confusing the linker.
