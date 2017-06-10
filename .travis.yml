@@ -18,7 +18,7 @@ install:
   # Run `make distcheck` normally.
   - "mkdir -p m4"
   - "autoreconf -ifv"
-  - "CFLAGS='-O3 -g' ./configure --host=\"${_arch}-w64-mingw32\""
+  - "CFLAGS='-O3 -g -fno-exceptions' ./configure --host=\"${_arch}-w64-mingw32\""
   - "make -j$(nproc)"
   - "make distcheck -j$(nproc)"
   - "cp -p libmcfgthread.dll.a  libmcfgthread-new.dll.a"
