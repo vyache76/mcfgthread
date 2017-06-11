@@ -39,3 +39,4 @@ notifications:
       - "ircs://chat.freenode.net:6697/#mcfproj"
     template:
       - "[ lh_mouse %{repository_slug}#%{commit}] %{result} (%{build_url})"
+  email: false
