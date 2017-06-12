@@ -33,6 +33,9 @@ install:
       $cmd -Wall -Wextra -Werror `find src -name "*.h"` -c /dev/null
     done
 
+script:
+  - "exit 0"
+
 notifications:
   irc:
     channels:
