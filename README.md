@@ -92,4 +92,4 @@ Now we can tell that all TLS slots have been constructed and destructed without 
 
 ### IRC channel:
 
-<irc://chat.freenode.net/%23mcfproj>
+<https://webchat.freenode.net/?channels=%23mcfproj>
