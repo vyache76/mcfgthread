@@ -2,8 +2,10 @@
 // See MCFLicense.txt for licensing information.
 // Copyleft 2013 - 2017, LH_Mouse. All wrongs reserved.
 
-#ifndef __MCFCRT_ENV_TLS_H_
-#define __MCFCRT_ENV_TLS_H_
+// FIXME: This file should have been placed in 'src/pre/' as all TLS stuff is module-specific.
+
+#ifndef __MCFCRT_PRE_TLS_H_
+#define __MCFCRT_PRE_TLS_H_
 
 #include "_crtdef.h"
 
