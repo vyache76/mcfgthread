@@ -4,7 +4,7 @@
 ### Introduction
 
 MCF Gthread 是为 Windows 7 及更高版本的 Windows 设计的高效 Gthread 实现，用于移植 GCC 的用途。  
-MCF Gthread is a Gthread implementation for Windows 7 and above that meets the requirements of Gthread interfaces, playing a role as a replacement for the (currently working but smelly and inefficient) ghtr-win32 implementation when porting GCC.  
+MCF Gthread is a Gthread implementation for Windows 7 and above that meets the requirements of Gthread interfaces, playing a role as a replacement for the (currently working but smelly and inefficient) gthr-win32 implementation when porting GCC.  
 
 C++0x 线程支持处于实验阶段。  
 目前包含一次性初始化、互斥体、递归互斥体、条件变量和线程局部存储的功能已经实现。  
