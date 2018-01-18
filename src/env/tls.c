@@ -27,6 +27,7 @@ typedef struct tagTlsObject {
 	struct tagTlsObject *pPrevByThread;
 	struct tagTlsObject *pNextByThread;
 
+	unsigned char abyPaddingToAvoidFalseSharing[64 - alignof(max_align_t)];
 	alignas(max_align_t) unsigned char abyStorage[];
 } TlsObject;
 
