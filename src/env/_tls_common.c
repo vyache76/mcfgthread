@@ -7,6 +7,7 @@
 #include "avl_tree.h"
 #include "heap.h"
 #include "inline_mem.h"
+#include "expect.h"
 #include <winerror.h>
 
 typedef struct tagTlsKey {
@@ -154,7 +155,7 @@ unsigned long __MCFCRT_InternalTlsGet(__MCFCRT_TlsThreadMapHandle hThreadMap, _M
 
 	const TlsObjectKey vObjectKey = { pKey, pKey->uCounter };
 	TlsObject *pObject = (TlsObject *)_MCFCRT_AvlFind(&(pThreadMap->avlObjects), (intptr_t)&vObjectKey, &TlsObjectComparatorNodeKey);
-	if(!pObject){
+	if(_MCFCRT_EXPECT_NOT(!pObject)){
 		return ERROR_NOT_FOUND;
 	}
 	*ppStorage = pObject->abyStorage;
@@ -172,7 +173,7 @@ unsigned long __MCFCRT_InternalTlsRequire(__MCFCRT_TlsThreadMapHandle hThreadMap
 
 	const TlsObjectKey vObjectKey = { pKey, pKey->uCounter };
 	TlsObject *pObject = (TlsObject *)_MCFCRT_AvlFind(&(pThreadMap->avlObjects), (intptr_t)&vObjectKey, &TlsObjectComparatorNodeKey);
-	if(!pObject){
+	if(_MCFCRT_EXPECT_NOT(!pObject)){
 		const size_t uSizeToAlloc = sizeof(TlsObject) + pKey->uSize;
 		if(uSizeToAlloc < sizeof(TlsObject)){
 			return ERROR_NOT_ENOUGH_MEMORY;
