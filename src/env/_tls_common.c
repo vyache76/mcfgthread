@@ -74,6 +74,7 @@ typedef struct tagTlsObject {
 	struct tagTlsObject *pNext; // By thread
 	struct tagTlsObjectKey vObjectKey;
 
+	unsigned char abyPaddingToAvoidFalseSharing[64 - alignof(max_align_t)];
 	alignas(max_align_t) unsigned char abyStorage[];
 } TlsObject;
 
