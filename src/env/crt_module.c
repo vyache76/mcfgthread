@@ -40,7 +40,7 @@ static void CheckExitingThread(unsigned uExitCode){
 	if(dwOldExitingThreadId != 0){
 		if(dwOldExitingThreadId == dwCurrentThreadId){
 			_MCFCRT_Bail(L"_MCFCRT_QuickExit() or _MCFCRT_Exit() is called recursively.\n"
-				"This is probably caused by calling exit() or quick_exit() inside the destructor of a static or thread_local object.");
+			              "This is probably caused by calling exit() or quick_exit() inside the destructor of a static or thread_local object.");
 		}
 		ExitThread(uExitCode);
 		__builtin_trap();
