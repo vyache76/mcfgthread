@@ -185,7 +185,7 @@ static unsigned long MopthreadProc(void *pParam){
 	(*(pControl->pfnProc))(pControl->abyParams);
 	return 0;
 }
-__MCFCRT_C_STDCALL __attribute__((__noreturn__))
+__attribute__((__noreturn__, __stdcall__))
 static unsigned long NativeMopthreadProc(void *pParam){
 	MopthreadControl *const restrict pControl = pParam;
 	_MCFCRT_DEBUG_CHECK(pControl);

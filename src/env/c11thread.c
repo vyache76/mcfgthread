@@ -4,7 +4,6 @@
 
 #define __MCFCRT_C11THREAD_INLINE_OR_EXTERN     extern inline
 #include "c11thread.h"
-#include "_seh_top.h"
 
 void __MCFCRT_c11thread_tls_destructor(intptr_t context, void *storage){
 	void (*const destructor)(void *) = (void (*)(void *))context;
@@ -14,7 +13,6 @@ void __MCFCRT_c11thread_tls_destructor(intptr_t context, void *storage){
 		return;
 	}
 	*(void **)storage = _MCFCRT_NULLPTR;
-
 	(*destructor)(value);
 }
 
@@ -54,14 +52,7 @@ void __MCFCRT_c11thread_relock_callback_mutex(intptr_t context, intptr_t unlocke
 void __MCFCRT_c11thread_mopthread_wrapper(void *params){
 	__MCFCRT_c11thread_control_t *const control = params;
 
-	int exit_code;
-
-	__MCFCRT_SEH_TOP_BEGIN
-	{
-		exit_code = (*(control->__proc))(control->__param);
-	}
-	__MCFCRT_SEH_TOP_END
-
+	const int exit_code = (*(control->__proc))(control->__param);
 	control->__exit_code = exit_code;
 }
 void __MCFCRT_c11thread_mopthread_exit_modifier(void *params, size_t size_of_params, intptr_t context){
