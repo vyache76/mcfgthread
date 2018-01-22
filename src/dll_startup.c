@@ -3,35 +3,50 @@
 // Copyleft 2013 - 2018, LH_Mouse. All wrongs reserved.
 
 #include "mcfcrt.h"
-#include "env/_seh_top.h"
+#include "env/thread.h"
 #include "env/tls.h"
+#include "env/mcfwin.h"
 
-__MCFCRT_C_STDCALL
+__attribute__((__stdcall__))
 extern BOOL __MCFCRT_DllStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved)
 	__asm__("@__MCFCRT_DllStartup");
 
-__MCFCRT_C_STDCALL
-BOOL __MCFCRT_DllStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved){
-	(void)hInstance, (void)pReserved;
+typedef struct tagDllStartupParams {
+	HINSTANCE hInstance;
+	DWORD dwReason;
+	LPVOID pReserved;
+} DllStartupParams;
 
-	bool bRet = true;
+static unsigned long WrappedDllStartup(void *pOpaque){
+	DllStartupParams *const pParams = pOpaque;
 
-	__MCFCRT_SEH_TOP_BEGIN
-	{
-		switch(dwReason){
-		case DLL_PROCESS_ATTACH:
-			bRet = __MCFCRT_InitRecursive();
-			break;
-		case DLL_THREAD_DETACH:
-			__MCFCRT_TlsCleanup();
-			break;
-		case DLL_PROCESS_DETACH:
-			__MCFCRT_TlsCleanup();
-			__MCFCRT_UninitRecursive();
-			break;
+	switch(pParams->dwReason){
+	case DLL_PROCESS_ATTACH:
+		if(!__MCFCRT_InitRecursive()){
+			return false;
 		}
-	}
-	__MCFCRT_SEH_TOP_END
+		return true;
 
-	return bRet;
+	case DLL_PROCESS_DETACH:
+		__MCFCRT_TlsCleanup();
+		__MCFCRT_UninitRecursive();
+		return true;
+
+	case DLL_THREAD_ATTACH:
+		return true;
+
+	case DLL_THREAD_DETACH:
+		__MCFCRT_TlsCleanup();
+		return true;
+
+	default:
+		return false;
+	}
+}
+
+__attribute__((__stdcall__))
+BOOL __MCFCRT_DllStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved){
+	DllStartupParams vParams = { hInstance, dwReason, pReserved };
+	const unsigned long dwResult = _MCFCRT_WrapThreadProcWithSehTop(&WrappedDllStartup, &vParams);
+	return dwResult != 0;
 }
