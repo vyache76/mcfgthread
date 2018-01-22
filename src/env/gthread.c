@@ -4,7 +4,6 @@
 
 #define __MCFCRT_GTHREAD_INLINE_OR_EXTERN     extern inline
 #include "gthread.h"
-#include "_seh_top.h"
 
 void __MCFCRT_gthread_tls_destructor(intptr_t context, void *storage){
 	void (*const destructor)(void *) = (void (*)(void *))context;
@@ -14,7 +13,6 @@ void __MCFCRT_gthread_tls_destructor(intptr_t context, void *storage){
 		return;
 	}
 	*(void **)storage = _MCFCRT_NULLPTR;
-
 	(*destructor)(value);
 }
 
@@ -56,13 +54,6 @@ void __MCFCRT_gthread_relock_callback_recursive_mutex(intptr_t context, intptr_t
 void __MCFCRT_gthread_mopthread_wrapper(void *params){
 	__MCFCRT_gthread_control_t *const control = params;
 
-	void *exit_code;
-
-	__MCFCRT_SEH_TOP_BEGIN
-	{
-		exit_code = (*(control->__proc))(control->__param);
-	}
-	__MCFCRT_SEH_TOP_END
-
+	void *const exit_code = (*(control->__proc))(control->__param);
 	control->__exit_code = exit_code;
 }
