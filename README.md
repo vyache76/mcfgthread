@@ -1,7 +1,7 @@
-|CI            |OS            |Build Status     |
-|:-------------|:-------------|:----------------|
-|**Tea CI**    |Wine          |[![Build Status](https://tea-ci.org/api/badges/lhmouse/mcfgthread/status.svg)](https://tea-ci.org/lhmouse/mcfgthread)  |
-|**Travis CI** |Ubuntu Trusty |[![Build Status](https://travis-ci.org/lhmouse/mcfgthread.svg?branch=master)](https://travis-ci.org/lhmouse/mcfgthread)  |
+|CI            |Category  |Host OS       |Build for OS  |Build Status     |
+|:-------------|:---------|:-------------|:-------------|:----------------|
+|**Travis CI** |Primary   |Ubuntu Trusty |Windows Vista |[![Build Status](https://travis-ci.org/lhmouse/mcfgthread.svg?branch=master)](https://travis-ci.org/lhmouse/mcfgthread)  |
+|**Tea CI**    |Primary   |Wine          |Windows Vista |[![Build Status](https://tea-ci.org/api/badges/lhmouse/mcfgthread/status.svg)](https://tea-ci.org/lhmouse/mcfgthread)  |
 
 ### 简介
 ### Introduction
