@@ -25,7 +25,7 @@ build:
     - |
       for cmd in {"${CC} -x c -std=c99","${CC} -x c -std=c11","${CXX} -x c++ -std=c++98","${CXX} -x c++ -std=c++11"}; do
         echo "Checking #include directives using command:" $cmd
-        $cmd -Wall -Wextra -Werror `find src -name "*.h"` -c /dev/null
+        $cmd -Wall -Wextra -Werror $(find src -name "*.h") -c /dev/null
       done
 
 notify:
