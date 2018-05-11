@@ -6,6 +6,7 @@ sudo: required
 
 addons:
   apt:
+    update: true
     packages:
       - mingw-w64-i686-dev
       - mingw-w64-x86-64-dev
