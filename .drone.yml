@@ -19,14 +19,8 @@ build:
     ## FIXME: At the moment this crashes on Wine. We must have a REAL Windows to test it.
     ## - ./a
     - "CC=\"gcc\""
-    - "CXX=\"g++\""
     - "${CC} -std=c11 test/test.c -lmcfgthread-new -L."
-    # Make sure that all `#include` directives in our headers are met.
-    - |
-      for _cmd in {"${CC} -x c -std=c99","${CC} -x c -std=c11","${CXX} -x c++ -std=c++98","${CXX} -x c++ -std=c++11"}; do
-        echo "Checking #include directives using command:" ${_cmd}
-        ${_cmd} -Wall -Wextra -Werror $(find src -name "*.h") -c /dev/null
-      done
+    - "./check_includes.sh"
 
 notify:
   irc:
