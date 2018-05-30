@@ -10,8 +10,7 @@
 
 _MCFCRT_EXTERN_C_BEGIN
 
-__attribute__((__noreturn__))
-extern void __MCFCRT_OnAssertionFailure(const wchar_t *__pwszExpression, const wchar_t *__pwszFile, unsigned long __ulLine, const wchar_t *__pwszMessage) _MCFCRT_NOEXCEPT;
+__attribute__((__noreturn__)) extern void __MCFCRT_OnAssertionFailure(const wchar_t *__pwszExpression, const wchar_t *__pwszFile, unsigned long __ulLine, const wchar_t *__pwszMessage) _MCFCRT_NOEXCEPT;
 
 #define __MCFCRT_DECLARE_UNREACHABLE()                (__builtin_unreachable(), 1)
 #define __MCFCRT_FAIL_ASSERTION(__s_, __msg_)         (__MCFCRT_OnAssertionFailure((__s_),  _MCFCRT_PP_LAZY(_MCFCRT_PP_WIDEN, __FILE__), __LINE__, (__msg_)), 1)

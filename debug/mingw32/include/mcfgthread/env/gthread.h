@@ -57,7 +57,7 @@ __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_key_delete(__gthread_key_
 	return 0;
 }
 
-__MCFCRT_GTHREAD_INLINE_OR_EXTERN void *__MCFCRT_gthread_getspecific(__gthread_key_t __key) _MCFCRT_NOEXCEPT {
+__MCFCRT_GTHREAD_INLINE_OR_EXTERN void * __MCFCRT_gthread_getspecific(__gthread_key_t __key) _MCFCRT_NOEXCEPT {
 	void *__storage;
 	const bool __success = _MCFCRT_TlsGet(__key, &__storage);
 	if(!__success){
@@ -312,8 +312,7 @@ __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_detach(__gthread_t __tid)
 __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_equal(__gthread_t __tid1, __gthread_t __tid2) _MCFCRT_NOEXCEPT {
 	return __tid1 == __tid2;
 }
-__attribute__((__const__))
-__MCFCRT_GTHREAD_INLINE_OR_EXTERN __gthread_t __MCFCRT_gthread_self(void) _MCFCRT_NOEXCEPT {
+__attribute__((__const__)) __MCFCRT_GTHREAD_INLINE_OR_EXTERN __gthread_t __MCFCRT_gthread_self(void) _MCFCRT_NOEXCEPT {
 	return _MCFCRT_GetCurrentThreadId();
 }
 __MCFCRT_GTHREAD_INLINE_OR_EXTERN int __MCFCRT_gthread_yield(void) _MCFCRT_NOEXCEPT {
