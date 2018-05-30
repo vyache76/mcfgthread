@@ -22,7 +22,7 @@ void once_proc(void){
 
 #define THREAD_COUNT           16ul
 
-void *test_thread_proc(void *param){
+void * test_thread_proc(void *param){
 	printf("thread %u running\n", (unsigned)(intptr_t)param);
 
 	Sleep(500);

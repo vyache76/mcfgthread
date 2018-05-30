@@ -11,7 +11,7 @@
 #include <intrin.h>
 #include <emmintrin.h>
 
-wchar_t *_MCFCRT_wcpcpy(wchar_t *restrict dst, const wchar_t *restrict src){
+wchar_t * _MCFCRT_wcpcpy(wchar_t *restrict dst, const wchar_t *restrict src){
 	register wchar_t *wp = dst;
 	register const wchar_t *rp = src;
 	// Align `rp` to word boundaries, only by then can we read one word at a time.
@@ -57,7 +57,7 @@ wchar_t *_MCFCRT_wcpcpy(wchar_t *restrict dst, const wchar_t *restrict src){
 		SSE2_CPY(_mm_storeu_si128, _mm_load_si128)
 	}
 }
-wchar_t *_MCFCRT_wcppcpy(wchar_t *dst, wchar_t *end, const wchar_t *restrict src){
+wchar_t * _MCFCRT_wcppcpy(wchar_t *dst, wchar_t *end, const wchar_t *restrict src){
 	_MCFCRT_ASSERT(dst + 1 <= end);
 	register wchar_t *wp = dst;
 	wchar_t *const wend = end - 1;
@@ -123,7 +123,7 @@ wchar_t *_MCFCRT_wcppcpy(wchar_t *dst, wchar_t *end, const wchar_t *restrict src
 #  define MASK     0x00010001ul
 #endif
 
-wchar_t *_MCFCRT_wcpcpy(wchar_t *restrict dst, const wchar_t *restrict src){
+wchar_t * _MCFCRT_wcpcpy(wchar_t *restrict dst, const wchar_t *restrict src){
 	register const wchar_t *rp = src;
 	register wchar_t *wp = dst;
 
@@ -179,7 +179,7 @@ wchar_t *_MCFCRT_wcpcpy(wchar_t *restrict dst, const wchar_t *restrict src){
 		wp += 8 * sizeof(uintptr_t) / sizeof(wchar_t);
 	}
 }
-wchar_t *_MCFCRT_wcppcpy(wchar_t *dst, wchar_t *end, const wchar_t *restrict src){
+wchar_t * _MCFCRT_wcppcpy(wchar_t *dst, wchar_t *end, const wchar_t *restrict src){
 	register const wchar_t *rp = src;
 	register wchar_t *wp = dst;
 

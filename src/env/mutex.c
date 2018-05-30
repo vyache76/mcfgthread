@@ -9,13 +9,10 @@
 #include "expect.h"
 #include <ntdef.h>
 
-__attribute__((__dllimport__, __stdcall__))
-extern NTSTATUS NtWaitForKeyedEvent(HANDLE hKeyedEvent, void *pKey, BOOLEAN bAlertable, const LARGE_INTEGER *pliTimeout);
-__attribute__((__dllimport__, __stdcall__))
-extern NTSTATUS NtReleaseKeyedEvent(HANDLE hKeyedEvent, void *pKey, BOOLEAN bAlertable, const LARGE_INTEGER *pliTimeout);
+__attribute__((__dllimport__, __stdcall__)) extern NTSTATUS NtWaitForKeyedEvent(HANDLE hKeyedEvent, void *pKey, BOOLEAN bAlertable, const LARGE_INTEGER *pliTimeout);
+__attribute__((__dllimport__, __stdcall__)) extern NTSTATUS NtReleaseKeyedEvent(HANDLE hKeyedEvent, void *pKey, BOOLEAN bAlertable, const LARGE_INTEGER *pliTimeout);
 
-__attribute__((__dllimport__, __stdcall__, __const__))
-extern BOOLEAN RtlDllShutdownInProgress(void);
+__attribute__((__dllimport__, __stdcall__, __const__)) extern BOOLEAN RtlDllShutdownInProgress(void);
 
 #ifndef __BYTE_ORDER__
 #  error Byte order is unknown.
@@ -46,8 +43,7 @@ extern BOOLEAN RtlDllShutdownInProgress(void);
 #define MIN_SPIN_COUNT          ((uintptr_t)16)
 #define MAX_SPIN_MULTIPLIER     ((uintptr_t)32)
 
-__attribute__((__always_inline__))
-static inline bool ReallyWaitForMutex(volatile uintptr_t *puControl, size_t uMaxSpinCountInitial, bool bMayTimeOut, uint64_t u64UntilFastMonoClock){
+__attribute__((__always_inline__)) static inline bool ReallyWaitForMutex(volatile uintptr_t *puControl, size_t uMaxSpinCountInitial, bool bMayTimeOut, uint64_t u64UntilFastMonoClock){
 	for(;;){
 		size_t uMaxSpinCount, uSpinMultiplier;
 		bool bTaken, bSpinnable;
@@ -176,8 +172,7 @@ static inline bool ReallyWaitForMutex(volatile uintptr_t *puControl, size_t uMax
 		}
 	}
 }
-__attribute__((__always_inline__))
-static inline void ReallySignalMutex(volatile uintptr_t *puControl){
+__attribute__((__always_inline__)) static inline void ReallySignalMutex(volatile uintptr_t *puControl){
 	bool bSignalOne;
 	{
 		uintptr_t uOld, uNew;
