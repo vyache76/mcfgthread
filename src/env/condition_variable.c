@@ -9,13 +9,10 @@
 #include "expect.h"
 #include <ntdef.h>
 
-__attribute__((__dllimport__, __stdcall__))
-extern NTSTATUS NtWaitForKeyedEvent(HANDLE hKeyedEvent, void *pKey, BOOLEAN bAlertable, const LARGE_INTEGER *pliTimeout);
-__attribute__((__dllimport__, __stdcall__))
-extern NTSTATUS NtReleaseKeyedEvent(HANDLE hKeyedEvent, void *pKey, BOOLEAN bAlertable, const LARGE_INTEGER *pliTimeout);
+__attribute__((__dllimport__, __stdcall__)) extern NTSTATUS NtWaitForKeyedEvent(HANDLE hKeyedEvent, void *pKey, BOOLEAN bAlertable, const LARGE_INTEGER *pliTimeout);
+__attribute__((__dllimport__, __stdcall__)) extern NTSTATUS NtReleaseKeyedEvent(HANDLE hKeyedEvent, void *pKey, BOOLEAN bAlertable, const LARGE_INTEGER *pliTimeout);
 
-__attribute__((__dllimport__, __stdcall__, __const__))
-extern BOOLEAN RtlDllShutdownInProgress(void);
+__attribute__((__dllimport__, __stdcall__, __const__)) extern BOOLEAN RtlDllShutdownInProgress(void);
 
 #ifndef __BYTE_ORDER__
 #  error Byte order is unknown.
@@ -55,8 +52,7 @@ static inline size_t Min(size_t uSelf, size_t uOther){
 	return (uSelf <= uOther) ? uSelf : uOther;
 }
 
-__attribute__((__always_inline__))
-static inline bool ReallyWaitForConditionVariable(volatile uintptr_t *puControl, _MCFCRT_ConditionVariableUnlockCallback pfnUnlockCallback, _MCFCRT_ConditionVariableRelockCallback pfnRelockCallback, intptr_t nContext, size_t uMaxSpinCountInitial, bool bMayTimeOut, uint64_t u64UntilFastMonoClock, bool bRelockIfTimeOut){
+__attribute__((__always_inline__)) static inline bool ReallyWaitForConditionVariable(volatile uintptr_t *puControl, _MCFCRT_ConditionVariableUnlockCallback pfnUnlockCallback, _MCFCRT_ConditionVariableRelockCallback pfnRelockCallback, intptr_t nContext, size_t uMaxSpinCountInitial, bool bMayTimeOut, uint64_t u64UntilFastMonoClock, bool bRelockIfTimeOut){
 	size_t uMaxSpinCount, uSpinMultiplier;
 	bool bSignaled, bSpinnable;
 	{
@@ -193,8 +189,7 @@ static inline bool ReallyWaitForConditionVariable(volatile uintptr_t *puControl,
 	(*pfnRelockCallback)(nContext, nUnlocked);
 	return true;
 }
-__attribute__((__always_inline__))
-static inline size_t ReallySignalConditionVariable(volatile uintptr_t *puControl, size_t uMaxCountToReleaseOrSignal){
+__attribute__((__always_inline__)) static inline size_t ReallySignalConditionVariable(volatile uintptr_t *puControl, size_t uMaxCountToReleaseOrSignal){
 	uintptr_t uCountToRelease; // Number of threads spinning to release
 	uintptr_t uCountToSignal; // Number of threads trapped to signal
 	{

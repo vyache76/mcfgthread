@@ -7,8 +7,7 @@
 #include "env/tls.h"
 #include "env/mcfwin.h"
 
-__attribute__((__stdcall__))
-extern BOOL __MCFCRT_DllStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved)
+__attribute__((__stdcall__)) extern BOOL __MCFCRT_DllStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved)
 	__asm__("@__MCFCRT_DllStartup");
 
 typedef struct tagDllStartupParams {
@@ -44,8 +43,7 @@ static unsigned long WrappedDllStartup(void *pOpaque){
 	}
 }
 
-__attribute__((__stdcall__))
-BOOL __MCFCRT_DllStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved){
+__attribute__((__stdcall__)) BOOL __MCFCRT_DllStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved){
 	DllStartupParams vParams = { hInstance, dwReason, pReserved };
 	const unsigned long dwResult = _MCFCRT_WrapThreadProcWithSehTop(&WrappedDllStartup, &vParams);
 	return dwResult != 0;

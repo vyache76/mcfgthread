@@ -5,12 +5,12 @@
 #include "heap.h"
 #include "mcfwin.h"
 
-void *__MCFCRT_HeapAlloc(size_t uNewSize, bool bFillsWithZero, const void *pRetAddrOuter){
+void * __MCFCRT_HeapAlloc(size_t uNewSize, bool bFillsWithZero, const void *pRetAddrOuter){
 	(void)pRetAddrOuter;
 
 	return HeapAlloc(GetProcessHeap(), bFillsWithZero ? HEAP_ZERO_MEMORY : 0, uNewSize);
 }
-void *__MCFCRT_HeapRealloc(void *pOldBlock, size_t uNewSize, bool bFillsWithZero, const void *pRetAddrOuter){
+void * __MCFCRT_HeapRealloc(void *pOldBlock, size_t uNewSize, bool bFillsWithZero, const void *pRetAddrOuter){
 	(void)pRetAddrOuter;
 
 	return HeapReAlloc(GetProcessHeap(), bFillsWithZero ? HEAP_ZERO_MEMORY : 0, pOldBlock, uNewSize);

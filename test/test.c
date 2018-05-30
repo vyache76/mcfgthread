@@ -24,7 +24,7 @@ volatile unsigned long counter = 0;
 #define INCREMENT_PER_THREAD   1000000ul
 #define THREAD_COUNT           4ul
 
-void *test_thread_proc(void *param){
+void * test_thread_proc(void *param){
 	unsigned *p = malloc(sizeof(unsigned));
 	assert(p);
 	*p = (unsigned)(uintptr_t)param;

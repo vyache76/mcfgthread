@@ -269,8 +269,7 @@ __MCFCRT_C11THREAD_INLINE_OR_EXTERN int __MCFCRT_thrd_create(thrd_t *__tid_ret, 
 	*__tid_ret = __tid;
 	return thrd_success;
 }
-__attribute__((__noreturn__))
-__MCFCRT_C11THREAD_INLINE_OR_EXTERN void __MCFCRT_thrd_exit(int __exit_code) _MCFCRT_NOEXCEPT {
+__attribute__((__noreturn__)) __MCFCRT_C11THREAD_INLINE_OR_EXTERN void __MCFCRT_thrd_exit(int __exit_code) _MCFCRT_NOEXCEPT {
 	__MCFCRT_MopthreadExit(&__MCFCRT_c11thread_mopthread_exit_modifier, __exit_code);
 }
 __MCFCRT_C11THREAD_INLINE_OR_EXTERN int __MCFCRT_thrd_join(thrd_t __tid, int *__exit_code_ret) _MCFCRT_NOEXCEPT {
@@ -302,8 +301,7 @@ __MCFCRT_C11THREAD_INLINE_OR_EXTERN int __MCFCRT_thrd_detach(thrd_t __tid) _MCFC
 	return thrd_success;
 }
 
-__attribute__((__const__))
-__MCFCRT_C11THREAD_INLINE_OR_EXTERN thrd_t __MCFCRT_thrd_current(void) _MCFCRT_NOEXCEPT {
+__attribute__((__const__)) __MCFCRT_C11THREAD_INLINE_OR_EXTERN thrd_t __MCFCRT_thrd_current(void) _MCFCRT_NOEXCEPT {
 	return _MCFCRT_GetCurrentThreadId();
 }
 __MCFCRT_C11THREAD_INLINE_OR_EXTERN int __MCFCRT_thrd_equal(thrd_t __tid1, thrd_t __tid2) _MCFCRT_NOEXCEPT {
@@ -370,7 +368,7 @@ __MCFCRT_C11THREAD_INLINE_OR_EXTERN void __MCFCRT_tss_delete(tss_t __key) _MCFCR
 	_MCFCRT_TlsFreeKey(__key);
 }
 
-__MCFCRT_C11THREAD_INLINE_OR_EXTERN void *__MCFCRT_tss_get(tss_t __key) _MCFCRT_NOEXCEPT {
+__MCFCRT_C11THREAD_INLINE_OR_EXTERN void * __MCFCRT_tss_get(tss_t __key) _MCFCRT_NOEXCEPT {
 	void *__storage;
 	const bool __success = _MCFCRT_TlsGet(__key, &__storage);
 	if(!__success){
