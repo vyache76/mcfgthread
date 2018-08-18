@@ -1,6 +1,4 @@
-#!/bin/sh
-
-set -e
+#!/bin/sh -e
 
 prefix="$(pwd)/debug/mingw32"
 mkdir -p "$prefix"
