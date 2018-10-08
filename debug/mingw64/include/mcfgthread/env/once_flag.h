@@ -14,19 +14,24 @@
 _MCFCRT_EXTERN_C_BEGIN
 
 // In the case of static initialization, please initialize it with { 0 }.
-typedef struct __MCFCRT_tagOnceFlag {
-	_MCFCRT_STD uintptr_t __u;
-} _MCFCRT_OnceFlag;
+struct __MCFCRT_tagOnceFlag
+  {
+    _MCFCRT_STD uintptr_t __u;
+  }
+typedef _MCFCRT_OnceFlag;
 
-typedef enum __MCFCRT_tagOnceResult {
-	_MCFCRT_kOnceResultTimedOut = 1,
-	_MCFCRT_kOnceResultInitial  = 2,
-	_MCFCRT_kOnceResultFinished = 3,
-} _MCFCRT_OnceResult;
+enum __MCFCRT_tagOnceResult
+  {
+    _MCFCRT_kOnceResultTimedOut = 1,
+    _MCFCRT_kOnceResultInitial  = 2,
+    _MCFCRT_kOnceResultFinished = 3,
+  }
+typedef _MCFCRT_OnceResult;
 
-__MCFCRT_ONCE_FLAG_INLINE_OR_EXTERN void _MCFCRT_InitializeOnceFlag(_MCFCRT_OnceFlag *__pOnceFlag) _MCFCRT_NOEXCEPT {
-	__atomic_store_n(&(__pOnceFlag->__u), 0, __ATOMIC_RELEASE);
-}
+__MCFCRT_ONCE_FLAG_INLINE_OR_EXTERN void _MCFCRT_InitializeOnceFlag(_MCFCRT_OnceFlag *__pOnceFlag) _MCFCRT_NOEXCEPT
+  {
+    __atomic_store_n(&(__pOnceFlag->__u), 0, __ATOMIC_RELEASE);
+  }
 
 extern _MCFCRT_OnceResult __MCFCRT_ReallyWaitForOnceFlag(_MCFCRT_OnceFlag *__pOnceFlag, _MCFCRT_STD uint64_t __u64UntilFastMonoClock) _MCFCRT_NOEXCEPT;
 extern _MCFCRT_OnceResult __MCFCRT_ReallyWaitForOnceFlagForever(_MCFCRT_OnceFlag *__pOnceFlag) _MCFCRT_NOEXCEPT;
@@ -35,28 +40,35 @@ extern void __MCFCRT_ReallySignalOnceFlagAsAborted(_MCFCRT_OnceFlag *__pOnceFlag
 
 // See Itanium ABI: <https://itanium-cxx-abi.github.io/cxx-abi/abi.html#guards>
 // Bytes other than the first byte are used as the counter of trapped threads, in native byte order.
-__MCFCRT_ONCE_FLAG_INLINE_OR_EXTERN _MCFCRT_OnceResult _MCFCRT_WaitForOnceFlag(_MCFCRT_OnceFlag *__pOnceFlag, _MCFCRT_STD uint64_t __u64UntilFastMonoClock) _MCFCRT_NOEXCEPT {
-	unsigned char *const __pbyGuard = (unsigned char *)(void *)&(__pOnceFlag->__u);
-	unsigned char __byLockFlag = __atomic_load_n(__pbyGuard, __ATOMIC_ACQUIRE);
-	if(__builtin_expect((__byLockFlag != 0), true)){
-		return _MCFCRT_kOnceResultFinished;
-	}
-	return __MCFCRT_ReallyWaitForOnceFlag(__pOnceFlag, __u64UntilFastMonoClock);
-}
-__MCFCRT_ONCE_FLAG_INLINE_OR_EXTERN _MCFCRT_OnceResult _MCFCRT_WaitForOnceFlagForever(_MCFCRT_OnceFlag *__pOnceFlag) _MCFCRT_NOEXCEPT {
-	unsigned char *const __pbyGuard = (unsigned char *)(void *)&(__pOnceFlag->__u);
-	unsigned char __byLockFlag = __atomic_load_n(__pbyGuard, __ATOMIC_ACQUIRE);
-	if(__builtin_expect((__byLockFlag != 0), true)){
-		return _MCFCRT_kOnceResultFinished;
-	}
-	return __MCFCRT_ReallyWaitForOnceFlagForever(__pOnceFlag);
-}
-__MCFCRT_ONCE_FLAG_INLINE_OR_EXTERN void _MCFCRT_SignalOnceFlagAsFinished(_MCFCRT_OnceFlag *__pOnceFlag) _MCFCRT_NOEXCEPT {
-	__MCFCRT_ReallySignalOnceFlagAsFinished(__pOnceFlag);
-}
-__MCFCRT_ONCE_FLAG_INLINE_OR_EXTERN void _MCFCRT_SignalOnceFlagAsAborted(_MCFCRT_OnceFlag *__pOnceFlag) _MCFCRT_NOEXCEPT {
-	__MCFCRT_ReallySignalOnceFlagAsAborted(__pOnceFlag);
-}
+__MCFCRT_ONCE_FLAG_INLINE_OR_EXTERN _MCFCRT_OnceResult _MCFCRT_WaitForOnceFlag(_MCFCRT_OnceFlag *__pOnceFlag, _MCFCRT_STD uint64_t __u64UntilFastMonoClock) _MCFCRT_NOEXCEPT
+  {
+    unsigned char *const __pbyGuard = (unsigned char *)(void *)&(__pOnceFlag->__u);
+    unsigned char __byLockFlag = __atomic_load_n(__pbyGuard, __ATOMIC_ACQUIRE);
+    if(__builtin_expect((__byLockFlag != 0), true)) {
+      return _MCFCRT_kOnceResultFinished;
+    }
+    return __MCFCRT_ReallyWaitForOnceFlag(__pOnceFlag, __u64UntilFastMonoClock);
+  }
+
+__MCFCRT_ONCE_FLAG_INLINE_OR_EXTERN _MCFCRT_OnceResult _MCFCRT_WaitForOnceFlagForever(_MCFCRT_OnceFlag *__pOnceFlag) _MCFCRT_NOEXCEPT
+  {
+    unsigned char *const __pbyGuard = (unsigned char *)(void *)&(__pOnceFlag->__u);
+    unsigned char __byLockFlag = __atomic_load_n(__pbyGuard, __ATOMIC_ACQUIRE);
+    if(__builtin_expect((__byLockFlag != 0), true)) {
+      return _MCFCRT_kOnceResultFinished;
+    }
+    return __MCFCRT_ReallyWaitForOnceFlagForever(__pOnceFlag);
+  }
+
+__MCFCRT_ONCE_FLAG_INLINE_OR_EXTERN void _MCFCRT_SignalOnceFlagAsFinished(_MCFCRT_OnceFlag *__pOnceFlag) _MCFCRT_NOEXCEPT
+  {
+    __MCFCRT_ReallySignalOnceFlagAsFinished(__pOnceFlag);
+  }
+
+__MCFCRT_ONCE_FLAG_INLINE_OR_EXTERN void _MCFCRT_SignalOnceFlagAsAborted(_MCFCRT_OnceFlag *__pOnceFlag) _MCFCRT_NOEXCEPT
+  {
+    __MCFCRT_ReallySignalOnceFlagAsAborted(__pOnceFlag);
+  }
 
 _MCFCRT_EXTERN_C_END
 

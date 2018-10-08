@@ -11,7 +11,7 @@ _MCFCRT_EXTERN_C_BEGIN
 
 typedef unsigned long (__attribute__((__stdcall__)) *_MCFCRT_NativeThreadProc)(void *__pParam);
 
-typedef struct __MCFCRT_tagThreadHandle { int __n; } *_MCFCRT_ThreadHandle;
+typedef struct __MCFCRT_tagThreadHandle /* incomplete */ *_MCFCRT_ThreadHandle;
 
 extern _MCFCRT_ThreadHandle _MCFCRT_CreateNativeThread(_MCFCRT_NativeThreadProc __pfnThreadProc, void *__pParam, bool __bSuspended, _MCFCRT_STD uintptr_t *_MCFCRT_RESTRICT __puThreadId) _MCFCRT_NOEXCEPT;
 extern void _MCFCRT_CloseThread(_MCFCRT_ThreadHandle __hThread) _MCFCRT_NOEXCEPT;
