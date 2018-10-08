@@ -25,7 +25,7 @@ __attribute__((__always_inline__)) static inline void * _MCFCRT_realloc(void *__
 	return __MCFCRT_HeapRealloc(__ptr, __size, false,
 		__builtin_return_address(0));
 }
-__attribute__((__always_inline__, __malloc__)) static inline void * _MCFCRT_calloc(_MCFCRT_STD size_t __nmemb, _MCFCRT_STD size_t __size) _MCFCRT_NOEXCEPT {
+__attribute__((__always_inline__)) static inline void * _MCFCRT_calloc(_MCFCRT_STD size_t __nmemb, _MCFCRT_STD size_t __size) _MCFCRT_NOEXCEPT {
 	_MCFCRT_STD size_t __size_total = 0;
 	if((__nmemb != 0) && (__size != 0)){
 		if(__nmemb > SIZE_MAX / __size){
