@@ -12,16 +12,16 @@ echo Building shared library...
 mkdir -p m4
 autoreconf -i
 (cd "$builddir" &&
-  (test -f Makefile ||	\
-    CPPFLAGS='-DNDEBUG'	\
-    CFLAGS='-O2 -ffunction-sections -fdata-sections'	\
-    LDFLAGS='-O2 -Wl,-s,--gc-sections'	\
+  (test -f Makefile ||  \
+    CPPFLAGS='-DNDEBUG'  \
+    CFLAGS='-O2 -ffunction-sections -fdata-sections'  \
+    LDFLAGS='-O2 -Wl,-s,--gc-sections'  \
     ../configure --build="$build" --host="$build" --prefix="$prefix") &&
   make -j4)
 
 echo Testing...
 cp -p "$builddir/libmcfgthread.dll.a" "$builddir/libmcfgthread-new.dll.a"
-("$build"-gcc -std=c11 -Wall -Wextra -pedantic -Werror test/test.c -Isrc/env -L"$builddir" -lmcfgthread-new -o test.exe &&
+("$build"-gcc -std=c11 -Wall -Wextra -pedantic test/test.c -Isrc/env -L"$builddir" -lmcfgthread-new -o test.exe &&
   PATH="$builddir:$PATH" ./test.exe)
 
 (cd "$builddir" &&
