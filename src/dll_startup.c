@@ -23,26 +23,27 @@ static unsigned long WrappedDllStartup(void *pOpaque)
     DllStartupParams *const pParams = pOpaque;
 
     switch(pParams->dwReason) {
-    case DLL_PROCESS_ATTACH:
-      if(!__MCFCRT_InitRecursive()) {
+      case DLL_PROCESS_ATTACH: {
+        if(!__MCFCRT_InitRecursive()) {
+          return false;
+        }
+        return true;
+      }
+      case DLL_PROCESS_DETACH: {
+        __MCFCRT_TlsCleanup();
+        __MCFCRT_UninitRecursive();
+        return true;
+      }
+      case DLL_THREAD_ATTACH: {
+        return true;
+      }
+      case DLL_THREAD_DETACH: {
+        __MCFCRT_TlsCleanup();
+        return true;
+      }
+      default: {
         return false;
       }
-      return true;
-
-    case DLL_PROCESS_DETACH:
-      __MCFCRT_TlsCleanup();
-      __MCFCRT_UninitRecursive();
-      return true;
-
-    case DLL_THREAD_ATTACH:
-      return true;
-
-    case DLL_THREAD_DETACH:
-      __MCFCRT_TlsCleanup();
-      return true;
-
-    default:
-      return false;
     }
   }
 

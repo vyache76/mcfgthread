@@ -132,50 +132,59 @@ static void DetachInitialThread(void)
     MopthreadControl *const restrict pControl = (void *)g_abyInitialControlStorage;
 
     switch(pControl->eState) {
-    case kStateJoinable:
-      pControl->eState = kStateDetached;
-      goto jJoinSuccess;
-    case kStateZombie:
-      pControl->eState = kStateJoined;
-      goto jJoinSuccess;
-    case kStateJoining:
-    case kStateJoined:
-    case kStateDetached:
-      break;
-    default:
-      _MCFCRT_ASSERT(false);
-    jJoinSuccess:
+      case kStateJoinable: {
+        pControl->eState = kStateDetached;
+        goto jJoinSuccess;
+      }
+      case kStateZombie: {
+        pControl->eState = kStateJoined;
+        goto jJoinSuccess;
+      }
+      case kStateJoining:
+      case kStateJoined:
+      case kStateDetached: {
+        break;
+      }
+      default: {
+        _MCFCRT_ASSERT(false);
+      }
+  jJoinSuccess:
       DropControlRefUnsafe(pControl);
       // bSuccess = true;
-      break;
     }
   }
 
 __attribute__((__noreturn__)) static inline void SignalMutexAndExitThread(_MCFCRT_Mutex *restrict pMutex, MopthreadControl *restrict pControl, void (*pfnModifier)(void *, size_t, intptr_t), intptr_t nContext)
   {
     switch(pControl->eState) {
-    case kStateJoinable:
-      if(pfnModifier) {
-        (*pfnModifier)(pControl->abyParams, pControl->uSizeOfParams, nContext);
+      case kStateJoinable: {
+        if(pfnModifier) {
+          (*pfnModifier)(pControl->abyParams, pControl->uSizeOfParams, nContext);
+        }
+        pControl->eState = kStateZombie;
+        break;
       }
-      pControl->eState = kStateZombie;
-      break;
-    case kStateZombie:
-      _MCFCRT_ASSERT(false);
-    case kStateJoining:
-      if(pfnModifier) {
-        (*pfnModifier)(pControl->abyParams, pControl->uSizeOfParams, nContext);
+      case kStateZombie: {
+        _MCFCRT_ASSERT(false);
       }
-      pControl->eState = kStateJoined;
-      _MCFCRT_BroadcastConditionVariable(&(pControl->condTermination));
-      break;
-    case kStateJoined:
-      _MCFCRT_ASSERT(false);
-    case kStateDetached:
-      pControl->eState = kStateJoined;
-      break;
-    default:
-      _MCFCRT_ASSERT(false);
+      case kStateJoining: {
+        if(pfnModifier) {
+          (*pfnModifier)(pControl->abyParams, pControl->uSizeOfParams, nContext);
+        }
+        pControl->eState = kStateJoined;
+        _MCFCRT_BroadcastConditionVariable(&(pControl->condTermination));
+        break;
+      }
+      case kStateJoined: {
+        _MCFCRT_ASSERT(false);
+      }
+      case kStateDetached: {
+        pControl->eState = kStateJoined;
+        break;
+      }
+      default: {
+        _MCFCRT_ASSERT(false);
+      }
     }
     DropControlRefUnsafe(pControl);
     _MCFCRT_SignalMutex(pMutex);
@@ -289,22 +298,26 @@ bool __MCFCRT_MopthreadJoin(uintptr_t uTid, void *restrict pParams, size_t *rest
       MopthreadControl *const restrict pControl = (MopthreadControl *)_MCFCRT_AvlFind(&g_avlControlMap, (intptr_t)uTid, &MopthreadControlComparatorNodeOther);
       if(pControl) {
         switch(pControl->eState) {
-        case kStateJoinable:
-          pControl->eState = kStateJoining;
-          do {
-            _MCFCRT_WaitForConditionVariableForever(&(pControl->condTermination), &TerminationUnlockCallback, &TerminationRelockCallback, (intptr_t)&g_mtxControl, 0);
-          } while(pControl->eState != kStateJoined);
-          goto jJoinSuccess;
-        case kStateZombie:
-          pControl->eState = kStateJoined;
-          goto jJoinSuccess;
-        case kStateJoining:
-        case kStateJoined:
-        case kStateDetached:
-          break;
-        default:
-          _MCFCRT_ASSERT(false);
-        jJoinSuccess:
+          case kStateJoinable: {
+            pControl->eState = kStateJoining;
+            do {
+              _MCFCRT_WaitForConditionVariableForever(&(pControl->condTermination), &TerminationUnlockCallback, &TerminationRelockCallback, (intptr_t)&g_mtxControl, 0);
+            } while(pControl->eState != kStateJoined);
+            goto jJoinSuccess;
+          }
+          case kStateZombie: {
+            pControl->eState = kStateJoined;
+            goto jJoinSuccess;
+          }
+          case kStateJoining:
+          case kStateJoined:
+          case kStateDetached: {
+            break;
+          }
+          default: {
+            _MCFCRT_ASSERT(false);
+          }
+  jJoinSuccess:
           _MCFCRT_WaitForThreadForever(pControl->hThread);
           if(pParams) {
             const size_t uSizeCopied = (pControl->uSizeOfParams < *puSizeOfParams) ? pControl->uSizeOfParams : *puSizeOfParams;
@@ -313,7 +326,6 @@ bool __MCFCRT_MopthreadJoin(uintptr_t uTid, void *restrict pParams, size_t *rest
           }
           DropControlRefUnsafe(pControl);
           bSuccess = true;
-          break;
         }
       }
     }
@@ -331,22 +343,25 @@ bool __MCFCRT_MopthreadDetach(uintptr_t uTid)
       MopthreadControl *const restrict pControl = (MopthreadControl *)_MCFCRT_AvlFind(&g_avlControlMap, (intptr_t)uTid, &MopthreadControlComparatorNodeOther);
       if(pControl) {
         switch(pControl->eState) {
-        case kStateJoinable:
-          pControl->eState = kStateDetached;
-          goto jJoinSuccess;
-        case kStateZombie:
-          pControl->eState = kStateJoined;
-          goto jJoinSuccess;
-        case kStateJoining:
-        case kStateJoined:
-        case kStateDetached:
-          break;
-        default:
-          _MCFCRT_ASSERT(false);
-        jJoinSuccess:
+          case kStateJoinable: {
+            pControl->eState = kStateDetached;
+            goto jJoinSuccess;
+          }
+          case kStateZombie: {
+            pControl->eState = kStateJoined;
+            goto jJoinSuccess;
+          }
+          case kStateJoining:
+          case kStateJoined:
+          case kStateDetached: {
+            break;
+          }
+          default: {
+            _MCFCRT_ASSERT(false);
+          }
+  jJoinSuccess:
           DropControlRefUnsafe(pControl);
           bSuccess = true;
-          break;
         }
       }
     }
