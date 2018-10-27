@@ -15,28 +15,24 @@ addons:
       - g++-mingw-w64-i686
       - g++-mingw-w64-x86-64
 
-matrix:
-  include:
-    - env: "_arch=i686"
-    - env: "_arch=x86_64"
-
-before_install:
-  - "test -n \"${CC}\" && unset CC"
+env:
+  - _arch="i686"
+  - _arch="x86_64"
 
 install:
   # Run `make check` normally.
-  - "mkdir -p m4"
-  - "autoreconf -ifv"
-  - "CFLAGS='-O3 -g -fno-unwind-tables' ./configure --host=\"${_arch}-w64-mingw32\""
-  - "make -j$(nproc)"
-  - "make check"
-  - "cp -p libmcfgthread.dll.a  libmcfgthread-new.dll.a"
-  - "CC=\"${_arch}-w64-mingw32-gcc\""
-  - "${CC} -std=c11 test/test.c -lmcfgthread-new -L."
-  - "./check_includes.sh"
+  - CC="${_arch}-w64-mingw32-gcc"
+  - mkdir -p m4
+  - autoreconf -ifv
+  - CFLAGS="-O2 -g -fno-unwind-tables" ./configure --host="${_arch}-w64-mingw32"
+  - make -j$(nproc)
+  - make check
+  - cp -p libmcfgthread.dll.a libmcfgthread-new.dll.a
+  - ${CC} -std=c11 test/test.c -lmcfgthread-new -L.
+  - ./check_includes.sh
 
 script:
-  - "exit 0"
+  - exit 0
 
 notifications:
   irc:
