@@ -24,7 +24,7 @@ install:
   - CC="${_arch}-w64-mingw32-gcc"
   - mkdir -p m4
   - autoreconf -ifv
-  - CFLAGS='-O3 -g -fno-unwind-tables' ./configure --host="${_arch}-w64-mingw32"
+  - CFLAGS="-O2 -g -fno-unwind-tables" ./configure --host="${_arch}-w64-mingw32"
   - make -j$(nproc)
   - make check
   - cp -p libmcfgthread.dll.a libmcfgthread-new.dll.a
@@ -32,7 +32,7 @@ install:
   - ./check_includes.sh
 
 script:
-  - exit 0"
+  - exit 0
 
 notifications:
   irc:
