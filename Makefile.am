@@ -4,7 +4,7 @@ AM_CPPFLAGS = -Wall -Wextra -pedantic -pedantic-errors -Werror -Wno-error=unused
   -Wwrite-strings -Wconversion -Wsign-conversion -Wdouble-promotion -Wsuggest-attribute=noreturn -Wundef -Wshadow -Wstrict-aliasing=2  \
   -pipe -mno-stack-arg-probe -masm=intel -municode -ffreestanding  \
   -D__MCFCRT_NO_GENERAL_INCLUDES
-AM_CFLAGS = -include __pch.h -std=c11 -Wstrict-prototypes -Wno-old-style-declaration
+AM_CFLAGS = -std=c11 -Wstrict-prototypes -Wno-old-style-declaration
 
 ## I think you GNU people should just STFU and stop confusing the linker.
 EXEEXT =
@@ -20,7 +20,7 @@ CLEANFILES =  \
 __pch.h: ${srcdir}/src/env/_crtdef.h
 	${AM_V_GEN}echo "#include \"$$(cygpath -m $< 2>/dev/null || readlink -f $<)\"" >$@
 __pch.h.gch: __pch.h
-	${AM_V_CC}${CC} -x c-header @DEFS@ ${AM_CPPFLAGS} ${CPPFLAGS} $$(echo "" ${AM_CFLAGS} | sed "s/-include __pch\\.h//") ${CFLAGS} -Wno-error $< -o $@
+	${AM_V_CC}${CC} -x c-header @DEFS@ ${AM_CPPFLAGS} ${CPPFLAGS} ${AM_CFLAGS} ${CFLAGS} -Wno-error $< -o $@
 
 pkginclude_HEADERS =  \
   src/mcfcrt.h  \
@@ -87,6 +87,9 @@ mcfgthread_12_dll_SOURCES =  \
   src/dll_startup.c  \
   ${mcfgthread_sources}
 
+mcfgthread_12_dll_CFLAGS =  \
+  ${AM_CFLAGS} -include __pch.h
+
 mcfgthread_12_dll_LDFLAGS =  \
   -shared -static -nostdlib  \
   -Wl,-e@__MCFCRT_DllStartup,--subsystem,windows:6.0,--disable-runtime-pseudo-reloc,--disable-auto-import  \
@@ -106,6 +109,9 @@ libmcfgthread.dll.a: mcfgthread-12.dll
 libmcfgthread_a_SOURCES =
 ##libmcfgthread_a_SOURCES =  \
 ##  ${mcfgthread_sources}
+
+##libmcfgthread_a_CFLAGS =  \
+##  ${AM_CFLAGS} -include __pch.h
 
 ## TODO: Modify MinGW-w64 startup code to perform CRT initialization before __main().
 libmcfgthread.a: mcfgthread-12.dll
