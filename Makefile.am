@@ -20,7 +20,7 @@ CLEANFILES = \
 __pch.h: ${srcdir}/src/env/_crtdef.h
 	${AM_V_GEN}echo "#include \"$$(cygpath -m $< 2>/dev/null || readlink -f $<)\"" >$@
 __pch.h.gch: __pch.h
-	${AM_V_CC}${CC} -x c-header @DEFS@ ${AM_CPPFLAGS} ${CPPFLAGS} $$(echo "" "${AM_CFLAGS}" | sed "s/-include __pch\\.h//") ${CFLAGS} -Wno-error $< -o $@
+	${AM_V_CC}${CC} -x c-header @DEFS@ ${AM_CPPFLAGS} ${CPPFLAGS} $$(echo "" ${AM_CFLAGS} | sed "s/-include __pch\\.h//") ${CFLAGS} -Wno-error $< -o $@
 
 pkginclude_HEADERS = \
 	src/mcfcrt.h	\
