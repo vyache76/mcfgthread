@@ -1,6 +1,6 @@
 // This file is part of MCFCRT.
 // See MCFLicense.txt for licensing information.
-// Copyleft 2013 - 2018, LH_Mouse. All wrongs reserved.
+// Copyleft 2013 - 2019, LH_Mouse. All wrongs reserved.
 
 #define __MCFCRT_ONCE_FLAG_INLINE_OR_EXTERN     extern inline
 #include "once_flag.h"
