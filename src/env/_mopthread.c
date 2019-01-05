@@ -142,8 +142,8 @@ static void DetachInitialThread(void)
         pControl->eState = kStateJoined;
         goto jJoinSuccess;
       }
-      case kStateJoining:
-      case kStateJoined:
+    case kStateJoining:
+    case kStateJoined:
     case kStateDetached:
       {
         break;
@@ -321,8 +321,8 @@ bool __MCFCRT_MopthreadJoin(uintptr_t uTid, void *restrict pParams, size_t *rest
             pControl->eState = kStateJoined;
             goto jJoinSuccess;
           }
-          case kStateJoining:
-          case kStateJoined:
+        case kStateJoining:
+        case kStateJoined:
         case kStateDetached:
           {
             break;
@@ -367,8 +367,8 @@ bool __MCFCRT_MopthreadDetach(uintptr_t uTid)
             pControl->eState = kStateJoined;
             goto jJoinSuccess;
           }
-          case kStateJoining:
-          case kStateJoined:
+        case kStateJoining:
+        case kStateJoined:
         case kStateDetached:
           {
             break;
