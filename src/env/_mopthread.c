@@ -132,20 +132,24 @@ static void DetachInitialThread(void)
     MopthreadControl *const restrict pControl = (void *)g_abyInitialControlStorage;
 
     switch(pControl->eState) {
-      case kStateJoinable: {
+    case kStateJoinable:
+      {
         pControl->eState = kStateDetached;
         goto jJoinSuccess;
       }
-      case kStateZombie: {
+    case kStateZombie:
+      {
         pControl->eState = kStateJoined;
         goto jJoinSuccess;
       }
       case kStateJoining:
       case kStateJoined:
-      case kStateDetached: {
+    case kStateDetached:
+      {
         break;
       }
-      default: {
+    default:
+      {
         _MCFCRT_ASSERT(false);
       }
   jJoinSuccess:
@@ -157,17 +161,20 @@ static void DetachInitialThread(void)
 __attribute__((__noreturn__)) static inline void SignalMutexAndExitThread(_MCFCRT_Mutex *restrict pMutex, MopthreadControl *restrict pControl, void (*pfnModifier)(void *, size_t, intptr_t), intptr_t nContext)
   {
     switch(pControl->eState) {
-      case kStateJoinable: {
+    case kStateJoinable:
+      {
         if(pfnModifier) {
           (*pfnModifier)(pControl->abyParams, pControl->uSizeOfParams, nContext);
         }
         pControl->eState = kStateZombie;
         break;
       }
-      case kStateZombie: {
+    case kStateZombie:
+      {
         _MCFCRT_ASSERT(false);
       }
-      case kStateJoining: {
+    case kStateJoining:
+      {
         if(pfnModifier) {
           (*pfnModifier)(pControl->abyParams, pControl->uSizeOfParams, nContext);
         }
@@ -175,14 +182,17 @@ __attribute__((__noreturn__)) static inline void SignalMutexAndExitThread(_MCFCR
         _MCFCRT_BroadcastConditionVariable(&(pControl->condTermination));
         break;
       }
-      case kStateJoined: {
+    case kStateJoined:
+      {
         _MCFCRT_ASSERT(false);
       }
-      case kStateDetached: {
+    case kStateDetached:
+      {
         pControl->eState = kStateJoined;
         break;
       }
-      default: {
+    default:
+      {
         _MCFCRT_ASSERT(false);
       }
     }
@@ -298,23 +308,27 @@ bool __MCFCRT_MopthreadJoin(uintptr_t uTid, void *restrict pParams, size_t *rest
       MopthreadControl *const restrict pControl = (MopthreadControl *)_MCFCRT_AvlFind(&g_avlControlMap, (intptr_t)uTid, &MopthreadControlComparatorNodeOther);
       if(pControl) {
         switch(pControl->eState) {
-          case kStateJoinable: {
+        case kStateJoinable:
+          {
             pControl->eState = kStateJoining;
             do {
               _MCFCRT_WaitForConditionVariableForever(&(pControl->condTermination), &TerminationUnlockCallback, &TerminationRelockCallback, (intptr_t)&g_mtxControl, 0);
             } while(pControl->eState != kStateJoined);
             goto jJoinSuccess;
           }
-          case kStateZombie: {
+        case kStateZombie:
+          {
             pControl->eState = kStateJoined;
             goto jJoinSuccess;
           }
           case kStateJoining:
           case kStateJoined:
-          case kStateDetached: {
+        case kStateDetached:
+          {
             break;
           }
-          default: {
+        default:
+          {
             _MCFCRT_ASSERT(false);
           }
   jJoinSuccess:
@@ -343,20 +357,24 @@ bool __MCFCRT_MopthreadDetach(uintptr_t uTid)
       MopthreadControl *const restrict pControl = (MopthreadControl *)_MCFCRT_AvlFind(&g_avlControlMap, (intptr_t)uTid, &MopthreadControlComparatorNodeOther);
       if(pControl) {
         switch(pControl->eState) {
-          case kStateJoinable: {
+        case kStateJoinable:
+          {
             pControl->eState = kStateDetached;
             goto jJoinSuccess;
           }
-          case kStateZombie: {
+        case kStateZombie:
+          {
             pControl->eState = kStateJoined;
             goto jJoinSuccess;
           }
           case kStateJoining:
           case kStateJoined:
-          case kStateDetached: {
+        case kStateDetached:
+          {
             break;
           }
-          default: {
+        default:
+          {
             _MCFCRT_ASSERT(false);
           }
   jJoinSuccess:
