@@ -1,28 +1,27 @@
 #!/bin/sh -e
 
-prefix="$(pwd)/debug/mingw32"
-mkdir -p "$prefix"
+_prefix="$(pwd)/debug/mingw32"
+_builddir="$(pwd)/tmp/build_i686_debug"
+_build=i686-w64-mingw32
 
-builddir="$(pwd)/.build_i686_debug"
-mkdir -p "$builddir"
-
-build=i686-w64-mingw32
+mkdir -p "${_prefix}"
+mkdir -p "${_builddir}"
 
 echo Building shared library...
 mkdir -p m4
 autoreconf -i
-(cd "$builddir" &&
+(cd "${_builddir}" &&
   (test -f Makefile ||  \
     CPPFLAGS=''  \
     CFLAGS='-O0 -g'  \
     LDFLAGS=''  \
-    ../configure --build="$build" --host="$build" --prefix="$prefix") &&
+    ../configure --_build="${_build}" --host="${_build}" --_prefix="${_prefix}") &&
   make -j4)
 
 echo Testing...
-cp -p "$builddir/libmcfgthread.dll.a" "$builddir/libmcfgthread-new.dll.a"
-("$build"-gcc -std=c11 -Wall -Wextra -pedantic test/test.c -Isrc/env -L"$builddir" -lmcfgthread-new -o test.exe &&
-  PATH="$builddir:$PATH" ./test.exe)
+cp -p "${_builddir}/libmcfgthread.dll.a" "${_builddir}/libmcfgthread-new.dll.a"
+("${_build}"-gcc -std=c11 -Wall -Wextra -pedantic test/test.c -Isrc/env -L"${_builddir}" -lmcfgthread-new -o test.exe &&
+  PATH="${_builddir}:$PATH" ./test.exe)
 
-(cd "$builddir" &&
+(cd "${_builddir}" &&
   make install)
