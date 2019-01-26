@@ -10,16 +10,16 @@ AM_CFLAGS = -std=c11 -Wstrict-prototypes -Wno-old-style-declaration
 EXEEXT =
 
 BUILT_SOURCES =  \
-  __pch.h  \
-  __pch.h.gch
+  .pch.h  \
+  .pch.h.gch
 
 CLEANFILES =  \
-  __pch.h  \
-  __pch.h.gch
+  .pch.h  \
+  .pch.h.gch
 
-__pch.h: ${srcdir}/src/env/_crtdef.h
+.pch.h: ${srcdir}/src/env/_crtdef.h
 	${AM_V_GEN}echo "#include \"$$(cygpath -m $< 2>/dev/null || readlink -f $<)\"" >$@
-__pch.h.gch: __pch.h
+.pch.h.gch: .pch.h
 	${AM_V_CC}${CC} -x c-header @DEFS@ ${AM_CPPFLAGS} ${CPPFLAGS} ${AM_CFLAGS} ${CFLAGS} -Wno-error $< -o $@
 
 pkginclude_HEADERS =  \
@@ -88,7 +88,7 @@ mcfgthread_12_dll_SOURCES =  \
   ${mcfgthread_sources}
 
 mcfgthread_12_dll_CFLAGS =  \
-  ${AM_CFLAGS} -include __pch.h
+  ${AM_CFLAGS} -include .pch.h
 
 mcfgthread_12_dll_LDFLAGS =  \
   -shared -static -nostdlib  \
@@ -111,7 +111,7 @@ libmcfgthread_a_SOURCES =
 ##  ${mcfgthread_sources}
 
 ##libmcfgthread_a_CFLAGS =  \
-##  ${AM_CFLAGS} -include __pch.h
+##  ${AM_CFLAGS} -include .pch.h
 
 ## TODO: Modify MinGW-w64 startup code to perform CRT initialization before __main().
 libmcfgthread.a: mcfgthread-12.dll
