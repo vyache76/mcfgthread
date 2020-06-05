@@ -26,27 +26,13 @@ __attribute__((__dllimport__, __stdcall__, __const__)) extern BOOLEAN RtlDllShut
 #  define BSFB(v_)              ((uintptr_t)(v_) << ((sizeof(uintptr_t) - 1) * CHAR_BIT))
 #endif
 
-#define MASK_THREADS_RELEASED   ((uintptr_t)( BSFB(0x03)))
-#define MASK_THREADS_SPINNING   ((uintptr_t)( BSFB(0x0C)))
-#define MASK_SPIN_FAILURE_COUNT ((uintptr_t)( BSFB(0xF0)))
 #define MASK_THREADS_TRAPPED    ((uintptr_t)(~BSFB(0xFF)))
-
-#define THREADS_RELEASED_ONE    ((uintptr_t)(MASK_THREADS_RELEASED & -MASK_THREADS_RELEASED))
-#define THREADS_RELEASED_MAX    ((uintptr_t)(MASK_THREADS_RELEASED / THREADS_RELEASED_ONE))
-
-#define THREADS_SPINNING_ONE    ((uintptr_t)(MASK_THREADS_SPINNING & -MASK_THREADS_SPINNING))
-#define THREADS_SPINNING_MAX    ((uintptr_t)(MASK_THREADS_SPINNING / THREADS_SPINNING_ONE))
 
 #define SPIN_FAILURE_COUNT_ONE  ((uintptr_t)(MASK_SPIN_FAILURE_COUNT & -MASK_SPIN_FAILURE_COUNT))
 #define SPIN_FAILURE_COUNT_MAX  ((uintptr_t)(MASK_SPIN_FAILURE_COUNT / SPIN_FAILURE_COUNT_ONE))
 
 #define THREADS_TRAPPED_ONE     ((uintptr_t)(MASK_THREADS_TRAPPED & -MASK_THREADS_TRAPPED))
 #define THREADS_TRAPPED_MAX     ((uintptr_t)(MASK_THREADS_TRAPPED / THREADS_TRAPPED_ONE))
-
-static_assert(__builtin_popcountll(MASK_THREADS_RELEASED) == __builtin_popcountll(MASK_THREADS_SPINNING), "MASK_THREADS_RELEASED must have the same number of bits set as MASK_THREADS_SPINNING.");
-
-#define MIN_SPIN_COUNT          ((uintptr_t)64)
-#define MAX_SPIN_MULTIPLIER     ((uintptr_t)32)
 
 static inline size_t Min(size_t uSelf, size_t uOther)
   {
@@ -55,105 +41,16 @@ static inline size_t Min(size_t uSelf, size_t uOther)
 
 __attribute__((__always_inline__)) static inline bool ReallyWaitForConditionVariable(volatile uintptr_t *puControl, _MCFCRT_ConditionVariableUnlockCallback pfnUnlockCallback, _MCFCRT_ConditionVariableRelockCallback pfnRelockCallback, intptr_t nContext, size_t uMaxSpinCountInitial, bool bMayTimeOut, uint64_t u64UntilFastMonoClock, bool bRelockIfTimeOut)
   {
-    size_t uMaxSpinCount, uSpinMultiplier;
-    bool bSignaled, bSpinnable;
+    (void)uMaxSpinCountInitial;
+    intptr_t nUnlocked;
     {
       uintptr_t uOld, uNew;
       uOld = __atomic_load_n(puControl, __ATOMIC_RELAXED);
       do {
-        const size_t uSpinFailureCount = (uOld & MASK_SPIN_FAILURE_COUNT) / SPIN_FAILURE_COUNT_ONE;
-        if(uMaxSpinCountInitial > MIN_SPIN_COUNT) {
-          uMaxSpinCount = (uMaxSpinCountInitial >> uSpinFailureCount) | MIN_SPIN_COUNT;
-          uSpinMultiplier = MAX_SPIN_MULTIPLIER >> uSpinFailureCount;
-        } else {
-          uMaxSpinCount = uMaxSpinCountInitial;
-          uSpinMultiplier = 0;
-        }
-        bSignaled = (uOld & MASK_THREADS_RELEASED) != 0;
-        bSpinnable = false;
-        if(!bSignaled) {
-          if(uMaxSpinCount != 0) {
-            const size_t uThreadsSpinning = (uOld & MASK_THREADS_SPINNING) / THREADS_SPINNING_ONE;
-            bSpinnable = uThreadsSpinning < THREADS_SPINNING_MAX;
-          }
-          if(!bSpinnable) {
-            break;
-          }
-          uNew = uOld + THREADS_SPINNING_ONE;
-        } else {
-          const bool bSpinFailureCountDecremented = uSpinFailureCount != 0;
-          uNew = uOld - THREADS_RELEASED_ONE - bSpinFailureCountDecremented * SPIN_FAILURE_COUNT_ONE;
-        }
+        uNew = uOld + THREADS_TRAPPED_ONE;
       } while(_MCFCRT_EXPECT_NOT(!__atomic_compare_exchange_n(puControl, &uOld, uNew, false, __ATOMIC_RELAXED, __ATOMIC_RELAXED)));
     }
-    if(_MCFCRT_EXPECT(bSignaled)) {
-      return true;
-    }
-    intptr_t nUnlocked;
-    if(_MCFCRT_EXPECT(bSpinnable)) {
-      nUnlocked = (*pfnUnlockCallback)(nContext);
-      for(size_t uSpinIndex = 0; _MCFCRT_EXPECT(uSpinIndex < uMaxSpinCount); ++uSpinIndex) {
-        register size_t uMultiplierIndex = uSpinMultiplier + 1;
-        __atomic_thread_fence(__ATOMIC_SEQ_CST);
-        do {
-          __builtin_ia32_pause();
-        } while(--uMultiplierIndex != 0);
-        __atomic_thread_fence(__ATOMIC_SEQ_CST);
-        {
-          uintptr_t uOld, uNew;
-          uOld = __atomic_load_n(puControl, __ATOMIC_RELAXED);
-          do {
-            bSignaled = (uOld & MASK_THREADS_RELEASED) != 0;
-            if(!bSignaled) {
-              break;
-            }
-            const size_t uSpinFailureCount = (uOld & MASK_SPIN_FAILURE_COUNT) / SPIN_FAILURE_COUNT_ONE;
-            const bool bSpinFailureCountDecremented = uSpinFailureCount != 0;
-            uNew = uOld - THREADS_SPINNING_ONE - THREADS_RELEASED_ONE - bSpinFailureCountDecremented * SPIN_FAILURE_COUNT_ONE;
-          } while(_MCFCRT_EXPECT_NOT(!__atomic_compare_exchange_n(puControl, &uOld, uNew, false, __ATOMIC_RELAXED, __ATOMIC_RELAXED)));
-        }
-        if(_MCFCRT_EXPECT_NOT(bSignaled)) {
-          (*pfnRelockCallback)(nContext, nUnlocked);
-          return true;
-        }
-      }
-      {
-        uintptr_t uOld, uNew;
-        uOld = __atomic_load_n(puControl, __ATOMIC_RELAXED);
-        do {
-          const size_t uSpinFailureCount = (uOld & MASK_SPIN_FAILURE_COUNT) / SPIN_FAILURE_COUNT_ONE;
-          bSignaled = (uOld & MASK_THREADS_RELEASED) != 0;
-          if(!bSignaled) {
-            const bool bSpinFailureCountIncremented = uSpinFailureCount < SPIN_FAILURE_COUNT_MAX;
-            uNew = uOld - THREADS_SPINNING_ONE + THREADS_TRAPPED_ONE + bSpinFailureCountIncremented * SPIN_FAILURE_COUNT_ONE;
-          } else {
-            const bool bSpinFailureCountDecremented = uSpinFailureCount != 0;
-            uNew = uOld - THREADS_SPINNING_ONE - THREADS_RELEASED_ONE - bSpinFailureCountDecremented * SPIN_FAILURE_COUNT_ONE;
-          }
-        } while(_MCFCRT_EXPECT_NOT(!__atomic_compare_exchange_n(puControl, &uOld, uNew, false, __ATOMIC_RELAXED, __ATOMIC_RELAXED)));
-      }
-      if(_MCFCRT_EXPECT(bSignaled)) {
-        (*pfnRelockCallback)(nContext, nUnlocked);
-        return true;
-      }
-    } else {
-      {
-        uintptr_t uOld, uNew;
-        uOld = __atomic_load_n(puControl, __ATOMIC_RELAXED);
-        do {
-          bSignaled = (uOld & MASK_THREADS_RELEASED) != 0;
-          if(!bSignaled) {
-            uNew = uOld + THREADS_TRAPPED_ONE;
-          } else {
-            uNew = uOld - THREADS_RELEASED_ONE;
-          }
-        } while(_MCFCRT_EXPECT_NOT(!__atomic_compare_exchange_n(puControl, &uOld, uNew, false, __ATOMIC_RELAXED, __ATOMIC_RELAXED)));
-      }
-      if(_MCFCRT_EXPECT(bSignaled)) {
-        return true;
-      }
-      nUnlocked = (*pfnUnlockCallback)(nContext);
-    }
+    nUnlocked = (*pfnUnlockCallback)(nContext);
     if(bMayTimeOut) {
       LARGE_INTEGER liTimeout;
       __MCFCRT_InitializeNtTimeout(&liTimeout, u64UntilFastMonoClock);
@@ -194,18 +91,14 @@ __attribute__((__always_inline__)) static inline bool ReallyWaitForConditionVari
 
 __attribute__((__always_inline__)) static inline size_t ReallySignalConditionVariable(volatile uintptr_t *puControl, size_t uMaxCountToReleaseOrSignal)
   {
-    uintptr_t uCountToRelease; // Number of threads spinning to release
     uintptr_t uCountToSignal; // Number of threads trapped to signal
     {
       uintptr_t uOld, uNew;
       uOld = __atomic_load_n(puControl, __ATOMIC_RELAXED);
       do {
-        const size_t uThreadsReleased = (uOld & MASK_THREADS_RELEASED) / THREADS_RELEASED_ONE;
-        const size_t uThreadsSpinning = (uOld & MASK_THREADS_SPINNING) / THREADS_SPINNING_ONE;
         const size_t uThreadsTrapped = (uOld & MASK_THREADS_TRAPPED) / THREADS_TRAPPED_ONE;
-        uCountToRelease = Min(uThreadsSpinning - uThreadsReleased, uMaxCountToReleaseOrSignal);
-        uCountToSignal = Min(uThreadsTrapped, uMaxCountToReleaseOrSignal - uCountToRelease);
-        uNew = uOld + uCountToRelease * THREADS_RELEASED_ONE - uCountToSignal * THREADS_TRAPPED_ONE;
+        uCountToSignal = Min(uThreadsTrapped, uMaxCountToReleaseOrSignal);
+        uNew = uOld - uCountToSignal * THREADS_TRAPPED_ONE;
         if(uNew == uOld) {
           break;
         }
@@ -220,7 +113,7 @@ __attribute__((__always_inline__)) static inline size_t ReallySignalConditionVar
         _MCFCRT_ASSERT(lStatus != STATUS_TIMEOUT);
       }
     }
-    return uCountToRelease + uCountToSignal;
+    return uCountToSignal;
   }
 
 bool __MCFCRT_ReallyWaitForConditionVariable(_MCFCRT_ConditionVariable *pConditionVariable, _MCFCRT_ConditionVariableUnlockCallback pfnUnlockCallback, _MCFCRT_ConditionVariableRelockCallback pfnRelockCallback, intptr_t nContext, size_t uMaxSpinCount, uint64_t u64UntilFastMonoClock)
